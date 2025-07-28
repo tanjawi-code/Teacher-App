@@ -1,201 +1,272 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
     static Scanner input = new Scanner(System.in);
-    static int index ;
     public static void main(String[] args) {
 
-        System.out.print("How many students do you have ? : ");
-        int studentsNumber = input.nextInt();
-        input.nextLine();
+        System.out.println("Hello teacher, we made a big update to the program which it has more things than the old one\n\n ");
 
-        Student[] students = new Student[studentsNumber];
-
-        System.out.println("\n\n");
-        studentsNames(students);
-        System.out.println("\n\n");
-        studentsAge(students);
-        System.out.println("\n\n");
-        studentsGrades(students);
-        System.out.println("\n\n");
+        Student student = new Student();
+        StudentsManager manager = new StudentsManager();
 
         int choose ;
         do{
-            System.out.println("1 : Showing all the details about students.");
-            System.out.println("2 : Checking a student and change its point.");
-            System.out.println("3 : Showing all the passed student.");
-            System.out.println("4 : Showing all the failed student.");
-            System.out.println("5 : Exit.");
+            System.out.println("1 : Add new students.");
+            System.out.println("2 : Show all the students with their details.");
+            System.out.println("3 : Checking a student and change his/her grades.");
+            System.out.println("4 : Showing all the passed student.");
+            System.out.println("5 : Showing all the failed student.");
+            System.out.println("6 : Show the general average of the class.");
+            System.out.println("7 : remove a student from the list.");
+            System.out.println("8 : Show the top three student.");
+            System.out.println("9 : Exit.");
             System.out.print("Enter your choice : ");
             choose = input.nextInt();
+            input.nextLine();
             System.out.println();
 
             switch (choose){
-                case 1 : details(students); break;
-                case 2 : searchForStudent(students); changing(students); break;
-                case 3 : passedStudents(students); break;
-                case 4 : failedStudents(students); break;
-                case 5 : System.out.println("The program is finished."); break;
+                case 1 : addStudent(student,manager); break;
+                case 2 : manager.displayStudentInfo(); break;
+                case 3 :
+                    searchForStudent(manager);
+                    System.out.print("Do you want to change the grades (yes : 1 || no : 2) : ");
+                    int choice = input.nextInt();
+                    if(choice == 1){
+                        changeStudentGrades(manager);
+                    }
+                    else{
+                        System.out.println();
+                    }
+                    break;
+                case 4 : passedStudents(manager); break;
+                case 5 : failedStudents(manager); break;
+                case 6 : generalAverage(manager); break;
+                case 7 : removeStudent(manager); break;
+                case 8 : System.out.println("We work on this part, it's coming in the future.\n"); break;
+                case 9 : System.out.println("The program is finished."); break;
                 default :
-                    System.out.println("Wrong choice , try again.");
+                    System.out.println("Wrong choice , try again.\n");
             }
 
-        }while(choose!=0);
+        }while(choose!=9);
 
         input.close();
     }
 
-    // This is a function for taking names from the teacher
-    public static void studentsNames(Student[] students){
-        for(int x = 0 ; x<students.length ; x++){
-            students[x] = new Student();
-            System.out.print("Enter student name for number "+(x+1)+" : ");
-            students[x].setStudentName(input.nextLine().toLowerCase().trim());
+    // This function is used only with (addStudent).
+    public static String addStudentName(int count){
+        String name;
+        System.out.println("Enter the details of the student number " + (count + 1) + " : ");
+        while(true) {
+            System.out.print("The name of the student : ");
+            name = input.nextLine().trim().toLowerCase();
+            if (name.matches("[a-zA-Z]+")) {
+                return name;
+            }
+            else {
+                System.out.println("The name should only accept letters.");
+            }
         }
     }
 
-    // This is a function for taking age from the teacher
-    public static void studentsAge(Student[] students){
-        for(int y = 0 ; y<students.length ; y++){
-            System.out.print("Enter student age for student "+students[y].getStudentName()+" : ");
-            students[y].setStudentAge(input.nextInt());
-        }
+    // This function is used only with (addStudent).
+    public static int addStudentAge(String name){
+        int age;
+        do{
+            try{
+                System.out.print("The age for the student " + name+ " : ");
+                age = input.nextInt();
+                if(age >= 14){
+                    input.nextLine();
+                    return age;
+                }
+                else{
+                    System.out.println("There are no students have 13 years old studying in this school.");
+                }
+            }
+            catch(InputMismatchException e){
+                System.out.println("The age cannot has letters.");
+                input.nextLine();
+            }
+        } while(true);
     }
 
-    // This is a function for taking student's grades from the teacher
-    public static void studentsGrades(Student[] students){
-        for(int a = 0 ; a<students.length ; a++){
-            for(int b = 0 ; b<3 ; b++){
-                System.out.print("Enter "+students[a].getStudentName()+"'s point for exam "+(b+1)+" : ");
-                students[a].setGrades(input.nextDouble(),b);
-                if(students[a].getStudentGrades(b) < 0 || students[a].getStudentGrades(b) > 20){
+    // This function is used only with (addStudent).
+    public static double[] addStudentGrade(String name){
+        double[] grades = new double[3];
+        try{
+            for(int b = 0; b <grades.length ; b++){
+                System.out.print(name+"'s grade for exam "+(b+1)+" : ");
+                grades[b] = input.nextDouble();
+                if(grades[b] < 0 || grades[b] > 20){
                     System.out.println("Enter a grade between 0 and 20.");
                     b--;
                 }
             }
-            System.out.println();
         }
-        for(int x = 0 ; x<students.length ; x++){
-            students[x].calculateGrades();
+        catch(InputMismatchException e){
+            System.out.println("The garde cannot have letters.");
+            input.nextLine();
         }
+        input.nextLine();
+        return grades;
     }
 
-    // This is a function for giving details about every from student
-    public static void details(Student[] students){
-        for(int x = 0 ; x<students.length ; x++){
-            students[x].studentDetails();
-        }
+    // This function has (addStudentName, addStudentAge, addStudentGrades). It used to take the details of the student.
+    public static void addStudent(Student student, StudentsManager manager){
+        int count =0;
+        int choice;
+        do{
+            student.setStudentName(addStudentName(count));
+            student.setStudentAge(addStudentAge(student.getStudentName()));
+            student.setGrades(addStudentGrade(student.getStudentName()));
+            student.calculateGrades();
+            manager.saveStudent(student);
+            count++;
+            System.out.print("\nDo you want to continue adding student (yes : 1 || no : 0) : ");
+            choice = input.nextInt();
+            input.nextLine();
+            System.out.println();
+        } while(choice != 0);
         System.out.println();
     }
 
-    // This is a function for showing passed students
-    public static void passedStudents(Student[] students){
-        double passed = 10 ;
-        int passedStudent = 0;
-        for(int a = 0 ; a<students.length ; a++) {
-            if (passed <= students[a].getStudentPoint()) {
-                System.out.printf(students[a].getStudentName()+ " : %.2f\n", students[a].getStudentPoint());
-                passedStudent++;
+    // This function is used to show the passed students.
+    public static void passedStudents(StudentsManager manager){
+        double passed = 10;
+        int passedStudents =0;
+        for(int x =0 ; x< manager.studentsSize() ; x++){
+            if(passed <= manager.getStudentPoint(x)){
+                System.out.printf(manager.getStudentName(x)+ " : %.2f\n",manager.getStudentPoint(x));
+                passedStudents++;
             }
-
         }
-        if(passedStudent == 0){
-            System.out.println("No passed students.");
-            System.out.println();
+        if(passedStudents == 0){
+            System.out.println("There are no passed students.");
         }
         else{
-            System.out.println();
+            System.out.println("The number of passed students are : "+passedStudents+"\n");
         }
     }
 
-    // This is a function for showing failed students
-    public static void failedStudents(Student[] students){
-        double failed = 9.99f ;
-        int failedStudent = 0;
-        for(int a = 0 ; a<students.length ; a++){
-            if(failed >= students[a].getStudentPoint()){
-                System.out.printf(students[a].getStudentName()+" : %.2f\n",students[a].getStudentPoint());
-                failedStudent++;
+    // This function is used to show the failed students.
+    public static void failedStudents(StudentsManager manager){
+        double failed = 9.99d;
+        int failedStudents = 0;
+        for(int x = 0; x<manager.studentsSize() ; x++){
+            if(failed >= manager.getStudentPoint(x)){
+                System.out.printf(manager.getStudentName(x)+" : %.2f.\n",manager.getStudentPoint(x));
+                failedStudents++;
             }
         }
-        if(failedStudent == 0){
-            System.out.println("No failed students.");
-            System.out.println();
+        if(failedStudents == 0){
+            System.out.println("There are no failed students.\n");
         }
         else{
-            System.out.println();
+            System.out.println("The number of failed student are  : "+failedStudents+"\n");
         }
     }
 
-    // This function is about finding a student
-    public static void searchForStudent(Student[] students){
-        System.out.print("Enter the student name you want to change : ");
-        input.nextLine();
-        String student = input.nextLine().toLowerCase().trim();
-        boolean found = false ;
+    // This for giving the general average of the class.
+    public static void generalAverage(StudentsManager manager){
+        double average =0 ;
+        for(int x = 0 ; x<manager.studentsSize() ; x++){
+            average += manager.getStudentPoint(x);
+        }
+        average = average/manager.studentsSize();
+        System.out.printf("The general average of the class is : %.2f\n\n ",average);
+    }
 
-        for(int x = 0 ; x<students.length ; x++){
-            if(student.equals(students[x].getStudentName())){
-                System.out.println("The student "+students[x].getStudentName()+" is found");
-                for(int y= 0 ; y<3 ; y++){
-                    System.out.printf("Exam : "+(y+1)+" is : %.2f\n",students[x].getStudentGrades(y));
+    // This function is used to search for a student and change his/her grades.
+    public static void searchForStudent(StudentsManager manager){
+        if(!manager.isEmpty()){
+            System.out.print("Enter your student name you want to search : ");
+            String name = input.nextLine().trim().toLowerCase();
+            boolean isFound = false;
+
+            for(int x = 0 ; x<manager.studentsSize() ; x++){
+                if(name.equals(manager.getStudentName(x))){
+                    System.out.println("The student "+manager.getStudentName(x)+" is found, The details are : ");
+                    manager.OneStudentDetails(x);
+                    manager.setStudentPosition(x);
+                    System.out.println();
+                    isFound = true;
                 }
-                System.out.printf("His/Her point is : %.2f\n",students[x].getStudentPoint());
-                found = true ;
-                index = x;
-                System.out.println("\n\n");
+            }
+
+            if(!isFound){
+                System.out.println("The student "+name+" is not found in the list.\n");
             }
         }
-        if(!found){
-            System.out.println("The student "+student+" is not found.");
-            index = -1;
+        else{
+            System.out.println("There are no students yet in the claas.\n");
+            manager.setStudentPosition(-1);
         }
     }
 
-    public static void changing(Student[] students){
-        if(index!=-1){
-            for(int a =0 ; a<3; a++){
-                double add , subtract ;
-                System.out.printf("Do you want to change "+(a+1)+" exam : %.2f\n",students[index].getStudentGrades(a));
-                System.out.print("Choose 1 to continue or any number to skip and see the next grade : ");
-                int choose = input.nextInt();
-                if(choose!=1){
-                    continue;
-                }
-                System.out.println("1 : + || 2 : -");
-                System.out.print("Choose : ");
-                int operator = input.nextInt();
-                if(operator==1){
-                    System.out.print("How much do you want to add : ");
-                    add = input.nextDouble();
-                    if(add == 0 || add > 20) {
-                        System.out.print("The number dose not contains the condition.");
+    // This function is used to change the grades of the student that we take from (searchForStudent).
+    public static void changeStudentGrades(StudentsManager manager){
+        if(manager.getStudentPosition() != -1){
+            int index = manager.getStudentPosition();
+            for(int x = 0;  x<3 ; x++){
+                double grade;
+                System.out.printf("Do you want to change the grade %.2f exam "+(x+1)+"\n",manager.getStudentGrades(index,x));
+                System.out.print("Choose 1 to put a new grade or any number to skip this grade : ");
+                int choice = input.nextInt();
+                if(choice == 1 ){
+                    System.out.print("Put the new grade of the exam "+(x+1)+" : ");
+                    grade = input.nextDouble();
+                    if(grade < 0 || grade > 20){
+                        System.out.println("The grade does not contains the conditions.\n");
+                        x--;
                     }
                     else{
-                        students[index].addToTheGrade(a,add);
-                    }
-                }
-                else if (operator==2){
-                    System.out.print("How much do you want to subtract : ");
-                    subtract = input.nextFloat();
-                    if(subtract == 0 || subtract > students[index].getStudentGrades(a)) {
-                        System.out.print("The number dose not contains the condition.");
-                    }
-                    else{
-                        students[index].subtractFromTheGrade(a,subtract);
+                        manager.changeGrades(x,grade);
+                        System.out.println();
                     }
                 }
                 else{
-                    System.out.println("Wrong choice.");
+                    System.out.println();
                 }
-
-                students[index].calculateGrades();
-
-                System.out.printf("The new point of the student "+students[index].getStudentName()+
-                        " is : %.2f\n",students[index].getStudentPoint());
-                System.out.println();
             }
+            manager.calculateNewGrades();
+            System.out.println();
         }
     }
 
+    // This function is used to remove a specific student from the list of the class.
+    public static void removeStudent(StudentsManager manager){
+        boolean found = false;
+        String choice ;
+        int studentPosition =0;
+        System.out.print("What is the name of the student you want ti remove : ");
+        String name = input.nextLine().toLowerCase().trim();
+
+        for(int x = 0 ; x<manager.studentsSize() ; x++){
+            if(name.equals(manager.getStudentName(x))){
+                System.out.println("The student "+manager.getStudentName(x)+" is found, The details are : ");
+                manager.OneStudentDetails(x);
+                studentPosition = x;
+                System.out.println();
+                found = true;
+            }
+        }
+        if(found){
+            System.out.print("Do you want to remove the student "+name+" (yes/no) : ");
+            choice = input.nextLine().trim().toLowerCase();
+            if(choice.equals("yes")){
+                System.out.println("You have removed the student "+name+" from the list of the students.\n");
+                manager.removeStudent(studentPosition);
+            }
+            else{
+                System.out.println();
+            }
+        }
+
+        else{
+            System.out.println("The student "+name+" is not in the list of the students.\n");
+        }
+    }
 }
