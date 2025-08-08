@@ -1,9 +1,10 @@
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class StudentsManager {
 
-    private ArrayList<Student> students = new ArrayList<>();
-    private Student student = new Student();
+    private final ArrayList<Student> students = new ArrayList<>();
     private int studentPosition;
 
     // Getters.
@@ -20,7 +21,6 @@ public class StudentsManager {
     // Saving a student.
     void saveStudent(Student s){
         students.add(new Student(s));
-        student = new Student();
     }
 
     // The size of the students.
@@ -46,7 +46,7 @@ public class StudentsManager {
         return this.studentPosition;
     }
 
-    // Changing grades and calculating them.
+    // Changing grades and calculating new grades.
     void changeGrades(int index ,double newGrade){
         students.get(this.studentPosition).setNewGrades(index,newGrade);
     }
@@ -54,9 +54,48 @@ public class StudentsManager {
         students.get(this.studentPosition).calculateGrades();
     }
 
+    // Show the top three student points from top to bottoms.
+    ArrayList<Student> showTopThreePoints(){
+        final ArrayList<Student> sortedStudent = new ArrayList<>(students);
+        sortedStudent.sort(Comparator.comparingDouble(Student::getStudentPoint).reversed());
+        return sortedStudent;
+    }
+
     // Removing a student.
     void removeStudent(int index){
         students.remove(index);
+    }
+
+    // Statistics
+    void classStatistics(ArrayList<Double> points){
+        int passedStudents = 0, failedStudents = 0;
+        double average = 0;
+        System.out.println("The subject : Math.");
+        System.out.println("The number of students are : "+students.size());
+        for (Student value : students) {
+            if (value.getStudentPoint() >= 10) {
+                passedStudents++;
+            }
+            else {
+                failedStudents++;
+            }
+        }
+        System.out.println("The number of passed students are : "+passedStudents);
+        System.out.println("The number of failed students are : "+failedStudents);
+
+        for(Student point : students){
+            average += point.getStudentPoint();
+        }
+        average = average/students.size();
+        System.out.printf("The general average of the class is : %.2f\n",average);
+
+        double percentage = (passedStudents * 100.0) / students.size();
+        System.out.printf("The success rate is : %.0f%%\n",percentage);
+
+        double max = Collections.max(points);
+        double min = Collections.min(points);
+        System.out.printf("The highest point in the class is : %.2f\n",max);
+        System.out.printf("The lowest point in the class is : %.2f\n",min);
     }
 
     void displayStudentInfo(){

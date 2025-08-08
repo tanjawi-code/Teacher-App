@@ -1,5 +1,4 @@
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     static Scanner input = new Scanner(System.in);
@@ -12,15 +11,16 @@ public class Main {
 
         int choose ;
         do{
-            System.out.println("1 : Add new students.");
-            System.out.println("2 : Show all the students with their details.");
-            System.out.println("3 : Checking a student and change his/her grades.");
-            System.out.println("4 : Showing all the passed student.");
-            System.out.println("5 : Showing all the failed student.");
-            System.out.println("6 : Show the general average of the class.");
-            System.out.println("7 : remove a student from the list.");
-            System.out.println("8 : Show the top three student.");
-            System.out.println("9 : Exit.");
+            System.out.println("""
+                    1 : Add new students.
+                    2 : Show all the students with their details.
+                    3 : Checking a student and change his/her grades.
+                    4 : Show all the passed students.
+                    5 : Show all the failed students.
+                    6 : Show Statistics of the class.
+                    7 : Remove a student from the class.
+                    8 : Show the top three students.
+                    9 : Exit.""");
             System.out.print("Enter your choice : ");
             choose = input.nextInt();
             input.nextLine();
@@ -31,20 +31,38 @@ public class Main {
                 case 2 : manager.displayStudentInfo(); break;
                 case 3 :
                     searchForStudent(manager);
-                    System.out.print("Do you want to change the grades (yes : 1 || no : 2) : ");
-                    int choice = input.nextInt();
-                    if(choice == 1){
-                        changeStudentGrades(manager);
-                    }
-                    else{
-                        System.out.println();
+                    if(!manager.isEmpty()){
+                        int choice;
+                        do{
+                            try{
+                                System.out.print("Do you want to change the grades (yes : 1 || no : 2) : ");
+                                choice = input.nextInt();
+                                if(choice == 1 || choice == 2){
+                                    System.out.println();
+                                    break;
+                                }
+                                else{
+                                    System.out.println("The choice should be only 1 or 2.");
+                                }
+                            }
+                            catch(InputMismatchException e){
+                                System.out.println("You can't enter letters or symbols.");
+                                input.nextLine();
+                            }
+                        } while(true);
+                        if(choice == 1){
+                            changeStudentGrades(manager);
+                        }
+                        else{
+                            System.out.println();
+                        }
                     }
                     break;
                 case 4 : passedStudents(manager); break;
                 case 5 : failedStudents(manager); break;
-                case 6 : generalAverage(manager); break;
+                case 6 : statistics(manager); break;
                 case 7 : removeStudent(manager); break;
-                case 8 : System.out.println("We work on this part, it's coming in the future.\n"); break;
+                case 8 : topThreeStudents(manager); break;
                 case 9 : System.out.println("The program is finished."); break;
                 default :
                     System.out.println("Wrong choice , try again.\n");
@@ -62,7 +80,7 @@ public class Main {
         while(true) {
             System.out.print("The name of the student : ");
             name = input.nextLine().trim().toLowerCase();
-            if (name.matches("[a-zA-Z]+")) {
+            if (name.matches("[a-zA-Z]+(\\s[a-zA-Z]+)*")) {
                 return name;
             }
             else {
@@ -78,12 +96,12 @@ public class Main {
             try{
                 System.out.print("The age for the student " + name+ " : ");
                 age = input.nextInt();
-                if(age >= 14){
+                if(age >= 14 && age <= 20){
                     input.nextLine();
                     return age;
                 }
                 else{
-                    System.out.println("There are no students have 13 years old studying in this school.");
+                    System.out.println("Less than 13 or above 20 can't be in this school.");
                 }
             }
             catch(InputMismatchException e){
@@ -114,6 +132,12 @@ public class Main {
         return grades;
     }
 
+    // This function is used only with (addStudent).
+    public static int addStudentID(){
+        Random random = new Random();
+        return random.nextInt(1000,10000);
+    }
+
     // This function has (addStudentName, addStudentAge, addStudentGrades). It used to take the details of the student.
     public static void addStudent(Student student, StudentsManager manager){
         int count =0;
@@ -123,11 +147,27 @@ public class Main {
             student.setStudentAge(addStudentAge(student.getStudentName()));
             student.setGrades(addStudentGrade(student.getStudentName()));
             student.calculateGrades();
+            student.setStudentID(addStudentID());
             manager.saveStudent(student);
             count++;
-            System.out.print("\nDo you want to continue adding student (yes : 1 || no : 0) : ");
-            choice = input.nextInt();
-            input.nextLine();
+            do{
+                try{
+                    System.out.print("\nDo you want to continue adding student (yes : 1 || no : 0) : ");
+                    choice = input.nextInt();
+                    input.nextLine();
+                    if(choice == 1 || choice == 0){
+                        break;
+                    }
+                    else{
+                        System.out.println("The choice should only have 1 or 0.");
+                    }
+                }
+                catch (InputMismatchException e){
+                    System.out.println("The choice can't have letters or symbols.");
+                    input.nextLine();
+                }
+            } while(true);
+
             System.out.println();
         } while(choice != 0);
         System.out.println();
@@ -144,7 +184,7 @@ public class Main {
             }
         }
         if(passedStudents == 0){
-            System.out.println("There are no passed students.");
+            System.out.println("There are no passed students.\n");
         }
         else{
             System.out.println("The number of passed students are : "+passedStudents+"\n");
@@ -169,16 +209,6 @@ public class Main {
         }
     }
 
-    // This for giving the general average of the class.
-    public static void generalAverage(StudentsManager manager){
-        double average =0 ;
-        for(int x = 0 ; x<manager.studentsSize() ; x++){
-            average += manager.getStudentPoint(x);
-        }
-        average = average/manager.studentsSize();
-        System.out.printf("The general average of the class is : %.2f\n\n ",average);
-    }
-
     // This function is used to search for a student and change his/her grades.
     public static void searchForStudent(StudentsManager manager){
         if(!manager.isEmpty()){
@@ -195,7 +225,6 @@ public class Main {
                     isFound = true;
                 }
             }
-
             if(!isFound){
                 System.out.println("The student "+name+" is not found in the list.\n");
             }
@@ -241,7 +270,7 @@ public class Main {
         boolean found = false;
         String choice ;
         int studentPosition =0;
-        System.out.print("What is the name of the student you want ti remove : ");
+        System.out.print("What is the name of the student you want to remove : ");
         String name = input.nextLine().toLowerCase().trim();
 
         for(int x = 0 ; x<manager.studentsSize() ; x++){
@@ -267,6 +296,49 @@ public class Main {
 
         else{
             System.out.println("The student "+name+" is not in the list of the students.\n");
+        }
+    }
+
+    // Show The top three students.
+    public static void topThreeStudents(StudentsManager manager){
+        if(!manager.isEmpty()) {
+            int threeStudents = 0;
+            List<Student> topThree = manager.showTopThreePoints();
+            for (Student student : topThree) {
+                if (student.getStudentPoint() >= 10) {
+                    student.studentInfo();
+                    threeStudents++;
+                }
+                if (threeStudents == 3) {
+                    System.out.println();
+                    break;
+                }
+            }
+            if(threeStudents == 0){
+                System.out.println("There no passed students.\n");
+            }
+            else{
+                System.out.println();
+            }
+        }
+        else{
+            System.out.println("There are no students yet in the class.\n");
+        }
+    }
+
+    // Statistics.
+    public static void statistics(StudentsManager manager){
+        if(!manager.isEmpty()){
+            ArrayList<Double> points = new ArrayList<>();
+            for(int x = 0 ;x<manager.studentsSize() ; x++){
+                points.add(manager.getStudentPoint(x));
+            }
+            System.out.println("Statistics of the class : ");
+            manager.classStatistics(points);
+            System.out.println();
+        }
+        else{
+            System.out.println("There are no students yet in the class.\n");
         }
     }
 }
