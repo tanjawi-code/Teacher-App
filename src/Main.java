@@ -21,11 +21,21 @@ public class Main {
                     7 : Remove a student from the class.
                     8 : Show the top three students.
                     9 : Exit.""");
-            System.out.print("Enter your choice : ");
-            choose = input.nextInt();
-            input.nextLine();
-            System.out.println();
-
+            while(true){
+                try{
+                    System.out.print("Enter your choice : ");
+                    choose = input.nextInt();
+                    input.nextLine();
+                    if(choose >= 0){
+                        System.out.println();
+                        break;
+                    }
+                }
+                catch (InputMismatchException e){
+                    System.out.println("The choice should be numbers.");
+                    input.nextLine();
+                }
+            }
             switch (choose){
                 case 1 : addStudent(student,manager); break;
                 case 2 : manager.displayStudentInfo(); break;
@@ -315,7 +325,7 @@ public class Main {
                 }
             }
             if(threeStudents == 0){
-                System.out.println("There no passed students.\n");
+                System.out.println("There are no passed students.\n");
             }
             else{
                 System.out.println();
