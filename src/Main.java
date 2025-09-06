@@ -14,7 +14,7 @@ public class Main {
             System.out.println("""
                     1 : Add new students.
                     2 : Show all the students with their details.
-                    3 : Checking a student and change his/her grades.
+                    3 : Checking a student and change his/her details if you want.
                     4 : Show all the passed students.
                     5 : Show all the failed students.
                     6 : Show Statistics of the class.
@@ -41,37 +41,19 @@ public class Main {
                 case 2 : manager.displayStudentInfo(); break;
                 case 3 :
                     searchForStudent(manager);
-                    if(!manager.isEmpty()){
-                        int choice;
-                        do{
-                            try{
-                                System.out.print("Do you want to change the grades (yes : 1 || no : 2) : ");
-                                choice = input.nextInt();
-                                if(choice == 1 || choice == 2){
-                                    System.out.println();
-                                    break;
-                                }
-                                else{
-                                    System.out.println("The choice should be only 1 or 2.");
-                                }
-                            }
-                            catch(InputMismatchException e){
-                                System.out.println("You can't enter letters or symbols.");
-                                input.nextLine();
-                            }
-                        } while(true);
-                        if(choice == 1){
-                            changeStudentGrades(manager);
-                        }
-                        else{
-                            System.out.println();
-                        }
-                    }
+                    modifyStudent(manager);
                     break;
                 case 4 : passedStudents(manager); break;
                 case 5 : failedStudents(manager); break;
                 case 6 : statistics(manager); break;
-                case 7 : removeStudent(manager); break;
+                case 7 :
+                    if(!manager.isEmpty()){
+                        removeStudent(manager);
+                    }
+                    else{
+                        System.out.println("There are no students yet in the class.\n");
+                    }
+                    break;
                 case 8 : topThreeStudents(manager); break;
                 case 9 : System.out.println("The program is finished."); break;
                 default :
@@ -84,13 +66,16 @@ public class Main {
     }
 
     // This function is used only with (addStudent).
-    public static String addStudentName(int count){
+    public static String addStudentName(int count, StudentsManager manager){
         String name;
         System.out.println("Enter the details of the student number " + (count + 1) + " : ");
         while(true) {
             System.out.print("The name of the student : ");
             name = input.nextLine().trim().toLowerCase();
-            if (name.matches("[a-zA-Z]+(\\s[a-zA-Z]+)*")) {
+            if (name.equals(manager.checkName(name))) {
+                System.out.println("The name is already in the list.");
+            }
+            else if(name.matches("[a-zA-Z]+(\\s[a-zA-Z]+)*")){
                 return name;
             }
             else {
@@ -124,19 +109,22 @@ public class Main {
     // This function is used only with (addStudent).
     public static double[] addStudentGrade(String name){
         double[] grades = new double[3];
-        try{
-            for(int b = 0; b <grades.length ; b++){
-                System.out.print(name+"'s grade for exam "+(b+1)+" : ");
-                grades[b] = input.nextDouble();
-                if(grades[b] < 0 || grades[b] > 20){
-                    System.out.println("Enter a grade between 0 and 20.");
-                    b--;
+        while(true){
+            try{
+                for(int b = 0; b <grades.length ; b++){
+                    System.out.print(name+"'s grade for exam "+(b+1)+" : ");
+                    grades[b] = input.nextDouble();
+                    if(grades[b] < 0 || grades[b] > 20){
+                        System.out.println("Enter a grade between 0 and 20.");
+                        b--;
+                    }
                 }
+                break;
             }
-        }
-        catch(InputMismatchException e){
-            System.out.println("The garde cannot have letters.");
-            input.nextLine();
+            catch(InputMismatchException e){
+                System.out.println("The garde cannot have letters.");
+                input.nextLine();
+            }
         }
         input.nextLine();
         return grades;
@@ -153,7 +141,7 @@ public class Main {
         int count =0;
         int choice;
         do{
-            student.setStudentName(addStudentName(count));
+            student.setStudentName(addStudentName(count,manager));
             student.setStudentAge(addStudentAge(student.getStudentName()));
             student.setGrades(addStudentGrade(student.getStudentName()));
             student.calculateGrades();
@@ -185,37 +173,47 @@ public class Main {
 
     // This function is used to show the passed students.
     public static void passedStudents(StudentsManager manager){
-        double passed = 10;
-        int passedStudents =0;
-        for(int x =0 ; x< manager.studentsSize() ; x++){
-            if(passed <= manager.getStudentPoint(x)){
-                System.out.printf(manager.getStudentName(x)+ " : %.2f\n",manager.getStudentPoint(x));
-                passedStudents++;
+        if(!manager.isEmpty()){
+            double passed = 10;
+            int passedStudents =0;
+            for(int x =0 ; x< manager.studentsSize() ; x++){
+                if(passed <= manager.getStudentPoint(x)){
+                    System.out.printf(manager.getStudentName(x)+ " : %.2f\n",manager.getStudentPoint(x));
+                    passedStudents++;
+                }
+            }
+            if(passedStudents == 0){
+                System.out.println("There are no passed students.\n");
+            }
+            else{
+                System.out.println("The number of passed students are : "+passedStudents+"\n");
             }
         }
-        if(passedStudents == 0){
-            System.out.println("There are no passed students.\n");
-        }
         else{
-            System.out.println("The number of passed students are : "+passedStudents+"\n");
+            System.out.println("There are no students yet in the class.\n");
         }
     }
 
     // This function is used to show the failed students.
     public static void failedStudents(StudentsManager manager){
-        double failed = 9.99d;
-        int failedStudents = 0;
-        for(int x = 0; x<manager.studentsSize() ; x++){
-            if(failed >= manager.getStudentPoint(x)){
-                System.out.printf(manager.getStudentName(x)+" : %.2f.\n",manager.getStudentPoint(x));
-                failedStudents++;
+        if(!manager.isEmpty()){
+            double failed = 9.99d;
+            int failedStudents = 0;
+            for(int x = 0; x<manager.studentsSize() ; x++){
+                if(failed >= manager.getStudentPoint(x)){
+                    System.out.printf(manager.getStudentName(x)+" : %.2f.\n",manager.getStudentPoint(x));
+                    failedStudents++;
+                }
+            }
+            if(failedStudents == 0){
+                System.out.println("There are no failed students.\n");
+            }
+            else{
+                System.out.println("The number of failed student are  : "+failedStudents+"\n");
             }
         }
-        if(failedStudents == 0){
-            System.out.println("There are no failed students.\n");
-        }
         else{
-            System.out.println("The number of failed student are  : "+failedStudents+"\n");
+            System.out.println("There are no students yet in the class.\n");
         }
     }
 
@@ -230,6 +228,7 @@ public class Main {
                 if(name.equals(manager.getStudentName(x))){
                     System.out.println("The student "+manager.getStudentName(x)+" is found, The details are : ");
                     manager.OneStudentDetails(x);
+                    manager.studentStatistics(x);
                     manager.setStudentPosition(x);
                     System.out.println();
                     isFound = true;
@@ -247,31 +246,103 @@ public class Main {
 
     // This function is used to change the grades of the student that we take from (searchForStudent).
     public static void changeStudentGrades(StudentsManager manager){
-        if(manager.getStudentPosition() != -1){
-            int index = manager.getStudentPosition();
-            for(int x = 0;  x<3 ; x++){
-                double grade;
-                System.out.printf("Do you want to change the grade %.2f exam "+(x+1)+"\n",manager.getStudentGrades(index,x));
-                System.out.print("Choose 1 to put a new grade or any number to skip this grade : ");
-                int choice = input.nextInt();
-                if(choice == 1 ){
-                    System.out.print("Put the new grade of the exam "+(x+1)+" : ");
-                    grade = input.nextDouble();
-                    if(grade < 0 || grade > 20){
-                        System.out.println("The grade does not contains the conditions.\n");
-                        x--;
-                    }
-                    else{
-                        manager.changeGrades(x,grade);
-                        System.out.println();
-                    }
+        int index = manager.getStudentPosition();
+        for(int x = 0;  x<3 ; x++){
+            double grade;
+            System.out.printf("Do you want to change the grade %.2f exam "+(x+1)+"\n",manager.getStudentGrades(index,x));
+            System.out.print("Choose 1 to put a new grade or any number to skip this grade : ");
+            int choice = input.nextInt();
+            if(choice == 1 ){
+                System.out.print("Put the new grade of the exam "+(x+1)+" : ");
+                grade = input.nextDouble();
+                if(grade < 0 || grade > 20){
+                    System.out.println("The grade does not contains the conditions.\n");
+                    x--;
                 }
                 else{
+                    manager.changeGrades(x,grade,index);
                     System.out.println();
                 }
             }
-            manager.calculateNewGrades();
-            System.out.println();
+            else{
+                System.out.println();
+            }
+        }
+        manager.calculateNewGrades(index);
+    }
+
+    // This function is used to change the name of the student that we take from (searchForStudent).
+    public static void changeStudentName(StudentsManager manager){
+        int index = manager.getStudentPosition();
+        String name;
+        input.nextLine();
+
+        while(true){
+            System.out.print("Enter the new name of the student "+manager.getStudentName(index)+" : ");
+            name = input.nextLine().trim().toLowerCase();
+            if(name.equals(manager.checkName(name))){
+                System.out.println("The name is already in the list.");
+            }
+            else if(name.matches("[a-zA-Z]+(\\s[a-zA-Z]+)*")){
+                System.out.println("The new name of the student "+manager.getStudentName(index)+" is : "+name);
+                manager.changeName(name,index);
+                break;
+            }
+            else{
+                System.out.println("Cannot enter symbols or numbers in the name.");
+            }
+        }
+    }
+
+    // This function is used to change the age of the student that we take from (searchForStudent).
+    public static void changeStudentAge(StudentsManager manager){
+        int index = manager.getStudentPosition();
+        int age;
+        while(true){
+            try{
+                System.out.print("Enter the new age of the student "+manager.getStudentName(index)+" : ");
+                age = input.nextInt();
+                if(age >= 14 && age <= 20){
+                    System.out.println("The new age of the student "+manager.getStudentName(index)+" : "+age);
+                    manager.changeAge(age,index);
+                    break;
+                }
+                else{
+                    System.out.println("Less than 13 or above 20 can't be in this school.");
+                }
+            }
+            catch(InputMismatchException e){
+                System.out.println("Cannot enter letters or symbols.");
+                input.nextLine();
+            }
+        }
+    }
+
+    // This method has the three function (changeStudentGrades, changeStudentName, changeStudentAge).
+    public static void modifyStudent(StudentsManager manager){
+        if(!manager.isEmpty() && manager.getStudentPosition() != -1){
+            System.out.print("Do you want to modify the student's details (yes/no) : ");
+            String choose = input.nextLine().trim().toLowerCase();
+            if(choose.equals("yes")){
+                int choice;
+                System.out.println("\nWhat do you want to modify.");
+                System.out.println("""
+                    1 : Change the grades.
+                    2 : Change the name.
+                    3 : Change the age.
+                    4 : Exit.""");
+                do{
+                    System.out.print("\nEnter your choice : ");
+                    choice = input.nextInt();
+                    switch (choice){
+                        case 1 : changeStudentGrades(manager); break;
+                        case 2 : changeStudentName(manager); break;
+                        case 3 : changeStudentAge(manager); break;
+                        case 4 : System.out.println("\n");break;
+                        default : System.out.println("The choice is incorrect.");
+                    }
+                } while (choice != 4);
+            }
         }
     }
 

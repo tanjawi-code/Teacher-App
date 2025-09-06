@@ -1,3 +1,5 @@
+// I will add the gender (male,female).
+
 public class Student{
 
     private String studentName;
@@ -59,9 +61,20 @@ public class Student{
         this.studentPoint = sum/studentGrades.length;
    }
 
+   // This is for setting new grades.
    void setNewGrades(int index , double newGrade){
         this.studentGrades[index] = newGrade;
    }
+
+   // This is for setting new name.
+    void setNewName(String newName){
+        studentName = newName;
+    }
+
+    // This is for setting new age.
+    void setNewAge(int newAge){
+        studentAge = newAge;
+    }
 
    // The function to print all the details of every student.
     public void studentDetails(){

@@ -16,14 +16,14 @@ point, lowest point, class average, success rate, and the top three students in 
 ## To-Do list.
 - [  ] Add login screen.
 - [  ] Add GUI swing to the project.
+- [  ] Add gender (male or female).
 - [  ] Make things more clear and simple.
 ---
 ## Problems need to be fixed.
 - Find a solution to reduce using try-catch without methods too much.
 - Make the program hold all the problems of (InputMismatchException) to avoid stopping the program while working.
-- Fix the problem in the method (studentsGrades), The problem is when the user enter letters or symbols instead of
-numbers. The program shows an empty line and then continue without letting the user enter correct numbers.
-- Fix the problem of when the teacher does not store students, but the teacher wants to manage or see the details.
+- Find a better to use these methods (changeStudentGrades, changeStudentName, changeStudentAge, modifyStudent). Use 
+SOLID and make these function more reusable.
 ---
 ## Future improvements.
 - Add database support (MySQl or SQLite).

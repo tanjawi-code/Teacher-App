@@ -47,11 +47,19 @@ public class StudentsManager {
     }
 
     // Changing grades and calculating new grades.
-    void changeGrades(int index ,double newGrade){
-        students.get(this.studentPosition).setNewGrades(index,newGrade);
+    void changeGrades(int index ,double newGrade, int studentIndex){
+        students.get(studentIndex).setNewGrades(index,newGrade);
     }
-    void calculateNewGrades(){
-        students.get(this.studentPosition).calculateGrades();
+    void calculateNewGrades(int index){
+        students.get(index).calculateGrades();
+    }
+
+    // This is for changing the name and age of one student.
+    void changeName(String name,int index){
+        students.get(index).setNewName(name);
+    }
+    void changeAge(int age, int index){
+        students.get(index).setNewAge(age);
     }
 
     // Show the top three student points from top to bottoms.
@@ -96,6 +104,58 @@ public class StudentsManager {
         double min = Collections.min(points);
         System.out.printf("The highest point in the class is : %.2f\n",max);
         System.out.printf("The lowest point in the class is : %.2f\n",min);
+    }
+
+    // Check the name if it's not repeated.
+    String checkName(String name){
+        for (Student student : students) {
+            if (name.equals(student.getStudentName())) {
+                return student.getStudentName();
+            }
+        }
+        return "";
+    }
+
+    // This method is used to show more Statistics about one student. It's used in the function (searchForStudent).
+    void studentStatistics(int studentIndex){
+        ArrayList<Double> grades = new ArrayList<>();
+
+        System.out.println("\nThe student statistics.\n");
+
+        for(int x = 0; x<3; x++){
+            grades.add(students.get(studentIndex).getStudentGrades(x));
+        }
+        System.out.printf("The highest grade of the student is %.2f\n",Collections.max(grades));
+        System.out.printf("The lowest grade of the student is %.2f\n",Collections.min(grades));
+
+        double average =0;
+        for(Double grade : grades){
+            average += grade;
+        }
+        average = average/grades.size();
+        System.out.printf("The average of the grades is %.2f\n",average);
+
+        int belowTen =0;
+        for(Double grade : grades){
+            if(grade < 10){
+                belowTen++;
+            }
+        }
+        System.out.println("The number of grades below 10 is "+belowTen);
+
+        System.out.print("The rate of "+students.get(studentIndex).getStudentName()+"'s point : ");
+        if(students.get(studentIndex).getStudentPoint() >= 18){
+            System.out.println("Excellent.");
+        }
+        else if(students.get(studentIndex).getStudentPoint() >= 14){
+            System.out.println("Very good.");
+        }
+        else if(students.get(studentIndex).getStudentPoint() >= 10){
+            System.out.println("Good.");
+        }
+        else{
+            System.out.println("Work harder next time.");
+        }
     }
 
     void displayStudentInfo(){
