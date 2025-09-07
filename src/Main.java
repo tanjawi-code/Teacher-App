@@ -41,7 +41,7 @@ public class Main {
                 case 2 : manager.displayStudentInfo(); break;
                 case 3 :
                     searchForStudent(manager);
-                    modifyStudent(manager);
+                    manager.modifyStudent(manager.getStudentPosition());
                     break;
                 case 4 : passedStudents(manager); break;
                 case 5 : failedStudents(manager); break;
@@ -218,6 +218,7 @@ public class Main {
     }
 
     // This function is used to search for a student and change his/her grades.
+    // Search by name, point, age, passed or failed, grade, male or female.
     public static void searchForStudent(StudentsManager manager){
         if(!manager.isEmpty()){
             System.out.print("Enter your student name you want to search : ");
@@ -241,108 +242,6 @@ public class Main {
         else{
             System.out.println("There are no students yet in the claas.\n");
             manager.setStudentPosition(-1);
-        }
-    }
-
-    // This function is used to change the grades of the student that we take from (searchForStudent).
-    public static void changeStudentGrades(StudentsManager manager){
-        int index = manager.getStudentPosition();
-        for(int x = 0;  x<3 ; x++){
-            double grade;
-            System.out.printf("Do you want to change the grade %.2f exam "+(x+1)+"\n",manager.getStudentGrades(index,x));
-            System.out.print("Choose 1 to put a new grade or any number to skip this grade : ");
-            int choice = input.nextInt();
-            if(choice == 1 ){
-                System.out.print("Put the new grade of the exam "+(x+1)+" : ");
-                grade = input.nextDouble();
-                if(grade < 0 || grade > 20){
-                    System.out.println("The grade does not contains the conditions.\n");
-                    x--;
-                }
-                else{
-                    manager.changeGrades(x,grade,index);
-                    System.out.println();
-                }
-            }
-            else{
-                System.out.println();
-            }
-        }
-        manager.calculateNewGrades(index);
-    }
-
-    // This function is used to change the name of the student that we take from (searchForStudent).
-    public static void changeStudentName(StudentsManager manager){
-        int index = manager.getStudentPosition();
-        String name;
-        input.nextLine();
-
-        while(true){
-            System.out.print("Enter the new name of the student "+manager.getStudentName(index)+" : ");
-            name = input.nextLine().trim().toLowerCase();
-            if(name.equals(manager.checkName(name))){
-                System.out.println("The name is already in the list.");
-            }
-            else if(name.matches("[a-zA-Z]+(\\s[a-zA-Z]+)*")){
-                System.out.println("The new name of the student "+manager.getStudentName(index)+" is : "+name);
-                manager.changeName(name,index);
-                break;
-            }
-            else{
-                System.out.println("Cannot enter symbols or numbers in the name.");
-            }
-        }
-    }
-
-    // This function is used to change the age of the student that we take from (searchForStudent).
-    public static void changeStudentAge(StudentsManager manager){
-        int index = manager.getStudentPosition();
-        int age;
-        while(true){
-            try{
-                System.out.print("Enter the new age of the student "+manager.getStudentName(index)+" : ");
-                age = input.nextInt();
-                if(age >= 14 && age <= 20){
-                    System.out.println("The new age of the student "+manager.getStudentName(index)+" : "+age);
-                    manager.changeAge(age,index);
-                    break;
-                }
-                else{
-                    System.out.println("Less than 13 or above 20 can't be in this school.");
-                }
-            }
-            catch(InputMismatchException e){
-                System.out.println("Cannot enter letters or symbols.");
-                input.nextLine();
-            }
-        }
-    }
-
-    // This method has the three function (changeStudentGrades, changeStudentName, changeStudentAge).
-    public static void modifyStudent(StudentsManager manager){
-        if(!manager.isEmpty() && manager.getStudentPosition() != -1){
-            System.out.print("Do you want to modify the student's details (yes/no) : ");
-            String choose = input.nextLine().trim().toLowerCase();
-            if(choose.equals("yes")){
-                int choice;
-                System.out.println("\nWhat do you want to modify.");
-                System.out.println("""
-                    1 : Change the grades.
-                    2 : Change the name.
-                    3 : Change the age.
-                    4 : Exit.""");
-                do{
-                    System.out.print("\nEnter your choice : ");
-                    choice = input.nextInt();
-                    switch (choice){
-                        case 1 : changeStudentGrades(manager); break;
-                        case 2 : changeStudentName(manager); break;
-                        case 3 : changeStudentAge(manager); break;
-                        case 4 : System.out.println("\n");break;
-                        default : System.out.println("The choice is incorrect.");
-                    }
-                } while (choice != 4);
-            }
         }
     }
 

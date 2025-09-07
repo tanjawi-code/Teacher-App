@@ -1,4 +1,7 @@
-// I will add the gender (male,female).
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+enum Gender {male, female}
 
 public class Student{
 
@@ -61,24 +64,86 @@ public class Student{
         this.studentPoint = sum/studentGrades.length;
    }
 
-   // This is for setting new grades.
-   void setNewGrades(int index , double newGrade){
-        this.studentGrades[index] = newGrade;
-   }
-
-   // This is for setting new name.
-    void setNewName(String newName){
-        studentName = newName;
-    }
-
-    // This is for setting new age.
-    void setNewAge(int newAge){
-        studentAge = newAge;
-    }
-
    // The function to print all the details of every student.
     public void studentDetails(){
         System.out.printf("Name : "+studentName+" || ID : "+studentID+" || Age :"+studentAge+" || Point : %.2f || Grades : [exam 1 : %.2f, exam 2 : %.2f, exam 3 : %.2f].\n",studentPoint, studentGrades[0], studentGrades[1], studentGrades[2]);
+    }
+
+    // This function is used to change the grades of the student that we take from the function (searchForStudent).
+    public void changeStudentGrades() {
+        Scanner input = new Scanner(System.in);
+        for(int x = 0;  x<3 ; x++){
+            double grade;
+            System.out.printf("Do you want to change the grade %.2f exam "+(x+1)+"\n",this.studentGrades[x]);
+            System.out.print("Choose 1 to put a new grade or 0 to skip this grade : ");
+            int choice = input.nextInt();
+            if(choice == 1 ){
+                System.out.print("Put the new grade of the exam "+(x+1)+" : ");
+                grade = input.nextDouble();
+                if(grade < 0 || grade > 20){
+                    System.out.println("The grade does not contains the conditions.\n");
+                    x--;
+                }
+                else{
+                    this.studentGrades[x] = grade;
+                    System.out.println();
+                }
+            }
+            else{
+                System.out.println();
+            }
+        }
+        double average =0;
+        for(Double grade : studentGrades){
+            average += grade;
+        }
+        this.studentPoint = average / this.studentGrades.length;
+    }
+
+    // This function is used to change the name of the student that we take from the function (searchForStudent).
+    public void changeStudentName(){
+        Scanner input = new Scanner(System.in);
+        String name;
+
+        while(true){
+            System.out.print("Enter the new name of the student "+this.studentName+" : ");
+            name = input.nextLine().trim().toLowerCase();
+            if(name.equals(this.studentName)){
+                System.out.println("The name is already in the list.");
+            }
+            else if(name.matches("[a-zA-Z]+(\\s[a-zA-Z]+)*")){
+                System.out.println("The new name of the student "+this.studentName+" is : "+name);
+                this.studentName = name;
+                break;
+            }
+            else{
+                System.out.println("Cannot enter symbols or numbers in the name.");
+            }
+        }
+    }
+
+    // This function is used to change the age of the student that we take from the function (searchForStudent).
+    public void changeStudentAge(){
+        Scanner input = new Scanner(System.in);
+        int age;
+        while(true){
+            try{
+                System.out.print("Enter the new age of the student "+this.studentName+" : ");
+                age = input.nextInt();
+                if(age >= 14 && age <= 20){
+                    System.out.println("The new age of the student "+this.studentName+" : "+age);
+                    this.studentAge = age;
+                    break;
+                }
+                else{
+                    System.out.println("Less than 13 or above 20 can't be in this school.");
+                }
+            }
+            catch(InputMismatchException e){
+                System.out.println("Cannot enter letters or symbols.");
+                input.nextLine();
+            }
+        }
     }
 
     // This function will be used only to print the three top points in the class.

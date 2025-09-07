@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Scanner;
 
 public class StudentsManager {
 
@@ -10,9 +11,6 @@ public class StudentsManager {
     // Getters.
     String getStudentName(int index){
         return students.get(index).getStudentName();
-    }
-    double getStudentGrades(int index, int grade){
-        return students.get(index).getStudentGrades(grade);
     }
     double getStudentPoint(int index){
         return students.get(index).getStudentPoint();
@@ -44,22 +42,6 @@ public class StudentsManager {
     }
     int getStudentPosition(){
         return this.studentPosition;
-    }
-
-    // Changing grades and calculating new grades.
-    void changeGrades(int index ,double newGrade, int studentIndex){
-        students.get(studentIndex).setNewGrades(index,newGrade);
-    }
-    void calculateNewGrades(int index){
-        students.get(index).calculateGrades();
-    }
-
-    // This is for changing the name and age of one student.
-    void changeName(String name,int index){
-        students.get(index).setNewName(name);
-    }
-    void changeAge(int age, int index){
-        students.get(index).setNewAge(age);
     }
 
     // Show the top three student points from top to bottoms.
@@ -155,6 +137,39 @@ public class StudentsManager {
         }
         else{
             System.out.println("Work harder next time.");
+        }
+    }
+
+    // This method has the three method (changeStudentGrades, changeStudentName, changeStudentAge).
+    public void modifyStudent(int index){
+        Scanner input = new Scanner(System.in);
+
+        if(!students.isEmpty() && this.studentPosition != -1){
+            System.out.print("Do you want to modify the student's details (yes/no) : ");
+            String choose = input.nextLine().trim().toLowerCase();
+            if(choose.equals("yes")){
+                int choice;
+                System.out.println("\nWhat do you want to modify.");
+                System.out.println("""
+                    1 : Change the grades.
+                    2 : Change the name.
+                    3 : Change the age.
+                    4 : Exit.""");
+                do{
+                    System.out.print("\nEnter your choice : ");
+                    choice = input.nextInt();
+                    switch (choice){
+                        case 1 : students.get(index).changeStudentGrades(); break;
+                        case 2 : students.get(index).changeStudentName(); break;
+                        case 3 : students.get(index).changeStudentAge(); break;
+                        case 4 : System.out.println("\n"); break;
+                        default : System.out.println("The choice is incorrect.");
+                    }
+                } while (choice != 4);
+            }
+            else{
+                System.out.println("\n");
+            }
         }
     }
 
