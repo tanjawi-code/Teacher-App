@@ -10,6 +10,7 @@ public class Student{
     private double[] studentGrades = new double[3];
     private double studentPoint;
     private int studentID;
+    private Gender studentGender;
 
     Student(){
         this.studentName = "No name";
@@ -27,6 +28,7 @@ public class Student{
         this.studentGrades = other.studentGrades;
         this.studentPoint = other.studentPoint;
         this.studentID = other.studentID;
+        this.studentGender = other.studentGender;
     }
 
     // Setters and Getters.
@@ -51,6 +53,12 @@ public class Student{
     public int getStudentID() {
         return this.studentID;
     }
+    void setStudentGender(Gender gender){
+        this.studentGender = gender;
+    }
+    Gender getStudentGender(){
+        return this.studentGender;
+    }
     public double getStudentPoint(){
         return this.studentPoint;
     }
@@ -66,7 +74,7 @@ public class Student{
 
    // The function to print all the details of every student.
     public void studentDetails(){
-        System.out.printf("Name : "+studentName+" || ID : "+studentID+" || Age :"+studentAge+" || Point : %.2f || Grades : [exam 1 : %.2f, exam 2 : %.2f, exam 3 : %.2f].\n",studentPoint, studentGrades[0], studentGrades[1], studentGrades[2]);
+        System.out.printf("Name : "+studentName+" || Gender :  "+this.studentGender+" || ID : "+studentID+" || Age :"+studentAge+" || Point : %.2f || Grades : [exam 1 : %.2f, exam 2 : %.2f, exam 3 : %.2f].\n",studentPoint, studentGrades[0], studentGrades[1], studentGrades[2]);
     }
 
     // This function is used to change the grades of the student that we take from the function (searchForStudent).
@@ -101,14 +109,14 @@ public class Student{
     }
 
     // This function is used to change the name of the student that we take from the function (searchForStudent).
-    public void changeStudentName(){
+    public void changeStudentName(StudentsManager manager){
         Scanner input = new Scanner(System.in);
         String name;
 
         while(true){
             System.out.print("Enter the new name of the student "+this.studentName+" : ");
             name = input.nextLine().trim().toLowerCase();
-            if(name.equals(this.studentName)){
+            if(name.equals(manager.checkName(name))){
                 System.out.println("The name is already in the list.");
             }
             else if(name.matches("[a-zA-Z]+(\\s[a-zA-Z]+)*")){
@@ -148,6 +156,6 @@ public class Student{
 
     // This function will be used only to print the three top points in the class.
     public void studentInfo(){
-        System.out.printf("ID : "+studentID+" || Name : "+studentName+" || Point : %.2f\n",studentPoint );
+        System.out.printf("ID : "+studentID+" || Gender : "+this.studentGender +" || Name : "+studentName+" || Point : %.2f\n",studentPoint );
     }
 }

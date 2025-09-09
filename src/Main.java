@@ -39,10 +39,7 @@ public class Main {
             switch (choose){
                 case 1 : addStudent(student,manager); break;
                 case 2 : manager.displayStudentInfo(); break;
-                case 3 :
-                    searchForStudent(manager);
-                    manager.modifyStudent(manager.getStudentPosition());
-                    break;
+                case 3 : searchForStudent(manager); break;
                 case 4 : passedStudents(manager); break;
                 case 5 : failedStudents(manager); break;
                 case 6 : statistics(manager); break;
@@ -63,6 +60,32 @@ public class Main {
         }while(choose!=9);
 
         input.close();
+    }
+
+    // This is for adding the gender (male or female).
+    static Gender addStudentGender(){
+        System.out.println("What is the gender of the employee : (1 : male || 2 : female) ");
+        do{
+            try{
+                System.out.print("Enter the choice number : ");
+                int choice = input.nextInt();
+                if(choice == 1){
+                    input.nextLine();
+                    return Gender.male;
+                }
+                else if(choice == 2){
+                    input.nextLine();
+                    return Gender.female;
+                }
+                else{
+                    System.out.println("The choice must be only 1 or 2.");
+                }
+            }
+            catch (InputMismatchException e){
+                System.out.println("The choice cannot have letters or symbols.");
+                input.nextLine();
+            }
+        } while(true);
     }
 
     // This function is used only with (addStudent).
@@ -141,6 +164,7 @@ public class Main {
         int count =0;
         int choice;
         do{
+            student.setStudentGender(addStudentGender());
             student.setStudentName(addStudentName(count,manager));
             student.setStudentAge(addStudentAge(student.getStudentName()));
             student.setGrades(addStudentGrade(student.getStudentName()));
@@ -230,8 +254,8 @@ public class Main {
                     System.out.println("The student "+manager.getStudentName(x)+" is found, The details are : ");
                     manager.OneStudentDetails(x);
                     manager.studentStatistics(x);
-                    manager.setStudentPosition(x);
                     System.out.println();
+                    manager.modifyStudent(x); // This is the method of modifying the student.
                     isFound = true;
                 }
             }
@@ -241,7 +265,6 @@ public class Main {
         }
         else{
             System.out.println("There are no students yet in the claas.\n");
-            manager.setStudentPosition(-1);
         }
     }
 

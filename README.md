@@ -16,16 +16,12 @@ point, lowest point, class average, success rate, and the top three students in 
 ## To-Do list.
 - [  ] Add login screen.
 - [  ] Add GUI swing to the project.
-- [  ] Add gender (male or female).
 - [  ] Make things more clear and simple.
 - [  ] Add searching ways : (age, point, grade, passed or failed, and male or female).
 ---
 ## Problems need to be fixed.
 - Find a solution to reduce using try-catch without methods too much.
 - Make the program hold all the problems of (InputMismatchException) to avoid stopping the program while working.
-- Fix the problem in the method (modifyStudent). The problem is when you search for a student by a name, and the name
-is not in the list of the students. The program continues and let you modify the details of the first student instead of
-showing you that the incorrect name is not in the list. 
 ---
 ## Future improvements.
 - Add database support (MySQl or SQLite).

@@ -6,7 +6,6 @@ import java.util.Scanner;
 public class StudentsManager {
 
     private final ArrayList<Student> students = new ArrayList<>();
-    private int studentPosition;
 
     // Getters.
     String getStudentName(int index){
@@ -36,14 +35,6 @@ public class StudentsManager {
         students.get(index).studentDetails();
     }
 
-    // Set and Get the position of one student.
-    void setStudentPosition(int index){
-        this.studentPosition = index;
-    }
-    int getStudentPosition(){
-        return this.studentPosition;
-    }
-
     // Show the top three student points from top to bottoms.
     ArrayList<Student> showTopThreePoints(){
         final ArrayList<Student> sortedStudent = new ArrayList<>(students);
@@ -59,9 +50,22 @@ public class StudentsManager {
     // Statistics
     void classStatistics(ArrayList<Double> points){
         int passedStudents = 0, failedStudents = 0;
+        int males = 0, females = 0;
         double average = 0;
         System.out.println("The subject : Math.");
         System.out.println("The number of students are : "+students.size());
+
+        for(Student gender : students){
+            if(gender.getStudentGender() == Gender.male){
+                males++;
+            }
+            else if (gender.getStudentGender() == Gender.female){
+                females++;
+            }
+        }
+        System.out.println("The number of males : "+males);
+        System.out.println("The number of females : "+females);
+
         for (Student value : students) {
             if (value.getStudentPoint() >= 10) {
                 passedStudents++;
@@ -144,32 +148,30 @@ public class StudentsManager {
     public void modifyStudent(int index){
         Scanner input = new Scanner(System.in);
 
-        if(!students.isEmpty() && this.studentPosition != -1){
-            System.out.print("Do you want to modify the student's details (yes/no) : ");
-            String choose = input.nextLine().trim().toLowerCase();
-            if(choose.equals("yes")){
-                int choice;
-                System.out.println("\nWhat do you want to modify.");
-                System.out.println("""
+        System.out.print("Do you want to modify the student's details (yes/no) : ");
+        String choose = input.nextLine().trim().toLowerCase();
+        if(choose.equals("yes")){
+            int choice;
+            System.out.println("\nWhat do you want to modify.");
+            System.out.println("""
                     1 : Change the grades.
                     2 : Change the name.
                     3 : Change the age.
                     4 : Exit.""");
-                do{
-                    System.out.print("\nEnter your choice : ");
-                    choice = input.nextInt();
-                    switch (choice){
-                        case 1 : students.get(index).changeStudentGrades(); break;
-                        case 2 : students.get(index).changeStudentName(); break;
-                        case 3 : students.get(index).changeStudentAge(); break;
-                        case 4 : System.out.println("\n"); break;
-                        default : System.out.println("The choice is incorrect.");
-                    }
-                } while (choice != 4);
-            }
-            else{
-                System.out.println("\n");
-            }
+            do{
+                System.out.print("\nEnter your choice : ");
+                choice = input.nextInt();
+                switch (choice){
+                    case 1 : students.get(index).changeStudentGrades(); break;
+                    case 2 : students.get(index).changeStudentName(StudentsManager.this); break;
+                    case 3 : students.get(index).changeStudentAge(); break;
+                    case 4 : System.out.println(); break;
+                    default : System.out.println("The choice is incorrect.");
+                }
+            } while (choice != 4);
+        }
+        else{
+            System.out.println();
         }
     }
 
