@@ -11,6 +11,7 @@ public class Student{
     private double studentPoint;
     private int studentID;
     private Gender studentGender;
+    private int studentClassNumber;
 
     Student(){
         this.studentName = "No name";
@@ -20,6 +21,7 @@ public class Student{
         this.studentGrades[2] = 0;
         this.studentPoint = 0;
         this.studentID = 0;
+        this.studentClassNumber = 0;
     }
 
     Student(Student other){
@@ -29,6 +31,7 @@ public class Student{
         this.studentPoint = other.studentPoint;
         this.studentID = other.studentID;
         this.studentGender = other.studentGender;
+        this.studentClassNumber = other.studentClassNumber;
     }
 
     // Setters and Getters.
@@ -59,6 +62,12 @@ public class Student{
     Gender getStudentGender(){
         return this.studentGender;
     }
+    public void setStudentClassNumber(int number){
+        this.studentClassNumber = number;
+    }
+    public int getStudentClassNumber(){
+        return this.studentClassNumber;
+    }
     public double getStudentPoint(){
         return this.studentPoint;
     }
@@ -74,7 +83,8 @@ public class Student{
 
    // The function to print all the details of every student.
     public void studentDetails(){
-        System.out.printf("Name : "+studentName+" || Gender :  "+this.studentGender+" || ID : "+studentID+" || Age :"+studentAge+" || Point : %.2f || Grades : [exam 1 : %.2f, exam 2 : %.2f, exam 3 : %.2f].\n",studentPoint, studentGrades[0], studentGrades[1], studentGrades[2]);
+        System.out.println("Name : "+this.studentName+" || Gender : "+this.studentGender+" || ID : "+this.studentID+" || Class number : "+this.studentClassNumber);
+        System.out.printf("Point : %.2f || Grades : [exam 1 : %.2f, exam 2 : %.2f, exam 3 : %.2f].\n",studentPoint, studentGrades[0], studentGrades[1], studentGrades[2]);
     }
 
     // This function is used to change the grades of the student that we take from the function (searchForStudent).
@@ -156,6 +166,6 @@ public class Student{
 
     // This function will be used only to print the three top points in the class.
     public void studentInfo(){
-        System.out.printf("ID : "+studentID+" || Gender : "+this.studentGender +" || Name : "+studentName+" || Point : %.2f\n",studentPoint );
+        System.out.printf("ID : "+studentID+" || Class number : "+this.studentClassNumber+" || Gender : "+this.studentGender +" || Name : "+studentName+" || Point : %.2f\n",studentPoint );
     }
 }

@@ -62,7 +62,7 @@ public class Main {
         input.close();
     }
 
-    // This is for adding the gender (male or female).
+    // This function is used only with (addStudent).
     static Gender addStudentGender(){
         System.out.println("What is the gender of the employee : (1 : male || 2 : female) ");
         do{
@@ -119,7 +119,7 @@ public class Main {
                     return age;
                 }
                 else{
-                    System.out.println("Less than 13 or above 20 can't be in this school.");
+                    System.out.println("Less than 13 or more than 20 can't be in this school.");
                 }
             }
             catch(InputMismatchException e){
@@ -159,7 +159,8 @@ public class Main {
         return random.nextInt(1000,10000);
     }
 
-    // This function has (addStudentName, addStudentAge, addStudentGrades). It used to take the details of the student.
+    // This function has (addStudentName, addStudentAge, addStudentGrades, addStudentID, and addStudentGender).
+    // It used them to take the details of the student.
     public static void addStudent(Student student, StudentsManager manager){
         int count =0;
         int choice;
@@ -170,6 +171,7 @@ public class Main {
             student.setGrades(addStudentGrade(student.getStudentName()));
             student.calculateGrades();
             student.setStudentID(addStudentID());
+            student.setStudentClassNumber(count+1);
             manager.saveStudent(student);
             count++;
             do{
@@ -292,8 +294,11 @@ public class Main {
                 System.out.println("You have removed the student "+name+" from the list of the students.\n");
                 manager.removeStudent(studentPosition);
             }
-            else{
+            else if(choice.equals("no")){
                 System.out.println();
+            }
+            else{
+                System.out.println("Incorrect choice, did not remove the student.\n");
             }
         }
 

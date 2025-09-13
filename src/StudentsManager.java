@@ -127,7 +127,7 @@ public class StudentsManager {
                 belowTen++;
             }
         }
-        System.out.println("The number of grades below 10 is "+belowTen);
+        System.out.println("The number of grades less than 10 is : "+belowTen);
 
         System.out.print("The rate of "+students.get(studentIndex).getStudentName()+"'s point : ");
         if(students.get(studentIndex).getStudentPoint() >= 18){
@@ -178,8 +178,8 @@ public class StudentsManager {
     void displayStudentInfo(){
         for(Student Students : students){
             Students.studentDetails();
+            System.out.println();
         }
-        System.out.println();
     }
 
 }
