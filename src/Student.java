@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 enum Gender {male, female}
 
-public class Student{
+public class Student implements SaveAble{
 
     private String studentName;
     private int studentAge;
@@ -167,5 +167,12 @@ public class Student{
     // This function will be used only to print the three top points in the class.
     public void studentInfo(){
         System.out.printf("ID : "+studentID+" || Class number : "+this.studentClassNumber+" || Gender : "+this.studentGender +" || Name : "+studentName+" || Point : %.2f\n",studentPoint );
+    }
+
+    // This is the method of the interface DisplayAble.
+    @Override
+    public String saveFile(){
+        return studentClassNumber+","+studentID+","+studentName+","+studentAge+","+studentGender+","+studentPoint
+                +","+studentGrades[0]+","+studentGrades[1]+","+studentGrades[2]+"\n";
     }
 }

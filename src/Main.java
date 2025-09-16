@@ -1,13 +1,17 @@
+import javax.swing.*;
+import java.io.*;
 import java.util.*;
 
 public class Main {
     static Scanner input = new Scanner(System.in);
     public static void main(String[] args) {
 
-        System.out.println("Hello teacher, we made a big update to the program which it has more things than the old one\n\n ");
+        System.out.println("Hello teacher, I am here to inform you that I added more features and good things.\n");
 
         Student student = new Student();
         StudentsManager manager = new StudentsManager();
+
+        takeStudentsFile(manager,student);
 
         int choose ;
         do{
@@ -20,7 +24,8 @@ public class Main {
                     6 : Show Statistics of the class.
                     7 : Remove a student from the class.
                     8 : Show the top three students.
-                    9 : Exit.""");
+                    9 : Save students' details in a file.
+                    10 : Exit.""");
             while(true){
                 try{
                     System.out.print("Enter your choice : ");
@@ -32,7 +37,7 @@ public class Main {
                     }
                 }
                 catch (InputMismatchException e){
-                    System.out.println("The choice should be numbers.");
+                    System.out.println("The choice should be a number.");
                     input.nextLine();
                 }
             }
@@ -52,12 +57,13 @@ public class Main {
                     }
                     break;
                 case 8 : topThreeStudents(manager); break;
-                case 9 : System.out.println("The program is finished."); break;
+                case 9 : saveStudentsFile(manager); break;
+                case 10 : System.out.println("The program is finished."); break;
                 default :
                     System.out.println("Wrong choice , try again.\n");
             }
 
-        }while(choose!=9);
+        }while(choose!=10);
 
         input.close();
     }
@@ -99,7 +105,7 @@ public class Main {
                 System.out.println("The name is already in the list.");
             }
             else if(name.matches("[a-zA-Z]+(\\s[a-zA-Z]+)*")){
-                return name;
+                return name.substring(0,1).toUpperCase() + name.substring(1).toLowerCase();
             }
             else {
                 System.out.println("The name should only accept letters.");
@@ -252,7 +258,7 @@ public class Main {
             boolean isFound = false;
 
             for(int x = 0 ; x<manager.studentsSize() ; x++){
-                if(name.equals(manager.getStudentName(x))){
+                if(name.equals(manager.getStudentName(x).toLowerCase().trim())){
                     System.out.println("The student "+manager.getStudentName(x)+" is found, The details are : ");
                     manager.OneStudentDetails(x);
                     manager.studentStatistics(x);
@@ -279,7 +285,7 @@ public class Main {
         String name = input.nextLine().toLowerCase().trim();
 
         for(int x = 0 ; x<manager.studentsSize() ; x++){
-            if(name.equals(manager.getStudentName(x))){
+            if(name.equals(manager.getStudentName(x).trim().toLowerCase())){
                 System.out.println("The student "+manager.getStudentName(x)+" is found, The details are : ");
                 manager.OneStudentDetails(x);
                 studentPosition = x;
@@ -347,6 +353,98 @@ public class Main {
         }
         else{
             System.out.println("There are no students yet in the class.\n");
+        }
+    }
+
+    // This method is for clearing the file if the user wants to start new students.
+    public static void clearFile(String path){
+        File file = new File(path);
+
+        try(FileWriter fileWriter = new FileWriter(file)){
+            fileWriter.write("");
+        }
+        catch (IOException e){
+            System.out.println("Something is wrong.\n");
+        }
+    }
+
+    // This is for saving the students in a file.
+    public static void saveStudentsFile(StudentsManager manager) {
+        if(!manager.isEmpty()){
+            String filePath = "C:\\Users\\asus\\desktop\\studentsFile.csv";
+
+            try( FileWriter fileWriter = new FileWriter(filePath)){
+                for(int x = 0 ; x< manager.studentsSize() ; x++){
+                    fileWriter.write(manager.saveFile(x));
+                }
+                System.out.println("The file has been written.\n");
+            }
+            catch (FileNotFoundException e){
+                System.out.println("Could not find the file location.\n");
+            }
+            catch (IOException e){
+                System.out.println("Something went wrong with file.\n");
+            }
+        }
+        else {
+            System.out.println("The are no students yet in the class.\n");
+        }
+    }
+
+    // This is for using the data from the file that we have saved the students' details in.
+    public static void takeStudentsFile(StudentsManager manager,Student student){
+        String filePath = "C:\\Users\\asus\\desktop\\studentsFile.csv";
+        File file = new File(filePath);
+        int answer;
+        String[] confirm = {"Yes, Use the old data","No, Make new one(Delete the old)"};
+
+        try(BufferedReader bufferedReader = new BufferedReader(new FileReader(file))){
+            answer = JOptionPane.showOptionDialog(null,"Do want to use the previous file",
+                    "Students file",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,null,
+                    confirm,0);
+            if(answer == 0){
+                if(!(file.length() == 0)){
+                    System.out.println("The file is exists. You are using the old data.\n");
+                    String paragraph;
+                    while ((paragraph = bufferedReader.readLine()) != null){
+                        double[] grades = new double[3];
+                        String[] data = paragraph.split(",");
+                        int classNumber = Integer.parseInt(data[0]);
+                        int ID = Integer.parseInt(data[1]);
+                        String name = data[2];
+                        int age = Integer.parseInt(data[3]);
+                        Gender gender = Gender.valueOf(data[4]);
+                        double grade1 = Double.parseDouble(data[6]);
+                        double grade2 = Double.parseDouble(data[7]);
+                        double grade3 = Double.parseDouble(data[8]);
+                        grades[0] = grade1;
+                        grades[1] = grade2;
+                        grades[2] = grade3;
+
+                        student.setStudentName(name);
+                        student.setStudentAge(age);
+                        student.setStudentClassNumber(classNumber);
+                        student.setStudentGender(gender);
+                        student.setStudentID(ID);
+                        student.setGrades(grades);
+                        student.calculateGrades();
+                        manager.saveStudent(student);
+                    }
+                }
+                else {
+                    System.out.println("The file is empty.\n");
+                }
+            }
+            else {
+                System.out.println("You deleted the data in the previous file.\n");
+                clearFile(filePath);
+            }
+        }
+        catch (FileNotFoundException e){
+            System.out.println("File location is not found.\n");
+        }
+        catch (IOException e){
+            System.out.println("Something is wrong.\n");
         }
     }
 }

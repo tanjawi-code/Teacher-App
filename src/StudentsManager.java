@@ -14,6 +14,9 @@ public class StudentsManager {
     double getStudentPoint(int index){
         return students.get(index).getStudentPoint();
     }
+    String saveFile(int index){
+        return students.get(index).saveFile();
+    }
 
     // Saving a student.
     void saveStudent(Student s){
@@ -95,8 +98,8 @@ public class StudentsManager {
     // Check the name if it's not repeated.
     String checkName(String name){
         for (Student student : students) {
-            if (name.equals(student.getStudentName())) {
-                return student.getStudentName();
+            if (name.equals(student.getStudentName().trim().toLowerCase())) {
+                return name;
             }
         }
         return "";
@@ -181,5 +184,4 @@ public class StudentsManager {
             System.out.println();
         }
     }
-
 }
