@@ -14,10 +14,9 @@ point, lowest point, class average, success rate, and the top three students in 
 - Provide a simple screen of dealing with the program.
 ---
 ## To-Do list.
-- [  ] Add login screen.
-- [  ] Add GUI swing to the project.
 - [  ] Make things more clear and simple.
 - [  ] Add searching ways : (age, point, grade, passed or failed, and male or female).
+- [  ] Store details through GUI
 ---
 ## Problems need to be fixed.
 - Find a solution to reduce using try-catch without methods too much.
@@ -33,4 +32,4 @@ to add new students that weren't in the list before. The class number starts fro
 ## **The developer**
 - **Name** : [private name].
 - **Github** : [https://github.com/tanjawi-code].
-- *Version* : 1.0.0
+- *Version* : 1.1.0
