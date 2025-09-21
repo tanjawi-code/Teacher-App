@@ -34,6 +34,16 @@ public class Student implements SaveAble{
         this.studentClassNumber = other.studentClassNumber;
     }
 
+    Student(String name, int age, double[] Grades, double Point, int Id, Gender gender, int ClassNumber){
+        this.studentName = name;
+        this.studentAge = age;
+        this.studentGrades = Grades;
+        this.studentPoint = Point;
+        this.studentID = Id;
+        this.studentGender = gender;
+        this.studentClassNumber = ClassNumber;
+    }
+
     // Setters and Getters.
     public void setStudentName(String name){
         this.studentName = name;

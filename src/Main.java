@@ -11,9 +11,7 @@ public class Main {
         Student student = new Student();
         StudentsManager manager = new StudentsManager();
 
-        Login login = new Login();
-
-        //takeStudentsFile(manager,student);
+        takeStudentsFile(manager,student);
 
         int choose ;
         do{

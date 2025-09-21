@@ -19,7 +19,7 @@ public class Register implements ActionListener {
 
     // This is for holding the components.
     JPanel panel = new JPanel(new BorderLayout());
-    JPanel gridPanel = new JPanel(new GridLayout(8,2,0,10));
+    JPanel gridPanel = new JPanel(new GridLayout(9,2,0,10));
 
     // This is for name, age, password, confirm password.
     JTextField teacherName = new JTextField(15);
@@ -36,6 +36,8 @@ public class Register implements ActionListener {
     JButton buttonAccount = new JButton("Create account");
     JButton buttonClear = new JButton("Clear");
     JButton buttonBack = new JButton("Back");
+    JButton showPasswordButton = new JButton("Show password",seeIconPassword);
+    JButton HidePasswordButton = new JButton("Hide password",closeIconPassword);
 
     Register(){
         JFrame frame = new JFrame("Creating an account");
@@ -61,9 +63,9 @@ public class Register implements ActionListener {
         confirmPassword.setFont(new Font("MV Boli",Font.PLAIN,15));
 
         boxGender.addActionListener(e -> {
-            Object check = boxGender.getSelectedItem();
-            if(check instanceof teacherGender){
-                chosenGender = (teacherGender) check;
+            Object object = boxGender.getSelectedItem();
+            if(object instanceof teacherGender){
+                chosenGender = (teacherGender) object;
             }
         });
         boxSchools.addActionListener(e -> {
@@ -73,9 +75,9 @@ public class Register implements ActionListener {
             }
         });
         boxSubjects.addActionListener(e -> {
-            Object check = boxSubjects.getSelectedItem();
-            if(check instanceof subjects){
-                chosenSubject = (subjects) check;
+            Object object = boxSubjects.getSelectedItem();
+            if(object instanceof subjects){
+                chosenSubject = (subjects) object;
             }
         });
 
@@ -94,6 +96,16 @@ public class Register implements ActionListener {
         buttonBack.setBorder(BorderFactory.createEtchedBorder());
         buttonBack.setFocusable(false);
         buttonBack.addActionListener(this);
+        // The button of showing the password.
+        showPasswordButton.setBackground(Color.LIGHT_GRAY);
+        showPasswordButton.setBorder(BorderFactory.createEtchedBorder());
+        showPasswordButton.setFocusable(false);
+        showPasswordButton.addActionListener(this);
+        // The button of hiding the password.
+        HidePasswordButton.setBackground(Color.LIGHT_GRAY);
+        HidePasswordButton.setBorder(BorderFactory.createEtchedBorder());
+        HidePasswordButton.setFocusable(false);
+        HidePasswordButton.addActionListener(this);
 
         gridPanel.add(labels[0]);
         gridPanel.add(teacherName);
@@ -109,6 +121,8 @@ public class Register implements ActionListener {
         gridPanel.add(teacherPassword);
         gridPanel.add(labels[6]);
         gridPanel.add(confirmPassword);
+        gridPanel.add(showPasswordButton);
+        gridPanel.add(HidePasswordButton);
         gridPanel.add(buttonAccount);
         gridPanel.add(buttonClear);
         gridPanel.setBackground(Color.LIGHT_GRAY);
@@ -178,11 +192,10 @@ public class Register implements ActionListener {
                 boxSchools.setSelectedIndex(0);
                 boxSubjects.setSelectedIndex(0);
                 break;
-            case "Back" :
-                Login login = new Login();
-                break;
-            default:
-                System.out.println("Something went wrong.");
+            case "Back" : Login login = new Login(); break;
+            case "Show password" : teacherPassword.setEchoChar((char) 0); break;
+            case "Hide password" : teacherPassword.setEchoChar('•'); break;
+            default: System.out.println("Something went wrong.");
         }
     }
 

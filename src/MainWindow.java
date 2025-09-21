@@ -7,6 +7,8 @@ import java.util.Arrays;
 
 public class MainWindow extends JFrame implements ActionListener {
 
+    private final StudentsManager manager;
+
     // This is for the buttons in the lower part of the screen.
     String[] leftUnderTitles = {"Statistics","Passed","Failed","Top 3","Account","Sittings"};
     String[] rightUnderTitles = {"Delete","Update","Student Statistics","Save as a file","Get a file","Searching ways"};
@@ -16,10 +18,12 @@ public class MainWindow extends JFrame implements ActionListener {
     // This is for inputs in the higher part of the screen in left side.
     String[] leftTopTitles = {
             "First name : ","Second name : ","Age : ","Gender : ",
-            "ID : ","Grade 1 : ","Grade 2 : ","Grade 3 : ","Address : "};
+            "Grade 1 : ","Grade 2 : ","Grade 3 : ","Address : "};
     JTextField[] textInputs = new JTextField[leftTopTitles.length];
     JLabel[] labels = new JLabel[leftTopTitles.length];
     JButton addStudent = new JButton("Add student");
+    JButton cleanButton = new JButton("Clean");
+    JComboBox<Gender> boxGender = new JComboBox<>(Gender.values());
 
     // These are the main panels that are in the frame.
     JPanel northPanel = new JPanel(new BorderLayout());
@@ -28,7 +32,7 @@ public class MainWindow extends JFrame implements ActionListener {
 
     // This is for the table.
     String[] tableTitles = {
-            "First name","Second name","Age","Gender","ID","Grade 1","Grade 2","Grade 3","Point","Address"};
+            "First name","Second name","Age","Gender","ID","Grade 1","Grade 2","Grade 3","Point","Address","Class number"};
     JButton refresh = new JButton("Refresh");
     JButton search = new JButton("Search");
     JTextField searchName = new JTextField(50);
@@ -37,12 +41,13 @@ public class MainWindow extends JFrame implements ActionListener {
     JTable table = new JTable(model);
     JScrollPane pane = new JScrollPane(table);
 
-    MainWindow(){
+    MainWindow(StudentsManager manager){
         this.setTitle("Students management");
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setLayout(new BorderLayout());
+        this.manager = manager;
 
         // This is for the higher part of the screen in left side.
         JPanel textPanel = new JPanel(new GridLayout(9,2,0,5));
@@ -55,14 +60,24 @@ public class MainWindow extends JFrame implements ActionListener {
             textInputs[x].setFont(new Font("Arial",Font.PLAIN,20));
             textInputs[x].setCaretColor(Color.BLACK);
             textPanel.add(labels[x]);
-            textPanel.add(textInputs[x]);
+            if(labels[x].getText().equals("Gender : ")){
+                textPanel.add(boxGender);
+            }
+            else {
+                textPanel.add(textInputs[x]);
+            }
         }
-        addStudent.setFocusable(false);
+        addStudent.setFocusable(false); // Button of adding a student.
         addStudent.setBorder(BorderFactory.createEtchedBorder());
         addStudent.setBackground(Color.GREEN);
         addStudent.addActionListener(this);
+        cleanButton.setFocusable(false); // Button of cleaning the fields.
+        cleanButton.setBorder(BorderFactory.createEtchedBorder());
+        cleanButton.setBackground(Color.GRAY);
+        cleanButton.addActionListener(this);
+        textPanel.add(addStudent);
+        textPanel.add(cleanButton);
         westPanel.add(textPanel,BorderLayout.NORTH);
-        westPanel.add(addStudent,BorderLayout.CENTER);
 
         // This is for the lower part of the screen in left side.
         JPanel leftButtonsPanel = new JPanel(new GridLayout(3,2,30,30));
@@ -135,6 +150,54 @@ public class MainWindow extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        JButton button = (JButton) e.getSource();
+        String value = button.getText();
 
+        if(Arrays.asList(leftUnderTitles).contains(value)){
+            switch (value){
+                case "Statistics" :
+                    if(manager.isEmpty()){
+                        JOptionPane.showMessageDialog(null,
+                                "There are no students in the class yet","Empty class",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                    break;
+                case "Passed" :
+                    if(manager.isEmpty()){
+                        JOptionPane.showMessageDialog(null,"There are no students",
+                                "Empty class",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                    break;
+                case "Failed" :
+                    if(manager.isEmpty()){
+                        JOptionPane.showMessageDialog(null,
+                                "There are no students in the class","Empty class",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                    break;
+                case "Top 3" :
+                    if(manager.isEmpty()){
+                        JOptionPane.showMessageDialog(null,"The class is empty",
+                                "Empty class",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                    break;
+                case "Account" :
+                    JOptionPane.showMessageDialog(null,"It's coming soon",
+                            "Teacher's account",JOptionPane.INFORMATION_MESSAGE);
+                    break;
+                case "Sittings" :
+                    break;
+                default:
+            }
+        }
+        else if(Arrays.asList(rightUnderTitles).contains(value)){
+
+        }
+        else if (value.equals("Add student")) {
+            JOptionPane.showMessageDialog(null,"It's coming soon",
+                    "Adding students",JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 }
