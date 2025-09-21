@@ -9,7 +9,7 @@ public class MainWindow extends JFrame implements ActionListener {
 
     // This is for the buttons in the lower part of the screen.
     String[] leftUnderTitles = {"Statistics","Passed","Failed","Top 3","Account","Sittings"};
-    String[] rightUnderTitles = {"Delete","Update","Student Statistics","Save as a file","Get a file","Save Statistics as a file"};
+    String[] rightUnderTitles = {"Delete","Update","Student Statistics","Save as a file","Get a file","Searching ways"};
     JButton[] leftUnderButtons = new JButton[leftUnderTitles.length];
     JButton[] rightUnderButtons = new JButton[rightUnderTitles.length];
 
@@ -127,9 +127,9 @@ public class MainWindow extends JFrame implements ActionListener {
         rightSouthPanel.add(rightButtonsPanel,BorderLayout.SOUTH);
         southPanel.add(rightSouthPanel,BorderLayout.EAST);
 
-        this.add(northPanel,BorderLayout.CENTER);
-        this.add(westPanel,BorderLayout.WEST);
-        this.add(southPanel,BorderLayout.SOUTH);
+        this.add(northPanel,BorderLayout.CENTER); // Holds the north and center and south in the screen's center.
+        this.add(westPanel,BorderLayout.WEST); // Holds the north and center in the west
+        this.add(southPanel,BorderLayout.SOUTH); // Holds the south in the west.
         this.setVisible(true);
     }
 
