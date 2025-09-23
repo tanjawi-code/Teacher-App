@@ -11,7 +11,10 @@ public class Main {
         Student student = new Student();
         StudentsManager manager = new StudentsManager();
 
-        takeStudentsFile(manager,student);
+        MainWindow mainWindow = new MainWindow(manager,student);
+        //takeStudentsFile(manager,student);
+
+        manager.OneStudentDetails(0);
 
         int choose ;
         do{

@@ -184,4 +184,13 @@ public class StudentsManager {
             System.out.println();
         }
     }
+
+    // This is for increasing the class number.
+    int increaseClassNumber(){
+        int count = 0;
+        for(int x = 0; x<students.size(); x++){
+            count = x;
+        }
+        return  count;
+    }
 }

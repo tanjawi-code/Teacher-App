@@ -8,6 +8,7 @@ import java.util.Arrays;
 public class MainWindow extends JFrame implements ActionListener {
 
     private final StudentsManager manager;
+    private Student student;
 
     // This is for the buttons in the lower part of the screen.
     String[] leftUnderTitles = {"Statistics","Passed","Failed","Top 3","Account","Sittings"};
@@ -17,12 +18,12 @@ public class MainWindow extends JFrame implements ActionListener {
 
     // This is for inputs in the higher part of the screen in left side.
     String[] leftTopTitles = {
-            "First name : ","Second name : ","Age : ","Gender : ",
-            "Grade 1 : ","Grade 2 : ","Grade 3 : ","Address : "};
+            "First name : ","Second name : ","Age : ","Grade 1 : ",
+            "Grade 2 : ","Grade 3 : ","Address : ","Gender : "};
     JTextField[] textInputs = new JTextField[leftTopTitles.length];
     JLabel[] labels = new JLabel[leftTopTitles.length];
     JButton addStudent = new JButton("Add student");
-    JButton cleanButton = new JButton("Clean");
+    JButton clearButton = new JButton("Clear");
     JComboBox<Gender> boxGender = new JComboBox<>(Gender.values());
 
     // These are the main panels that are in the frame.
@@ -41,13 +42,15 @@ public class MainWindow extends JFrame implements ActionListener {
     JTable table = new JTable(model);
     JScrollPane pane = new JScrollPane(table);
 
-    MainWindow(StudentsManager manager){
+    Gender gender;
+    MainWindow(StudentsManager manager,Student student){
         this.setTitle("Students management");
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setLayout(new BorderLayout());
         this.manager = manager;
+        this.student = student;
 
         // This is for the higher part of the screen in left side.
         JPanel textPanel = new JPanel(new GridLayout(9,2,0,5));
@@ -67,16 +70,22 @@ public class MainWindow extends JFrame implements ActionListener {
                 textPanel.add(textInputs[x]);
             }
         }
+        boxGender.addActionListener(e -> {
+            Object object = boxGender.getSelectedItem();
+            if(object instanceof Gender){
+                gender = (Gender) object;
+            }
+        });
         addStudent.setFocusable(false); // Button of adding a student.
         addStudent.setBorder(BorderFactory.createEtchedBorder());
         addStudent.setBackground(Color.GREEN);
         addStudent.addActionListener(this);
-        cleanButton.setFocusable(false); // Button of cleaning the fields.
-        cleanButton.setBorder(BorderFactory.createEtchedBorder());
-        cleanButton.setBackground(Color.GRAY);
-        cleanButton.addActionListener(this);
+        clearButton.setFocusable(false); // Button of cleaning the fields.
+        clearButton.setBorder(BorderFactory.createEtchedBorder());
+        clearButton.setBackground(Color.GRAY);
+        clearButton.addActionListener(this);
         textPanel.add(addStudent);
-        textPanel.add(cleanButton);
+        textPanel.add(clearButton);
         westPanel.add(textPanel,BorderLayout.NORTH);
 
         // This is for the lower part of the screen in left side.
@@ -144,7 +153,7 @@ public class MainWindow extends JFrame implements ActionListener {
 
         this.add(northPanel,BorderLayout.CENTER); // Holds the north and center and south in the screen's center.
         this.add(westPanel,BorderLayout.WEST); // Holds the north and center in the west
-        this.add(southPanel,BorderLayout.SOUTH); // Holds the south in the west.
+        this.add(southPanel,BorderLayout.SOUTH); // Holds the south in the west and east.
         this.setVisible(true);
     }
 
@@ -196,8 +205,104 @@ public class MainWindow extends JFrame implements ActionListener {
 
         }
         else if (value.equals("Add student")) {
-            JOptionPane.showMessageDialog(null,"It's coming soon",
-                    "Adding students",JOptionPane.INFORMATION_MESSAGE);
+            buttonAddStudent();
         }
+        else if(value.equals("Clear")){
+            buttonClearFields();
+        }
+    }
+
+    // This is for adding the student to the table.
+    private void buttonAddStudent(){
+        if(textInputs[0].getText().isEmpty() || textInputs[1].getText().isEmpty() ||
+                textInputs[2].getText().isEmpty() || textInputs[3].getText().isEmpty() ||
+                textInputs[4].getText().isEmpty() || textInputs[5].getText().isEmpty() ||
+                textInputs[6].getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "The fields are empty.","Empty fields",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+        else if(!checkName(textInputs[0].getText())){
+            JOptionPane.showMessageDialog(null, "The first name must be only letters"
+                    ,"Wrong input",JOptionPane.ERROR_MESSAGE);
+        }
+        else if(!checkName(textInputs[1].getText())){
+            JOptionPane.showMessageDialog(null,"The second name must be only letters",
+                    "Wrong input",JOptionPane.ERROR_MESSAGE);
+        }
+        else if(!checkAge(textInputs[2].getText())){
+            JOptionPane.showMessageDialog(null,"The age must be only numbers",
+                    "Wrong input",JOptionPane.ERROR_MESSAGE);
+        }
+        else if(!checkValidAge(Integer.parseInt(textInputs[2].getText()))){
+            JOptionPane.showMessageDialog(null,
+                    "The student's age can't be less than 15 or bigger than 20",
+                    "Age is not available is this school",JOptionPane.ERROR_MESSAGE);
+        }
+        else if(!checkGrade(textInputs[3].getText()) || !checkGrade(textInputs[4].getText()) || !checkGrade(textInputs[5].getText())){
+            JOptionPane.showMessageDialog(null,"The grade must be only numbers",
+                    "Grades",JOptionPane.ERROR_MESSAGE);
+        }
+        else if(!checkValidGrades(Double.parseDouble(textInputs[3].getText())) ||
+                !checkValidGrades(Double.parseDouble(textInputs[4].getText())) ||
+                !checkValidGrades(Double.parseDouble(textInputs[5].getText()))){
+            JOptionPane.showMessageDialog(null,"The grade must be between 0 and 20",
+                    "Between 0 and 20",JOptionPane.ERROR_MESSAGE);
+        }
+        else if(!checkAddress(textInputs[6].getText())){
+            JOptionPane.showMessageDialog(null,"The address must be only letters",
+                    "Address",JOptionPane.ERROR_MESSAGE);
+        }
+        else{
+            String firstName = textInputs[0].getText();
+            String secondName = textInputs[1].getText();
+            int age = Integer.parseInt(textInputs[2].getText());
+            double[] grades = new double[3];
+            grades[0] = Double.parseDouble(textInputs[3].getText());
+            grades[1] = Double.parseDouble(textInputs[4].getText());
+            grades[2] = Double.parseDouble(textInputs[5].getText());
+            String address = textInputs[6].getText();
+            storeDataTable(firstName,secondName,age,grades,gender,address);
+        }
+    }
+
+    private void storeDataTable(String firstName,String secondName,int age,double[] grades,Gender gender, String address){
+        student = new Student(firstName,secondName,age,grades,gender,address);
+        student.calculateGrades();
+        int studentID = student.GenerateStudentID();
+        int classNumber = manager.increaseClassNumber();
+        manager.saveStudent(student);
+
+        model.addRow(new Object[] {firstName,secondName,age,gender,studentID,grades[0],grades[1],grades[2],
+        student.getStudentPoint(),address,classNumber});
+
+    }
+
+    // This is for clearing the fields.
+    private void buttonClearFields(){
+        for(int x = 0 ; x< labels.length; x++){
+            textInputs[x].setText("");
+            if(labels[x].getText().equals("Gender : ")){
+                boxGender.setSelectedIndex(0);
+            }
+        }
+    }
+
+    private Boolean checkName(String name){
+        return name.matches("[a-zA-Z]+");
+    }
+    private Boolean checkAge(String age){
+        return age.matches("\\d+");
+    }
+    private Boolean checkValidAge(int age){
+        return age >= 15 && age <= 20;
+    }
+    private Boolean checkAddress(String address){
+        return address.matches("[a-zA-Z]+");
+    }
+    private boolean checkGrade(String grade){
+        return grade.matches("\\d+");
+    }
+    private Boolean checkValidGrades(double grade){
+        return grade >= 0 && grade <= 20;
     }
 }

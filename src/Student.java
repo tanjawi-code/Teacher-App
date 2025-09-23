@@ -1,4 +1,5 @@
 import java.util.InputMismatchException;
+import java.util.Random;
 import java.util.Scanner;
 
 enum Gender {male, female}
@@ -6,12 +7,14 @@ enum Gender {male, female}
 public class Student implements SaveAble{
 
     private String studentName;
+    private String secondStudentName;
     private int studentAge;
     private double[] studentGrades = new double[3];
     private double studentPoint;
     private int studentID;
     private Gender studentGender;
     private int studentClassNumber;
+    private String studentAddress;
 
     Student(){
         this.studentName = "No name";
@@ -31,17 +34,18 @@ public class Student implements SaveAble{
         this.studentPoint = other.studentPoint;
         this.studentID = other.studentID;
         this.studentGender = other.studentGender;
+        this.secondStudentName = other.secondStudentName;
         this.studentClassNumber = other.studentClassNumber;
+        this.studentAddress = other.studentAddress;
     }
 
-    Student(String name, int age, double[] Grades, double Point, int Id, Gender gender, int ClassNumber){
+    Student(String name, String secondName,int age, double[] Grades,Gender gender, String address){
         this.studentName = name;
         this.studentAge = age;
         this.studentGrades = Grades;
-        this.studentPoint = Point;
-        this.studentID = Id;
+        this.secondStudentName = secondName;
         this.studentGender = gender;
-        this.studentClassNumber = ClassNumber;
+        this.studentAddress = address;
     }
 
     // Setters and Getters.
@@ -184,5 +188,12 @@ public class Student implements SaveAble{
     public String saveFile(){
         return studentClassNumber+","+studentID+","+studentName+","+studentAge+","+studentGender+","+studentPoint
                 +","+studentGrades[0]+","+studentGrades[1]+","+studentGrades[2]+"\n";
+    }
+
+    // Generate ID.
+    int GenerateStudentID(){
+        Random random  = new Random();
+        this.studentID = random.nextInt(100,1000);
+        return this.studentID;
     }
 }
