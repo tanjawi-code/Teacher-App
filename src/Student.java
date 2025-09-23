@@ -2,11 +2,11 @@ import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 
-enum Gender {male, female}
+enum Gender {male,female}
 
 public class Student implements SaveAble{
 
-    private String studentName;
+    private String firstStudentName;
     private String secondStudentName;
     private int studentAge;
     private double[] studentGrades = new double[3];
@@ -17,7 +17,7 @@ public class Student implements SaveAble{
     private String studentAddress;
 
     Student(){
-        this.studentName = "No name";
+        this.firstStudentName = "No name";
         this.studentAge = 0;
         this.studentGrades[0] = 0;
         this.studentGrades[1] = 0;
@@ -28,7 +28,7 @@ public class Student implements SaveAble{
     }
 
     Student(Student other){
-        this.studentName = other.studentName;
+        this.firstStudentName = other.firstStudentName;
         this.studentAge = other.studentAge;
         this.studentGrades = other.studentGrades;
         this.studentPoint = other.studentPoint;
@@ -40,7 +40,7 @@ public class Student implements SaveAble{
     }
 
     Student(String name, String secondName,int age, double[] Grades,Gender gender, String address){
-        this.studentName = name;
+        this.firstStudentName = name;
         this.studentAge = age;
         this.studentGrades = Grades;
         this.secondStudentName = secondName;
@@ -49,35 +49,23 @@ public class Student implements SaveAble{
     }
 
     // Setters and Getters.
-    public void setStudentName(String name){
-        this.studentName = name;
+    public String getFirstStudentName(){
+        return firstStudentName;
     }
-    public String getStudentName(){
-        return studentName;
+    public String getSecondStudentName(){
+        return this.secondStudentName;
     }
-    public void setStudentAge(int Age) {
-        this.studentAge = Age;
+    public int getStudentAge(){
+        return this.studentAge;
     }
-    public void setGrades(double[] grades){
-        this.studentGrades = grades;
-   }
     public double getStudentGrades(int index){
         return this.studentGrades[index];
-    }
-    public void setStudentID(int ID){
-        this.studentID = ID;
     }
     public int getStudentID() {
         return this.studentID;
     }
-    void setStudentGender(Gender gender){
-        this.studentGender = gender;
-    }
     Gender getStudentGender(){
         return this.studentGender;
-    }
-    public void setStudentClassNumber(int number){
-        this.studentClassNumber = number;
     }
     public int getStudentClassNumber(){
         return this.studentClassNumber;
@@ -97,7 +85,7 @@ public class Student implements SaveAble{
 
    // The function to print all the details of every student.
     public void studentDetails(){
-        System.out.println("Name : "+this.studentName+" || Gender : "+this.studentGender+" || ID : "+this.studentID+" || Class number : "+this.studentClassNumber);
+        System.out.println("Name : "+this.firstStudentName+" || Gender : "+this.studentGender+" || ID : "+this.studentID+" || Class number : "+this.studentClassNumber);
         System.out.printf("Point : %.2f || Grades : [exam 1 : %.2f, exam 2 : %.2f, exam 3 : %.2f].\n",studentPoint, studentGrades[0], studentGrades[1], studentGrades[2]);
     }
 
@@ -138,14 +126,14 @@ public class Student implements SaveAble{
         String name;
 
         while(true){
-            System.out.print("Enter the new name of the student "+this.studentName+" : ");
+            System.out.print("Enter the new name of the student "+this.firstStudentName+" : ");
             name = input.nextLine().trim().toLowerCase();
             if(name.equals(manager.checkName(name))){
                 System.out.println("The name is already in the list.");
             }
             else if(name.matches("[a-zA-Z]+(\\s[a-zA-Z]+)*")){
-                System.out.println("The new name of the student "+this.studentName+" is : "+name);
-                this.studentName = name;
+                System.out.println("The new name of the student "+this.firstStudentName+" is : "+name);
+                this.firstStudentName= name;
                 break;
             }
             else{
@@ -160,10 +148,10 @@ public class Student implements SaveAble{
         int age;
         while(true){
             try{
-                System.out.print("Enter the new age of the student "+this.studentName+" : ");
+                System.out.print("Enter the new age of the student "+this.firstStudentName+" : ");
                 age = input.nextInt();
                 if(age >= 14 && age <= 20){
-                    System.out.println("The new age of the student "+this.studentName+" : "+age);
+                    System.out.println("The new age of the student "+this.firstStudentName+" : "+age);
                     this.studentAge = age;
                     break;
                 }
@@ -180,13 +168,13 @@ public class Student implements SaveAble{
 
     // This function will be used only to print the three top points in the class.
     public void studentInfo(){
-        System.out.printf("ID : "+studentID+" || Class number : "+this.studentClassNumber+" || Gender : "+this.studentGender +" || Name : "+studentName+" || Point : %.2f\n",studentPoint );
+        System.out.printf("ID : "+studentID+" || Class number : "+this.studentClassNumber+" || Gender : "+this.studentGender +" || Name : "+firstStudentName+" || Point : %.2f\n",studentPoint );
     }
 
     // This is the method of the interface DisplayAble.
     @Override
     public String saveFile(){
-        return studentClassNumber+","+studentID+","+studentName+","+studentAge+","+studentGender+","+studentPoint
+        return studentClassNumber+","+studentID+","+firstStudentName+","+studentAge+","+studentGender+","+studentPoint
                 +","+studentGrades[0]+","+studentGrades[1]+","+studentGrades[2]+"\n";
     }
 

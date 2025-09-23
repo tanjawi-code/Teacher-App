@@ -3,12 +3,12 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 
 public class MainWindow extends JFrame implements ActionListener {
 
     private final StudentsManager manager;
-    private Student student;
 
     // This is for the buttons in the lower part of the screen.
     String[] leftUnderTitles = {"Statistics","Passed","Failed","Top 3","Account","Sittings"};
@@ -43,14 +43,14 @@ public class MainWindow extends JFrame implements ActionListener {
     JScrollPane pane = new JScrollPane(table);
 
     Gender gender;
-    MainWindow(StudentsManager manager,Student student){
+    boolean genderIsSelected = false;
+    MainWindow(StudentsManager manager){
         this.setTitle("Students management");
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setLayout(new BorderLayout());
         this.manager = manager;
-        this.student = student;
 
         // This is for the higher part of the screen in left side.
         JPanel textPanel = new JPanel(new GridLayout(9,2,0,5));
@@ -74,6 +74,7 @@ public class MainWindow extends JFrame implements ActionListener {
             Object object = boxGender.getSelectedItem();
             if(object instanceof Gender){
                 gender = (Gender) object;
+                genderIsSelected = true;
             }
         });
         addStudent.setFocusable(false); // Button of adding a student.
@@ -221,13 +222,9 @@ public class MainWindow extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(null, "The fields are empty.","Empty fields",
                     JOptionPane.ERROR_MESSAGE);
         }
-        else if(!checkName(textInputs[0].getText())){
-            JOptionPane.showMessageDialog(null, "The first name must be only letters"
+        else if(!checkName(textInputs[0].getText()) || !checkName(textInputs[1].getText())){
+            JOptionPane.showMessageDialog(null, "The name must be only letters"
                     ,"Wrong input",JOptionPane.ERROR_MESSAGE);
-        }
-        else if(!checkName(textInputs[1].getText())){
-            JOptionPane.showMessageDialog(null,"The second name must be only letters",
-                    "Wrong input",JOptionPane.ERROR_MESSAGE);
         }
         else if(!checkAge(textInputs[2].getText())){
             JOptionPane.showMessageDialog(null,"The age must be only numbers",
@@ -252,6 +249,10 @@ public class MainWindow extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(null,"The address must be only letters",
                     "Address",JOptionPane.ERROR_MESSAGE);
         }
+        else if(!genderIsSelected){
+            JOptionPane.showMessageDialog(null,"The gender is not selected yet",
+                    "Select Gender",JOptionPane.ERROR_MESSAGE);
+        }
         else{
             String firstName = textInputs[0].getText();
             String secondName = textInputs[1].getText();
@@ -266,15 +267,19 @@ public class MainWindow extends JFrame implements ActionListener {
     }
 
     private void storeDataTable(String firstName,String secondName,int age,double[] grades,Gender gender, String address){
-        student = new Student(firstName,secondName,age,grades,gender,address);
+        Student student = new Student(firstName,secondName,age,grades,gender,address);
         student.calculateGrades();
         int studentID = student.GenerateStudentID();
-        int classNumber = manager.increaseClassNumber();
-        manager.saveStudent(student);
+        int classNumber = 0;
+
+        for(int x = 0; x<manager.studentsSize(); x++){
+            classNumber = manager.increaseClassNumber(classNumber);
+        }
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
 
         model.addRow(new Object[] {firstName,secondName,age,gender,studentID,grades[0],grades[1],grades[2],
-        student.getStudentPoint(),address,classNumber});
-
+        decimalFormat.format(student.getStudentPoint()),address,classNumber+1});
+        manager.saveStudent(student);
     }
 
     // This is for clearing the fields.
@@ -300,7 +305,7 @@ public class MainWindow extends JFrame implements ActionListener {
         return address.matches("[a-zA-Z]+");
     }
     private boolean checkGrade(String grade){
-        return grade.matches("\\d+");
+        return grade.matches("\\d+(\\.\\d+)?");
     }
     private Boolean checkValidGrades(double grade){
         return grade >= 0 && grade <= 20;

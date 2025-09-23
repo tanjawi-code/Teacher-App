@@ -9,10 +9,28 @@ public class StudentsManager {
 
     // Getters.
     String getStudentName(int index){
-        return students.get(index).getStudentName();
+        return students.get(index).getFirstStudentName();
+    }
+    String getSecondStudentName(int index){
+        return students.get(index).getSecondStudentName();
     }
     double getStudentPoint(int index){
         return students.get(index).getStudentPoint();
+    }
+    int getStudentAge(int index){
+        return students.get(index).getStudentAge();
+    }
+    double getStudentGrade(int index,int grade){
+        return students.get(index).getStudentGrades(grade);
+    }
+    Gender getStudentgender(int index){
+        return students.get(index).getStudentGender();
+    }
+    int getStudentClassNumber(int index){
+        return students.get(index).getStudentClassNumber();
+    }
+    int getStudentID(int index){
+        return students.get(index).getStudentID();
     }
     String saveFile(int index){
         return students.get(index).saveFile();
@@ -98,7 +116,7 @@ public class StudentsManager {
     // Check the name if it's not repeated.
     String checkName(String name){
         for (Student student : students) {
-            if (name.equals(student.getStudentName().trim().toLowerCase())) {
+            if (name.equals(student.getFirstStudentName().trim().toLowerCase())) {
                 return name;
             }
         }
@@ -132,7 +150,7 @@ public class StudentsManager {
         }
         System.out.println("The number of grades less than 10 is : "+belowTen);
 
-        System.out.print("The rate of "+students.get(studentIndex).getStudentName()+"'s point : ");
+        System.out.print("The rate of "+students.get(studentIndex).getFirstStudentName()+"'s point : ");
         if(students.get(studentIndex).getStudentPoint() >= 18){
             System.out.println("Excellent.");
         }
@@ -186,11 +204,10 @@ public class StudentsManager {
     }
 
     // This is for increasing the class number.
-    int increaseClassNumber(){
-        int count = 0;
+    int increaseClassNumber(int count){
         for(int x = 0; x<students.size(); x++){
             count = x;
         }
-        return  count;
+        return  count + 1;
     }
 }
