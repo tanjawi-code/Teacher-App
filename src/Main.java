@@ -6,11 +6,9 @@ public class Main {
     static Scanner input = new Scanner(System.in);
     public static void main(String[] args) {
 
-        //Student student = new Student();
         StudentsManager manager = new StudentsManager();
 
         MainWindow mainWindow = new MainWindow(manager);
-        //takeStudentsFile(manager,student);
 
         /*
         int choose ;

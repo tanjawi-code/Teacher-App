@@ -119,7 +119,7 @@ public class StudentsManager {
     // Check the name if it's not repeated.
     String checkName(String name){
         for (Student student : students) {
-            if (name.equals(student.getFirstStudentName().trim().toLowerCase())) {
+            if (name.equals(student.getSecondStudentName().trim().toLowerCase())) {
                 return name;
             }
         }
