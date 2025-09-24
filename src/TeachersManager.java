@@ -28,4 +28,16 @@ public class TeachersManager {
     void saveTeacher(Teacher teacher){
         teachers.add(new Teacher(teacher));
     }
+
+    int teachersSize(){
+        return teachers.size();
+    }
+
+    boolean isEmpty(){
+        return teachers.isEmpty();
+    }
+
+    void removeTeacher(int index){
+        teachers.remove(index);
+    }
 }

@@ -73,6 +73,9 @@ public class Student implements SaveAble{
     public double getStudentPoint(){
         return this.studentPoint;
     }
+    public String getStudentAddress(){
+        return this.studentAddress;
+    }
 
     // Calculating The grades of the students.
     public void calculateGrades(){

@@ -1,8 +1,12 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 
@@ -41,6 +45,7 @@ public class MainWindow extends JFrame implements ActionListener {
     DefaultTableModel model = new DefaultTableModel(tableTitles,0);
     JTable table = new JTable(model);
     JScrollPane pane = new JScrollPane(table);
+    TableRowSorter<TableModel> sorter = new TableRowSorter<>(model);
 
     Gender gender;
     boolean genderIsSelected = false;
@@ -124,6 +129,7 @@ public class MainWindow extends JFrame implements ActionListener {
         tableChoices.add(searchName);
 
         // This is for the table.
+        table.setRowSorter(sorter);
         northPanel.add(pane,BorderLayout.CENTER);
         northPanel.add(tableChoices,BorderLayout.NORTH);
         table.setEnabled(false);
@@ -153,7 +159,7 @@ public class MainWindow extends JFrame implements ActionListener {
         southPanel.add(rightSouthPanel,BorderLayout.EAST);
 
         this.add(northPanel,BorderLayout.CENTER); // Holds the north and center and south in the screen's center.
-        this.add(westPanel,BorderLayout.WEST); // Holds the north and center in the west
+        this.add(westPanel,BorderLayout.WEST); // Holds the north and center in the west.
         this.add(southPanel,BorderLayout.SOUTH); // Holds the south in the west and east.
         this.setVisible(true);
     }
@@ -171,12 +177,18 @@ public class MainWindow extends JFrame implements ActionListener {
                                 "There are no students in the class yet","Empty class",
                                 JOptionPane.ERROR_MESSAGE);
                     }
+                    else{
+
+                    }
                     break;
                 case "Passed" :
                     if(manager.isEmpty()){
                         JOptionPane.showMessageDialog(null,"There are no students",
                                 "Empty class",
                                 JOptionPane.ERROR_MESSAGE);
+                    }
+                    else{
+
                     }
                     break;
                 case "Failed" :
@@ -185,12 +197,18 @@ public class MainWindow extends JFrame implements ActionListener {
                                 "There are no students in the class","Empty class",
                                 JOptionPane.ERROR_MESSAGE);
                     }
+                    else{
+
+                    }
                     break;
                 case "Top 3" :
                     if(manager.isEmpty()){
                         JOptionPane.showMessageDialog(null,"The class is empty",
                                 "Empty class",
                                 JOptionPane.ERROR_MESSAGE);
+                    }
+                    else{
+
                     }
                     break;
                 case "Account" :
@@ -203,13 +221,34 @@ public class MainWindow extends JFrame implements ActionListener {
             }
         }
         else if(Arrays.asList(rightUnderTitles).contains(value)){
-
+            switch (value){
+                case "Delete" :
+                    break;
+                case "Update" :
+                    break;
+                case "Student Statistics" :
+                    break;
+                case "Save as a file" :
+                    break;
+                case "Get a file" :
+                    break;
+                case "Searching ways" :
+                    break;
+                default:
+            }
         }
         else if (value.equals("Add student")) {
             buttonAddStudent();
         }
         else if(value.equals("Clear")){
             buttonClearFields();
+        }
+        else if(value.equals("Search")){
+            searchForStudent();
+        }
+        else if(value.equals("Refresh")){
+            sorter.setRowFilter(null);
+            searchName.setText("");
         }
     }
 
@@ -219,12 +258,17 @@ public class MainWindow extends JFrame implements ActionListener {
                 textInputs[2].getText().isEmpty() || textInputs[3].getText().isEmpty() ||
                 textInputs[4].getText().isEmpty() || textInputs[5].getText().isEmpty() ||
                 textInputs[6].getText().isEmpty()){
-            JOptionPane.showMessageDialog(null, "The fields are empty.","Empty fields",
+            JOptionPane.showMessageDialog(null,"The fields are empty.","Empty fields",
                     JOptionPane.ERROR_MESSAGE);
         }
         else if(!checkName(textInputs[0].getText()) || !checkName(textInputs[1].getText())){
-            JOptionPane.showMessageDialog(null, "The name must be only letters"
-                    ,"Wrong input",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null,
+                    "The name must be only letters and one name in the filed","Wrong input",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+        else if(textInputs[0].getText().equals(manager.checkName(textInputs[0].getText()))){
+            JOptionPane.showMessageDialog(null,"The name is already in the list",
+                    "Wrong input",JOptionPane.ERROR_MESSAGE);
         }
         else if(!checkAge(textInputs[2].getText())){
             JOptionPane.showMessageDialog(null,"The age must be only numbers",
@@ -267,6 +311,10 @@ public class MainWindow extends JFrame implements ActionListener {
     }
 
     private void storeDataTable(String firstName,String secondName,int age,double[] grades,Gender gender, String address){
+        firstName = firstName.substring(0,1).toUpperCase() + firstName.substring(1).toLowerCase();
+        secondName = secondName.substring(0,1).toUpperCase() + secondName.substring(1).toLowerCase();
+        address = address.substring(0,1).toUpperCase() + address.substring(1).toLowerCase();
+
         Student student = new Student(firstName,secondName,age,grades,gender,address);
         student.calculateGrades();
         int studentID = student.GenerateStudentID();
@@ -292,6 +340,68 @@ public class MainWindow extends JFrame implements ActionListener {
         }
     }
 
+    // These four methods are for deleting, searching, updating, refreshing.
+    private void deleteStudent(){
+        String name;
+        while(true){
+            name = JOptionPane.showInputDialog("What is the student's first name you want to remove?");
+            if(name.matches("[a-zA-Z]+")){
+                break;
+            }
+            else {
+                JOptionPane.showMessageDialog(null,"The student name must have only letters",
+                        "Unexpected input",JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    private void searchForStudent(){
+        String name = searchName.getText().trim();
+        boolean check = false;
+        for(int x = 0 ; x< manager.studentsSize(); x++){
+            if(name.isEmpty()){
+                sorter.setRowFilter(null);
+            }
+            else if (name.equals(manager.getFirstStudentName(x).trim().toLowerCase())){
+                sorter.setRowFilter(RowFilter.regexFilter("(?i)"+name,0));
+                check = true;
+            }
+        }
+
+        if(!check){
+            JOptionPane.showMessageDialog(null,"The student name is not found",
+                    "Student is not found",JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    private void updateStudent(){
+        String name;
+        while(true){
+            name = JOptionPane.showInputDialog("What is the student name?");
+            if(name.matches("[a-zA-Z]+")){
+
+                break;
+            }
+            else {
+                JOptionPane.showMessageDialog(null,"The student is not found",
+                        "Student not found",JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+    private void refreshTable(){
+        System.out.println();
+    }
+
+    // These three methods are for showing in the table: passed students, failed students, top 3 students.
+    private void passedStudents(){
+        System.out.println();
+    }
+    private  void failedStudents(){
+        System.out.println();
+    }
+    private void topThreeStudents(){
+        System.out.println();
+    }
+
+    // These are methods are for checking the fields.
     private Boolean checkName(String name){
         return name.matches("[a-zA-Z]+");
     }

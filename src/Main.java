@@ -6,8 +6,6 @@ public class Main {
     static Scanner input = new Scanner(System.in);
     public static void main(String[] args) {
 
-        System.out.println("Hello teacher, I am here to inform you that I added more features and good things.\n");
-
         //Student student = new Student();
         StudentsManager manager = new StudentsManager();
 

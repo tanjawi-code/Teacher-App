@@ -8,14 +8,11 @@ public class StudentsManager {
     private final ArrayList<Student> students = new ArrayList<>();
 
     // Getters.
-    String getStudentName(int index){
+    String getFirstStudentName(int index){
         return students.get(index).getFirstStudentName();
     }
     String getSecondStudentName(int index){
         return students.get(index).getSecondStudentName();
-    }
-    double getStudentPoint(int index){
-        return students.get(index).getStudentPoint();
     }
     int getStudentAge(int index){
         return students.get(index).getStudentAge();
@@ -23,7 +20,10 @@ public class StudentsManager {
     double getStudentGrade(int index,int grade){
         return students.get(index).getStudentGrades(grade);
     }
-    Gender getStudentgender(int index){
+    double getStudentPoint(int index){
+        return students.get(index).getStudentPoint();
+    }
+    Gender getStudentGender(int index){
         return students.get(index).getStudentGender();
     }
     int getStudentClassNumber(int index){
@@ -31,6 +31,9 @@ public class StudentsManager {
     }
     int getStudentID(int index){
         return students.get(index).getStudentID();
+    }
+    String getStudentAddress(int index){
+        return students.get(index).getStudentAddress();
     }
     String saveFile(int index){
         return students.get(index).saveFile();
