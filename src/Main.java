@@ -8,6 +8,7 @@ public class Main {
 
         StudentsManager manager = new StudentsManager();
 
+        //Login login = new Login();
         MainWindow mainWindow = new MainWindow(manager);
 
         /*

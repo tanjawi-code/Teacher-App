@@ -16,14 +16,16 @@ point, lowest point, class average, success rate, and the top three students in 
 ## To-Do list.
 - [  ] Make things more clear and simple.
 - [  ] Add searching ways : (age, point, grade, passed or failed, and male or female).
-- [  ] Store details through GUI.
 - [  ] Add frames to other buttons in the main frame.
+- [  ] Improve Showing statistics for class and for students.
+- [  ] Add changing details of the student.
 ---
 ## Problems need to be fixed.
 - Find a solution to reduce using try-catch without methods too much.
 - Make the program hold all the problems of (InputMismatchException) to avoid stopping the program while working.
 - Fix the problem in class number. When the teacher store students in the first step, and then the teacher wants
 to add new students that weren't in the list before. The class number starts from 1 instead of continue from the last student in the list.
+- Fix the problem in updating button. That shows null if the user press cancel.
 ---
 ## Future improvements.
 - Add database support (MySQl or SQLite).
@@ -33,4 +35,4 @@ to add new students that weren't in the list before. The class number starts fro
 ## **The developer**
 - **Name** : [private name].
 - **Github** : [https://github.com/tanjawi-code].
-- *Version* : 1.6.1
+- *Version* : 1.7.1
