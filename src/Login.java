@@ -6,6 +6,8 @@ import java.util.Arrays;
 
 public class Login extends JFrame implements ActionListener {
 
+    private final StudentsManager manager;
+
     String[] buttonsTitles = {"Login","Create new account"};
     JButton[] buttons = new JButton[buttonsTitles.length];
     JButton forgetPasswordButton = new JButton("Did you forget the password?");
@@ -20,13 +22,14 @@ public class Login extends JFrame implements ActionListener {
     JPanel centerPanel = new JPanel(new BorderLayout());
     JPanel southPanel = new JPanel(new FlowLayout());
 
-    Login(){
+    Login(StudentsManager manager){
         this.setTitle("Login-Screen");
         this.setSize(420,420);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.setLayout(new BorderLayout());
+        this.manager = manager;
 
         // This is for displaying a welcome message in the top.
         welcomeMessage.setForeground(Color.RED);
@@ -76,31 +79,40 @@ public class Login extends JFrame implements ActionListener {
         JButton button = (JButton) e.getSource();
         String text = button.getText();
 
-        String name = textName.getText();
-
         if(Arrays.asList(buttonsTitles).contains(text)){
             if(text.equals("Login")){
-                if(textName.getText().isEmpty() || textPassword.getPassword().length == 0){
-                    JOptionPane.showMessageDialog(null,"The fields are empty",
-                            "Empty fields",JOptionPane.ERROR_MESSAGE);
-                }
-                else if(!checkInputName(name)){
-                    JOptionPane.showMessageDialog(null,"The name should only be letters",
-                            "ERROR",JOptionPane.ERROR_MESSAGE);
-                }
-                else{
-                    JOptionPane.showMessageDialog(null,"Hello Mr."+name,
-                            "Welcome message",JOptionPane.INFORMATION_MESSAGE);
-                }
+                loginButton();
             }
             else{
-                Register register = new Register();
+                new Register(manager);
             }
         }
         else if(text.equals(forgetPasswordButton.getText())){
-            JOptionPane.showMessageDialog(null,"It's coming soon","Forgetting the password",
-                    JOptionPane.INFORMATION_MESSAGE);
+            forgetPassword();
         }
+    }
+
+    // This is for logging into the user's account.
+    private void loginButton(){
+        String name = textName.getText();
+
+        if(textName.getText().isEmpty() || textPassword.getPassword().length == 0){
+            JOptionPane.showMessageDialog(null,"The fields are empty",
+                    "Empty fields",JOptionPane.ERROR_MESSAGE);
+        }
+        else if(!checkInputName(name)){
+            JOptionPane.showMessageDialog(null,"The name should only be letters",
+                    "ERROR",JOptionPane.ERROR_MESSAGE);
+        }
+        else{
+            JOptionPane.showMessageDialog(null,"Hello Mr."+name,
+                    "Welcome message",JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+    // This is for forgetting the password.
+    private void forgetPassword(){
+        JOptionPane.showMessageDialog(null,"It's coming soon","Forgetting the password",
+                JOptionPane.INFORMATION_MESSAGE);
     }
 
     private Boolean checkInputName(String name){

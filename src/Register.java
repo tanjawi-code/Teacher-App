@@ -5,6 +5,9 @@ import java.awt.event.ActionListener;
 
 public class Register implements ActionListener {
 
+    JFrame frame = new JFrame("Creating an account");
+
+    private final StudentsManager studentsManager;
     private teacherGender chosenGender;
     private schools chosenSchool;
     private subjects chosenSubject;
@@ -39,8 +42,7 @@ public class Register implements ActionListener {
     JButton showPasswordButton = new JButton("Show password",seeIconPassword);
     JButton HidePasswordButton = new JButton("Hide password",closeIconPassword);
 
-    Register(){
-        JFrame frame = new JFrame("Creating an account");
+    Register(StudentsManager studentsManager){
         frame.setTitle("Login-Screen");
         frame.setSize(460,450);
         frame.setLocationRelativeTo(null);
@@ -48,6 +50,7 @@ public class Register implements ActionListener {
         frame.setResizable(false);
         frame.setLayout(new BorderLayout());
         frame.setIconImage(icon.getImage());
+        this.studentsManager = studentsManager;
 
         // These are labels .
         String[] titles = {"Name : ","Age : ","Gender : ","School : ","Subject : ","Password : ","Confirm Password : "};
@@ -139,64 +142,70 @@ public class Register implements ActionListener {
         JButton button = (JButton) e.getSource();
         String value = button.getText();
 
-        String password = new String(teacherPassword.getPassword());
-        String confirm = new String(confirmPassword.getPassword());
-        String name = teacherName.getText();
-
         switch (value) {
-            case "Create account" :
-                if(teacherName.getText().isEmpty() || teacherAge.getText().isEmpty() ||
-                        teacherPassword.getPassword().length == 0 || confirmPassword.getPassword().length == 0){
-                    JOptionPane.showMessageDialog(null,"The fields are empty ",
-                            "Empty fields",JOptionPane.ERROR_MESSAGE);
-                }
-                else if(!checkInputName(teacherName.getText())){
-                    JOptionPane.showMessageDialog(null,"The name should be only letters",
-                            "Letters",JOptionPane.ERROR_MESSAGE);
-                }
-                else if(teacherPassword.getPassword().length <= 5){
-                    JOptionPane.showMessageDialog(null,
-                            "The password's length is weak, The password must have between 6 and more(more than 10 is good).",
-                            "Weak password",JOptionPane.WARNING_MESSAGE);
-                }
-                else if(!checkPassword(password,confirm)){
-                    JOptionPane.showMessageDialog(null,
-                            "The password dose not match the confirmed password",
-                            "Error password!",JOptionPane.ERROR_MESSAGE);
-                }
-                else if (!checkAge(teacherAge.getText())){
-                    JOptionPane.showMessageDialog(null,"The age must have only numbers.",
-                            "Age",JOptionPane.ERROR_MESSAGE);
-                }
-                else if(!checkValidAge(Integer.parseInt(teacherAge.getText()))){
-                    JOptionPane.showMessageDialog(null,
-                            "The teacher's age can't be less than 20 or bigger than 51",
-                            "Age is not available",JOptionPane.ERROR_MESSAGE);
-                }
-                else{
-                    int age = Integer.parseInt(teacherAge.getText());
-                    Teacher teacher = new Teacher(name,age,password,chosenSubject,chosenSchool,chosenGender);
-                    JOptionPane.showMessageDialog(null,"The account is created.",
-                            "Welcome",JOptionPane.INFORMATION_MESSAGE);
-
-                    TeachersManager manager = new TeachersManager();
-                    manager.saveTeacher(teacher);
-                }
-                break;
-            case "Clear" :
-                teacherName.setText("");
-                teacherAge.setText("");
-                teacherPassword.setText("");
-                confirmPassword.setText("");
-                boxGender.setSelectedIndex(0);
-                boxSchools.setSelectedIndex(0);
-                boxSubjects.setSelectedIndex(0);
-                break;
-            case "Back" : Login login = new Login(); break;
+            case "Create account" : createAccountButton(); break;
+            case "Clear" : clearButton(); break;
+            case "Back" : frame.dispose(); break;
             case "Show password" : teacherPassword.setEchoChar((char) 0); break;
             case "Hide password" : teacherPassword.setEchoChar('•'); break;
             default: System.out.println("Something went wrong.");
         }
+    }
+
+    // This is for creating an account.
+    private void createAccountButton(){
+        String password = new String(teacherPassword.getPassword());
+        String confirm = new String(confirmPassword.getPassword());
+        String name = teacherName.getText();
+
+        if(teacherName.getText().isEmpty() || teacherAge.getText().isEmpty() ||
+                teacherPassword.getPassword().length == 0 || confirmPassword.getPassword().length == 0){
+            JOptionPane.showMessageDialog(null,"The fields are empty ",
+                    "Empty fields",JOptionPane.ERROR_MESSAGE);
+        }
+        else if(!checkInputName(teacherName.getText())){
+            JOptionPane.showMessageDialog(null,"The name should be only letters",
+                    "Letters",JOptionPane.ERROR_MESSAGE);
+        }
+        else if(teacherPassword.getPassword().length <= 5){
+            JOptionPane.showMessageDialog(null,
+                    "The password's length is weak, The password must have between 6 and more(more than 10 is good).",
+                    "Weak password",JOptionPane.WARNING_MESSAGE);
+        }
+        else if(!checkPassword(password,confirm)){
+            JOptionPane.showMessageDialog(null,
+                    "The password dose not match the confirmed password",
+                    "Error password!",JOptionPane.ERROR_MESSAGE);
+        }
+        else if (!checkAge(teacherAge.getText())){
+            JOptionPane.showMessageDialog(null,"The age must have only numbers.",
+                    "Age",JOptionPane.ERROR_MESSAGE);
+        }
+        else if(!checkValidAge(Integer.parseInt(teacherAge.getText()))){
+            JOptionPane.showMessageDialog(null,
+                    "The teacher's age can't be less than 20 or bigger than 51",
+                    "Age is not available",JOptionPane.ERROR_MESSAGE);
+        }
+        else{
+            int age = Integer.parseInt(teacherAge.getText());
+            Teacher teacher = new Teacher(name,age,password,chosenSubject,chosenSchool,chosenGender);
+
+            TeachersManager manager = new TeachersManager();
+            manager.saveTeacher(teacher);
+            MainWindow mainWindow = new MainWindow(studentsManager);
+            JOptionPane.showMessageDialog(null,"The account is created.",
+                    "Welcome",JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+    // This is for clearing the fields.
+    private void clearButton(){
+        teacherName.setText("");
+        teacherAge.setText("");
+        teacherPassword.setText("");
+        confirmPassword.setText("");
+        boxGender.setSelectedIndex(0);
+        boxSchools.setSelectedIndex(0);
+        boxSubjects.setSelectedIndex(0);
     }
 
     private Boolean checkPassword(String password, String confirmPassword){

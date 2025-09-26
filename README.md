@@ -25,7 +25,7 @@ point, lowest point, class average, success rate, and the top three students in 
 - Make the program hold all the problems of (InputMismatchException) to avoid stopping the program while working.
 - Fix the problem in class number. When the teacher store students in the first step, and then the teacher wants
 to add new students that weren't in the list before. The class number starts from 1 instead of continue from the last student in the list.
-- Fix the problem in updating button. That shows null if the user press cancel.
+- Fix the problem in student statistics button. when you press cancel the program show that student is not found.
 ---
 ## Future improvements.
 - Add database support (MySQl or SQLite).
@@ -35,4 +35,4 @@ to add new students that weren't in the list before. The class number starts fro
 ## **The developer**
 - **Name** : [private name].
 - **Github** : [https://github.com/tanjawi-code].
-- *Version* : 1.7.1
+- *Version* : 1.8.2

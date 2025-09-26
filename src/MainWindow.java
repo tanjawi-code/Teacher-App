@@ -181,16 +181,7 @@ public class MainWindow extends JFrame implements ActionListener {
 
         if(Arrays.asList(leftUnderTitles).contains(value)){
             switch (value){
-                case "Statistics" :
-                    if(manager.isEmpty()){
-                        JOptionPane.showMessageDialog(null,
-                                "There are no students in the class yet","Empty class",
-                                JOptionPane.ERROR_MESSAGE);
-                    }
-                    else{
-                        ClassStatistics statistics = new ClassStatistics(manager);
-                    }
-                    break;
+                case "Statistics" : new ClassStatistics(manager); break;
                 case "Passed" : passedStudents(); break;
                 case "Failed" : failedStudents(); break;
                 case "Top 3" : topThreeStudents(); break;
@@ -207,7 +198,7 @@ public class MainWindow extends JFrame implements ActionListener {
             switch (value){
                 case "Delete" : deleteStudent(); break;
                 case "Update" : updateStudent(); break;
-                case "Student Statistics" : studentStatistics statistics = new studentStatistics(manager); break;
+                case "Student Statistics" : new studentStatistics(manager); break;
                 case "Save as a file" : break;
                 case "Get a file" : break;
                 case "Searching ways" : break;
@@ -325,41 +316,49 @@ public class MainWindow extends JFrame implements ActionListener {
     // These four methods are for deleting, searching, updating, refreshing.
     private void deleteStudent(){
         String name;
+        boolean isCancel = false;
         while(true){
             name = JOptionPane.showInputDialog("What is the student's first name you want to remove?");
-            if(name.matches("[a-zA-Z]+")){
+            if(name == null){
+                isCancel = true;
+                break;
+            }
+            else if(name.matches("[a-zA-Z]+")){
                 break;
             }
             else {
-                JOptionPane.showMessageDialog(null,"The student name must have only letters",
-                        "Unexpected input",JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null,"the name must be only letters",
+                        "Wrong input",JOptionPane.ERROR_MESSAGE);
             }
         }
-        boolean isFound = false;
-        for(int x =0 ;x<manager.studentsSize(); x++){
-            if(manager.getStudentFullName(x).toLowerCase().contains(name.trim().toLowerCase())){
-                sorter.setRowFilter(RowFilter.regexFilter("(?i)"+name,0));
-                int choice = JOptionPane.showConfirmDialog(null,
-                        "Do you want to remove the student "+manager.getStudentFullName(x),
-                        "Removing a student",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
-                if(choice == 0){
-                    model.removeRow(x);
-                    manager.removeStudent(x);
-                    JOptionPane.showMessageDialog(null,
-                            "The student is removed successfully","Student is removed",
-                            JOptionPane.INFORMATION_MESSAGE);
+
+        if(!isCancel){
+            boolean isFound = false;
+            for(int x =0 ;x<manager.studentsSize(); x++){
+                if(manager.getStudentFullName(x).toLowerCase().contains(name.trim().toLowerCase())){
+                    sorter.setRowFilter(RowFilter.regexFilter("(?i)"+name,0));
+                    int choice = JOptionPane.showConfirmDialog(null,
+                            "Do you want to remove the student "+manager.getStudentFullName(x),
+                            "Removing a student",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+                    if(choice == 0){
+                        model.removeRow(x);
+                        manager.removeStudent(x);
+                        JOptionPane.showMessageDialog(null,
+                                "The student is removed successfully","Student is removed",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(null,"The student is not removed",
+                                "Student is not removed",JOptionPane.INFORMATION_MESSAGE);
+                    }
+                    isFound = true;
+                    break;
                 }
-                else{
-                    JOptionPane.showMessageDialog(null,"The student is not removed",
-                            "Student is not removed",JOptionPane.INFORMATION_MESSAGE);
-                }
-                isFound = true;
-                break;
             }
-        }
-        if(!isFound){
-            JOptionPane.showMessageDialog(null,"The student name is not found",
-                    "Student is not found",JOptionPane.INFORMATION_MESSAGE);
+            if(!isFound){
+                JOptionPane.showMessageDialog(null,"The student name is not found",
+                        "Student is not found",JOptionPane.INFORMATION_MESSAGE);
+            }
         }
     }
     private void searchForStudent(){
@@ -383,6 +382,7 @@ public class MainWindow extends JFrame implements ActionListener {
     private void updateStudent(){
         String name = "";
         boolean isEmpty = false;
+        boolean isCancel = false;
         if(manager.isEmpty()){
             JOptionPane.showMessageDialog(null,"There are no students in the class",
                     "Empty class",JOptionPane.ERROR_MESSAGE);
@@ -390,11 +390,12 @@ public class MainWindow extends JFrame implements ActionListener {
         else {
             while (true) {
                 name = JOptionPane.showInputDialog("What is the student name you want to modify?");
-                if (name.matches("[a-zA-Z]+")) {
-                    isEmpty = true;
+                if (name == null) {
+                    isCancel = true;
                     break;
                 }
-                else if(name.isEmpty()){
+                else if(name.matches("[a-zA-Z]+") ){
+                    isEmpty = true;
                     break;
                 }
                 else {
@@ -404,22 +405,24 @@ public class MainWindow extends JFrame implements ActionListener {
             }
         }
 
-        if(isEmpty){
-            boolean isFound = false;
-            for(int x =0 ; x<manager.studentsSize(); x++){
-                if(manager.getFirstStudentName(x).trim().toLowerCase().equals(name.trim())){
-                    sorter.setRowFilter(RowFilter.regexFilter("(?i)"+name,0));
-                    JOptionPane.showMessageDialog(null,
-                            "You can modify details through the table","Update student's details",
-                            JOptionPane.INFORMATION_MESSAGE);
-                    studentIndex = x;
-                    buttonConfirmUpdate.setVisible(true);
-                    isFound = true;
+        if(!isCancel){
+            if(isEmpty){
+                boolean isFound = false;
+                for(int x =0 ; x<manager.studentsSize(); x++){
+                    if(manager.getFirstStudentName(x).trim().toLowerCase().equals(name.trim())){
+                        sorter.setRowFilter(RowFilter.regexFilter("(?i)"+name,0));
+                        JOptionPane.showMessageDialog(null,
+                                "You can modify details through the table","Update student's details",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        studentIndex = x;
+                        buttonConfirmUpdate.setVisible(true);
+                        isFound = true;
+                    }
                 }
-            }
-            if(!isFound){
-                JOptionPane.showMessageDialog(null,"The student is not found",
-                        "Student not found",JOptionPane.INFORMATION_MESSAGE);
+                if(!isFound){
+                    JOptionPane.showMessageDialog(null,"The student is not found",
+                            "Student not found",JOptionPane.INFORMATION_MESSAGE);
+                }
             }
         }
     }

@@ -8,63 +8,7 @@ public class Main {
 
         StudentsManager manager = new StudentsManager();
 
-        //Login login = new Login();
-        MainWindow mainWindow = new MainWindow(manager);
-
-        /*
-        int choose ;
-        do{
-            System.out.println("""
-                    1 : Add new students.
-                    2 : Show all the students with their details.
-                    3 : Checking a student and change his/her details if you want.
-                    4 : Show all the passed students.
-                    5 : Show all the failed students.
-                    6 : Show Statistics of the class.
-                    7 : Remove a student from the class.
-                    8 : Show the top three students.
-                    9 : Save students' details in a file.
-                    10 : Exit.""");
-            while(true){
-                try{
-                    System.out.print("Enter your choice : ");
-                    choose = input.nextInt();
-                    input.nextLine();
-                    if(choose >= 0){
-                        System.out.println();
-                        break;
-                    }
-                }
-                catch (InputMismatchException e){
-                    System.out.println("The choice should be a number.");
-                    input.nextLine();
-                }
-            }
-            switch (choose){
-                //case 1 : addStudent(student,manager); break;
-                case 2 : manager.displayStudentInfo(); break;
-                case 3 : searchForStudent(manager); break;
-                case 4 : passedStudents(manager); break;
-                case 5 : failedStudents(manager); break;
-                case 6 : statistics(manager); break;
-                case 7 :
-                    if(!manager.isEmpty()){
-                        removeStudent(manager);
-                    }
-                    else{
-                        System.out.println("There are no students yet in the class.\n");
-                    }
-                    break;
-                case 8 : topThreeStudents(manager); break;
-                case 9 : saveStudentsFile(manager); break;
-                case 10 : System.out.println("The program is finished."); break;
-                default :
-                    System.out.println("Wrong choice , try again.\n");
-            }
-
-        }while(choose!=10);
-
-         */
+        Login login = new Login(manager);
 
         input.close();
     }

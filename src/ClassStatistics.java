@@ -13,7 +13,24 @@ public class ClassStatistics implements ActionListener {
     // This is for statistics of the class.
 
     ClassStatistics(StudentsManager manager){
-        frame.setSize(350,350);
+        if(manager.isEmpty()){
+            JOptionPane.showMessageDialog(null,"The class is empty","Empty class",
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
+        else{
+            getClassStatistics(manager);
+        }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == button){
+            frame.dispose();
+        }
+    }
+
+    void getClassStatistics(StudentsManager manager){
+        frame.setSize(400,350);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
@@ -72,12 +89,5 @@ public class ClassStatistics implements ActionListener {
 
         frame.add(statisticsClassPanel,BorderLayout.WEST);
         frame.setVisible(true);
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == button){
-
-        }
     }
 }
