@@ -6,8 +6,9 @@ import java.awt.event.ActionListener;
 public class Register implements ActionListener {
 
     JFrame frame = new JFrame("Creating an account");
-
     private final StudentsManager studentsManager;
+    private final TeachersManager manager; // Create teachers' accounts.
+
     private teacherGender chosenGender;
     private schools chosenSchool;
     private subjects chosenSubject;
@@ -42,7 +43,10 @@ public class Register implements ActionListener {
     JButton showPasswordButton = new JButton("Show password",seeIconPassword);
     JButton HidePasswordButton = new JButton("Hide password",closeIconPassword);
 
-    Register(StudentsManager studentsManager){
+    boolean genderIsSelected = false;
+    boolean schoolIsSelected = false;
+    boolean subjectIsSelected = false;
+    Register(StudentsManager studentsManager, TeachersManager manager){
         frame.setTitle("Login-Screen");
         frame.setSize(460,450);
         frame.setLocationRelativeTo(null);
@@ -51,6 +55,7 @@ public class Register implements ActionListener {
         frame.setLayout(new BorderLayout());
         frame.setIconImage(icon.getImage());
         this.studentsManager = studentsManager;
+        this.manager = manager;
 
         // These are labels .
         String[] titles = {"Name : ","Age : ","Gender : ","School : ","Subject : ","Password : ","Confirm Password : "};
@@ -69,18 +74,21 @@ public class Register implements ActionListener {
             Object object = boxGender.getSelectedItem();
             if(object instanceof teacherGender){
                 chosenGender = (teacherGender) object;
+                genderIsSelected = true;
             }
         });
         boxSchools.addActionListener(e -> {
             Object object = boxSchools.getSelectedItem();
             if(object instanceof schools){
                 chosenSchool = (schools) object;
+                schoolIsSelected = true;
             }
         });
         boxSubjects.addActionListener(e -> {
             Object object = boxSubjects.getSelectedItem();
             if(object instanceof subjects){
                 chosenSubject = (subjects) object;
+                subjectIsSelected = true;
             }
         });
 
@@ -186,13 +194,24 @@ public class Register implements ActionListener {
                     "The teacher's age can't be less than 20 or bigger than 51",
                     "Age is not available",JOptionPane.ERROR_MESSAGE);
         }
+        else if(!genderIsSelected){
+            JOptionPane.showMessageDialog(null,"The gender is not selected",
+                    "Gender is not selected",JOptionPane.ERROR_MESSAGE);
+        }
+        else if(!schoolIsSelected){
+            JOptionPane.showMessageDialog(null,"The school is not selected",
+                    "School is not selected",JOptionPane.ERROR_MESSAGE);
+        }
+        else if(!subjectIsSelected){
+            JOptionPane.showMessageDialog(null,"The subject is not selected",
+                    "Subject is not selected",JOptionPane.ERROR_MESSAGE);
+        }
         else{
             int age = Integer.parseInt(teacherAge.getText());
             Teacher teacher = new Teacher(name,age,password,chosenSubject,chosenSchool,chosenGender);
 
-            TeachersManager manager = new TeachersManager();
             manager.saveTeacher(teacher);
-            MainWindow mainWindow = new MainWindow(studentsManager);
+            new MainWindow(studentsManager,manager);
             JOptionPane.showMessageDialog(null,"The account is created.",
                     "Welcome",JOptionPane.INFORMATION_MESSAGE);
         }
@@ -206,6 +225,9 @@ public class Register implements ActionListener {
         boxGender.setSelectedIndex(0);
         boxSchools.setSelectedIndex(0);
         boxSubjects.setSelectedIndex(0);
+        genderIsSelected = false;
+        schoolIsSelected = false;
+        subjectIsSelected = false;
     }
 
     private Boolean checkPassword(String password, String confirmPassword){

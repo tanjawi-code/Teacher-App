@@ -12,6 +12,7 @@ import java.util.Arrays;
 public class MainWindow extends JFrame implements ActionListener {
 
     private final StudentsManager manager;
+    private final TeachersManager teachersManager;
 
     // This is for the buttons in the lower part of the screen.
     String[] leftUnderTitles = {"Statistics","Passed","Failed","Top 3","Account","Sittings"};
@@ -51,13 +52,14 @@ public class MainWindow extends JFrame implements ActionListener {
     boolean genderIsSelected = false;
     int selectedRow = table.getSelectedRow();
     int studentIndex;
-    MainWindow(StudentsManager manager){
+    MainWindow(StudentsManager manager, TeachersManager teachersManager){
         this.setTitle("Students management");
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setLayout(new BorderLayout());
         this.manager = manager;
+        this.teachersManager = teachersManager;
 
         // This is for the higher part of the screen in left side.
         JPanel textPanel = new JPanel(new GridLayout(9,2,0,5));
@@ -185,12 +187,8 @@ public class MainWindow extends JFrame implements ActionListener {
                 case "Passed" : passedStudents(); break;
                 case "Failed" : failedStudents(); break;
                 case "Top 3" : topThreeStudents(); break;
-                case "Account" :
-                    JOptionPane.showMessageDialog(null,"It's coming soon",
-                            "Teacher's account",JOptionPane.INFORMATION_MESSAGE);
-                    break;
-                case "Sittings" :
-                    break;
+                case "Account" :  new Account(teachersManager); break;
+                case "Sittings" : break;
                 default:
             }
         }
