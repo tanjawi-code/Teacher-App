@@ -147,7 +147,7 @@ public class StudentsManager {
 
         DecimalFormat decimalFormat = new DecimalFormat("#");
         decimalFormat.format(percentage);
-        String value = String.valueOf(percentage);
+        String value = String.valueOf(decimalFormat.format(Double.parseDouble(String.valueOf(percentage))));
         value = value+"%";
 
         return value;
@@ -201,7 +201,7 @@ public class StudentsManager {
     // The number of grades that less than 10.
     int getGradesLessTen(int studentIndex){
         int count = 0;
-        for(int x = 0 ;x<students.size(); x++){
+        for(int x = 0 ;x<3; x++){
             if(students.get(studentIndex).getStudentGrades(x) <= 9.99){
                 count++;
             }

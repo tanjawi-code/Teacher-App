@@ -80,6 +80,9 @@ public class Student implements SaveAble{
     public String getFullName(){
         return this.fullName;
     }
+    public void setStudentClassNumber(int classNumber){
+        this.studentClassNumber = classNumber;
+    }
 
     // Setters for updating data.
     public void setFirstName(String name){

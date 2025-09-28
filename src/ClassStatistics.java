@@ -12,13 +12,13 @@ public class ClassStatistics implements ActionListener {
 
     // This is for statistics of the class.
 
-    ClassStatistics(StudentsManager manager){
+    ClassStatistics(StudentsManager manager, TeachersManager teachersManager){
         if(manager.isEmpty()){
             JOptionPane.showMessageDialog(null,"The class is empty","Empty class",
                     JOptionPane.INFORMATION_MESSAGE);
         }
         else{
-            getClassStatistics(manager);
+            getClassStatistics(manager,teachersManager);
         }
     }
 
@@ -29,8 +29,8 @@ public class ClassStatistics implements ActionListener {
         }
     }
 
-    void getClassStatistics(StudentsManager manager){
-        frame.setSize(400,350);
+    void getClassStatistics(StudentsManager manager, TeachersManager teachersManager){
+        frame.setSize(420,350);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
@@ -61,7 +61,7 @@ public class ClassStatistics implements ActionListener {
         String minPoint = String.valueOf(decimalFormat.format(Double.parseDouble(String.valueOf(min))));
         String averagePoint = String.valueOf(decimalFormat.format(Double.parseDouble(String.valueOf(average))));
 
-        labelsStatistics[0].setText(String.valueOf(subjects.Math));
+        labelsStatistics[0].setText(String.valueOf(teachersManager.getTeacherSubject(0)));
         labelsStatistics[1].setText(String.valueOf(manager.studentsSize()));
         labelsStatistics[2].setText(String.valueOf(manager.getMalesNumber()));
         labelsStatistics[3].setText(String.valueOf(manager.getFemalesNumber()));

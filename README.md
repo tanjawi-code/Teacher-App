@@ -35,4 +35,4 @@ to add new students that weren't in the list before. The class number starts fro
 ## **The developer**
 - **Name** : [private name].
 - **Github** : [https://github.com/tanjawi-code].
-- *Version* : 1.8.2
+- *Version* : 1.9.2

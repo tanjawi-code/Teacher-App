@@ -15,7 +15,7 @@ public class Account implements ActionListener {
     JPanel westPanel = new JPanel(new BorderLayout());
 
     Account(TeachersManager manager){
-        frame.setSize(390,350);
+        frame.setSize(410,350);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
@@ -45,7 +45,7 @@ public class Account implements ActionListener {
             labels[x] = new JLabel(titles[x]);
             labels[x].setFont(new Font("MV Boli",Font.PLAIN,20));
             teacherLabel[x] = new JLabel();
-            teacherLabel[x].setFont(new Font("Arial",Font.PLAIN,10));
+            teacherLabel[x].setFont(new Font("Arial",Font.PLAIN,15));
         }
 
         String name = manager.getTeacherName(0);

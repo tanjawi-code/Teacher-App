@@ -72,7 +72,7 @@ public class studentStatistics implements ActionListener {
     }
 
     private void getStudentStatistics(int index, StudentsManager manager){
-        frame.setSize(300,360);
+        frame.setSize(350,220);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);

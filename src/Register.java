@@ -206,6 +206,11 @@ public class Register implements ActionListener {
             JOptionPane.showMessageDialog(null,"The subject is not selected",
                     "Subject is not selected",JOptionPane.ERROR_MESSAGE);
         }
+        else if(teacherPassword.getPassword().length > 30){
+            JOptionPane.showMessageDialog(null,
+                    "The password's length is more than 30","The password's length",
+                    JOptionPane.ERROR_MESSAGE);
+        }
         else{
             int age = Integer.parseInt(teacherAge.getText());
             Teacher teacher = new Teacher(name,age,password,chosenSubject,chosenSchool,chosenGender);

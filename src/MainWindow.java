@@ -183,7 +183,7 @@ public class MainWindow extends JFrame implements ActionListener {
 
         if(Arrays.asList(leftUnderTitles).contains(value)){
             switch (value){
-                case "Statistics" : new ClassStatistics(manager); break;
+                case "Statistics" : new ClassStatistics(manager,teachersManager); break;
                 case "Passed" : passedStudents(); break;
                 case "Failed" : failedStudents(); break;
                 case "Top 3" : topThreeStudents(); break;
@@ -293,6 +293,8 @@ public class MainWindow extends JFrame implements ActionListener {
         for(int x = 0; x<manager.studentsSize(); x++){
             classNumber = manager.increaseClassNumber(classNumber);
         }
+        student.setStudentClassNumber(classNumber+1);
+
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         point = Double.parseDouble(decimalFormat.format(Double.parseDouble(String.valueOf(point))));
 
@@ -307,6 +309,7 @@ public class MainWindow extends JFrame implements ActionListener {
             textInputs[x].setText("");
             if(labels[x].getText().equals("Gender : ")){
                 boxGender.setSelectedIndex(0);
+                genderIsSelected = false;
             }
         }
     }
@@ -425,6 +428,7 @@ public class MainWindow extends JFrame implements ActionListener {
         }
     }
     private void refreshTable(){
+        table.setModel(model);
         sorter.setRowFilter(null);
         searchName.setText("");
     }
@@ -452,9 +456,26 @@ public class MainWindow extends JFrame implements ActionListener {
         }
     }
     private void topThreeStudents(){
-        ArrayList<Student> sortedManager = manager.showTopThreePoints();
-        JOptionPane.showMessageDialog(null,"It's coming later","In the future",
-                JOptionPane.ERROR_MESSAGE);
+        if(manager.isEmpty()){
+            JOptionPane.showMessageDialog(null,"The class is empty","Empty class",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+        else{
+            ArrayList<Student> sortedList = manager.showTopThreePoints();
+            DefaultTableModel topThreeModel = new DefaultTableModel(tableTitles,0);
+            DecimalFormat decimalFormat = new DecimalFormat("#.##");
+            for (Student student : sortedList) {
+                double point = student.getStudentPoint();
+                point = Double.parseDouble(decimalFormat.format(Double.parseDouble(String.valueOf(point))));
+                topThreeModel.addRow(new Object[]{
+                        student.getFirstStudentName(), student.getSecondStudentName(), student.getStudentAge(),
+                        student.getStudentGender(), student.getStudentID(), student.getStudentGrades(0),
+                        student.getStudentGrades(1), student.getStudentGrades(2), point,
+                        student.getStudentAddress(), student.getStudentClassNumber()});
+            }
+            table.setModel(topThreeModel);
+            sorter.setRowFilter(RowFilter.numberFilter(RowFilter.ComparisonType.AFTER,9.99,8));
+        }
     }
 
     // These are methods are for checking the fields.
