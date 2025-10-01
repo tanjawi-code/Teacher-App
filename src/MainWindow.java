@@ -193,12 +193,15 @@ public class MainWindow extends JFrame implements ActionListener {
             }
         }
         else if(Arrays.asList(rightUnderTitles).contains(value)){
+            SaveFile saveFile = new SaveFile();
+            String filePath = saveFile.getFilePath();
+
             switch (value){
                 case "Delete" : deleteStudent(); break;
                 case "Update" : updateStudent(); break;
                 case "Student Statistics" : new studentStatistics(manager); break;
-                case "Save as a file" : break;
-                case "Get a file" : break;
+                case "Save as a file" : saveFile.saveFile(manager); break;
+                case "Get a file" : new GetFile(manager,filePath,model); break;
                 case "Searching ways" : break;
                 default:
             }
@@ -235,34 +238,34 @@ public class MainWindow extends JFrame implements ActionListener {
                     JOptionPane.ERROR_MESSAGE);
         }
         else if(textInputs[1].getText().equals(manager.checkName(textInputs[1].getText()))){
-            JOptionPane.showMessageDialog(null,"The family name is already in the list",
+            JOptionPane.showMessageDialog(null,"The student name is already in the list",
                     "Wrong input",JOptionPane.ERROR_MESSAGE);
         }
         else if(!checkAge(textInputs[2].getText())){
-            JOptionPane.showMessageDialog(null,"The age must be only numbers",
+            JOptionPane.showMessageDialog(null,"The student age must be only numbers",
                     "Wrong input",JOptionPane.ERROR_MESSAGE);
         }
         else if(!checkValidAge(Integer.parseInt(textInputs[2].getText()))){
             JOptionPane.showMessageDialog(null,
-                    "The student's age can't be less than 15 or bigger than 20",
+                    "The student's age can't be less than 15 or bigger than 20 in this school",
                     "Age is not available is this school",JOptionPane.ERROR_MESSAGE);
         }
         else if(!checkGrade(textInputs[3].getText()) || !checkGrade(textInputs[4].getText()) || !checkGrade(textInputs[5].getText())){
-            JOptionPane.showMessageDialog(null,"The grade must be only numbers",
+            JOptionPane.showMessageDialog(null,"The student grade must be only numbers",
                     "Grades",JOptionPane.ERROR_MESSAGE);
         }
         else if(!checkValidGrades(Double.parseDouble(textInputs[3].getText())) ||
                 !checkValidGrades(Double.parseDouble(textInputs[4].getText())) ||
                 !checkValidGrades(Double.parseDouble(textInputs[5].getText()))){
-            JOptionPane.showMessageDialog(null,"The grade must be between 0 and 20",
+            JOptionPane.showMessageDialog(null,"The student grade must be between 0 and 20",
                     "Between 0 and 20",JOptionPane.ERROR_MESSAGE);
         }
         else if(!checkAddress(textInputs[6].getText())){
-            JOptionPane.showMessageDialog(null,"The address must be only letters",
+            JOptionPane.showMessageDialog(null,"The student address must be only letters",
                     "Address",JOptionPane.ERROR_MESSAGE);
         }
         else if(!genderIsSelected){
-            JOptionPane.showMessageDialog(null,"The gender is not selected yet",
+            JOptionPane.showMessageDialog(null,"The student gender is not selected yet",
                     "Select Gender",JOptionPane.ERROR_MESSAGE);
         }
         else{
@@ -369,7 +372,7 @@ public class MainWindow extends JFrame implements ActionListener {
             if(name.isEmpty()){
                 sorter.setRowFilter(null);
             }
-            else if (manager.getFirstStudentName(x).trim().toLowerCase().equals(name.trim())){
+            else if (manager.getStudentFullName(x).trim().toLowerCase().contains(name.trim())){
                 sorter.setRowFilter(RowFilter.regexFilter("(?i)"+name,0));
                 check = true;
             }
@@ -463,6 +466,7 @@ public class MainWindow extends JFrame implements ActionListener {
         else{
             ArrayList<Student> sortedList = manager.showTopThreePoints();
             DefaultTableModel topThreeModel = new DefaultTableModel(tableTitles,0);
+            TableRowSorter<TableModel> sortedSorter = new TableRowSorter<>(topThreeModel);
             DecimalFormat decimalFormat = new DecimalFormat("#.##");
             for (Student student : sortedList) {
                 double point = student.getStudentPoint();
@@ -474,7 +478,7 @@ public class MainWindow extends JFrame implements ActionListener {
                         student.getStudentAddress(), student.getStudentClassNumber()});
             }
             table.setModel(topThreeModel);
-            sorter.setRowFilter(RowFilter.numberFilter(RowFilter.ComparisonType.AFTER,9.99,8));
+            sortedSorter.setRowFilter(RowFilter.numberFilter(RowFilter.ComparisonType.AFTER,9.99,8));
         }
     }
 

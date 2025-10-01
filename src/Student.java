@@ -48,6 +48,17 @@ public class Student implements SaveAble{
         this.studentAddress = address;
         this.fullName = fullName;
     }
+    Student(String firstName,String secondName,int age,Gender gender,int ID,double[] grades,double point,String address,int classNumber ){
+        this.firstStudentName = firstName;
+        this.secondStudentName = secondName;
+        this.studentAge = age;
+        this.studentGender = gender;
+        this.studentID = ID;
+        this.studentGrades = grades;
+        this.studentPoint = point;
+        this.studentAddress = address;
+        this.studentClassNumber = classNumber;
+    }
 
     // Setters and Getters.
     public String getFirstStudentName(){
@@ -113,22 +124,12 @@ public class Student implements SaveAble{
         this.studentPoint = sum/studentGrades.length;
    }
 
-   // The function to print all the details of every student.
-    public void studentDetails(){
-        System.out.println("Name : "+this.firstStudentName+" || Gender : "+this.studentGender+" || ID : "+this.studentID+" || Class number : "+this.studentClassNumber);
-        System.out.printf("Point : %.2f || Grades : [exam 1 : %.2f, exam 2 : %.2f, exam 3 : %.2f].\n",studentPoint, studentGrades[0], studentGrades[1], studentGrades[2]);
-    }
-
-    // This function will be used only to print the three top points in the class.
-    public void studentInfo(){
-        System.out.printf("ID : "+studentID+" || Class number : "+this.studentClassNumber+" || Gender : "+this.studentGender +" || Name : "+firstStudentName+" || Point : %.2f\n",studentPoint );
-    }
-
     // This is the method of the interface DisplayAble.
     @Override
     public String saveFile(){
-        return studentClassNumber+","+studentID+","+firstStudentName+","+studentAge+","+studentGender+","+studentPoint
-                +","+studentGrades[0]+","+studentGrades[1]+","+studentGrades[2]+"\n";
+        return firstStudentName+","+secondStudentName+","+studentAge+","+studentGender+","+studentID+","+
+               studentGrades[0]+","+studentGrades[1]+","+studentGrades[2]+","+studentPoint+","+studentAddress+","+
+               studentClassNumber+"\n";
     }
 
     // Generate ID.

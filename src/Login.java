@@ -2,7 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
 
 public class Login extends JFrame implements ActionListener {
 
@@ -112,25 +111,13 @@ public class Login extends JFrame implements ActionListener {
         JButton button = (JButton) e.getSource();
         String text = button.getText();
 
-        if(Arrays.asList(buttonsTitles).contains(text)){
-            if(text.equals("Login")){
-                loginButton();
-            }
-            else{
-                new Register(manager,teachersManager);
-            }
-        }
-        else if(text.equals(forgetPasswordButton.getText())){
-            forgetPassword();
-        }
-        else if(text.equals("Clear")){
-            clearButtonFields();
-        }
-        else if(text.equals("Show password")){
-            textPassword.setEchoChar((char) 0);
-        }
-        else if (text.equals("Hide password")) {
-            textPassword.setEchoChar('•');
+        switch (text) {
+            case "Login" -> loginButton();
+            case "Create new account" -> new Register(manager, teachersManager);
+            case "Did you forget the password?" -> forgetPassword();
+            case "Clear" -> clearButtonFields();
+            case "Show password" -> textPassword.setEchoChar((char) 0);
+            case "Hide password" -> textPassword.setEchoChar('•');
         }
     }
 

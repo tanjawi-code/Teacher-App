@@ -14,8 +14,9 @@ public class Account implements ActionListener {
 
     JPanel westPanel = new JPanel(new BorderLayout());
 
+    String password;
     Account(TeachersManager manager){
-        frame.setSize(410,350);
+        frame.setSize(440,350);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
@@ -50,7 +51,7 @@ public class Account implements ActionListener {
 
         String name = manager.getTeacherName(0);
         int age = manager.getTeacherAge(0);
-        String password = manager.password(0);
+        password = manager.password(0);
         String gender = String.valueOf(manager.getTeacherGender(0));
         String school = String.valueOf(manager.getTeacherSchool(0));
         String subject = String.valueOf(manager.getTeacherSubject(0));
@@ -79,13 +80,33 @@ public class Account implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == changePasswordButton){
-
+            changePassword(password);
         }
         else if(e.getSource() == deleteAccountButton){
-
+            deleteAccount();
         }
         else if(e.getSource() == buttonBack){
             frame.dispose();
+        }
+    }
+
+    // This is for changing password.
+    private void changePassword(String password){
+
+    }
+    // This is for deleting the account.
+    private void deleteAccount(){
+        int choice;
+        choice = JOptionPane.showConfirmDialog(null,
+                """
+                        Deleting your account will remove everything you have in this account:
+                        your profile, your students' details and you will start from the beginning.
+                        Are sure you want to delete and lose everything in this account?""",
+                "Deleting the account",JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
+
+        if(choice == 0){
+            JOptionPane.showMessageDialog(null,"It's coming soon","Coming soon",
+                    JOptionPane.INFORMATION_MESSAGE);
         }
     }
 }

@@ -26,6 +26,11 @@ point, lowest point, class average, success rate, and the top three students in 
 - Fix the problem in class number. When the teacher store students in the first step, and then the teacher wants
 to add new students that weren't in the list before. The class number starts from 1 instead of continue from the last student in the list.
 - Fix the problem in student statistics button. when you press cancel the program show that student is not found.
+- Fix the problem in class number, example : when add students like five, and then you want to delete a student, but
+  **not the last student because the problem will not happen**. You delete a student, and then you add another 
+student. the last student who has 5 as the class number will be the same number of the added student after him.
+The last student (5 as class number), the added student (the one after him, 5 as class number). This problem will only
+happen when you delete a student and then add a student.
 ---
 ## Future improvements.
 - Add database support (MySQl or SQLite).
