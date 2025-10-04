@@ -23,12 +23,13 @@ public class MainWindow extends JFrame implements ActionListener {
     // This is for inputs in the higher part of the screen in left side.
     String[] leftTopTitles = {
             "First name : ","Second name : ","Age : ","Grade 1 : ",
-            "Grade 2 : ","Grade 3 : ","Address : ","Gender : "};
+            "Grade 2 : ","Grade 3 : ","City : ","Gender : "};
     JTextField[] textInputs = new JTextField[leftTopTitles.length];
     JLabel[] labels = new JLabel[leftTopTitles.length];
     JButton addStudent = new JButton("Add student");
     JButton clearButton = new JButton("Clear");
     JComboBox<Gender> boxGender = new JComboBox<>(Gender.values());
+    JComboBox<City> cityBox = new JComboBox<>(City.values());
 
     // These are the main panels that are in the frame.
     JPanel northPanel = new JPanel(new BorderLayout());
@@ -37,7 +38,7 @@ public class MainWindow extends JFrame implements ActionListener {
 
     // This is for the table.
     String[] tableTitles = {
-            "First name","Second name","Age","Gender","ID","Grade 1","Grade 2","Grade 3","Point","Address","Class number"};
+            "First name","Second name","Age","Gender","ID","Grade 1","Grade 2","Grade 3","Point","City","Class number"};
     JButton refresh = new JButton("Refresh");
     JButton search = new JButton("Search");
     JButton buttonConfirmUpdate = new JButton("Confirm update");
@@ -49,7 +50,9 @@ public class MainWindow extends JFrame implements ActionListener {
     TableRowSorter<TableModel> sorter = new TableRowSorter<>(model);
 
     Gender gender;
+    City studentCity;
     boolean genderIsSelected = false;
+    boolean cityIsSelected = false;
     int selectedRow = table.getSelectedRow();
     int studentIndex;
     MainWindow(StudentsManager manager, TeachersManager teachersManager){
@@ -75,10 +78,14 @@ public class MainWindow extends JFrame implements ActionListener {
             if(labels[x].getText().equals("Gender : ")){
                 textPanel.add(boxGender);
             }
+            else if(labels[x].getText().equals("City : ")){
+                textPanel.add(cityBox);
+            }
             else {
                 textPanel.add(textInputs[x]);
             }
         }
+
         boxGender.addActionListener(e -> {
             Object object = boxGender.getSelectedItem();
             if(object instanceof Gender){
@@ -86,6 +93,14 @@ public class MainWindow extends JFrame implements ActionListener {
                 genderIsSelected = true;
             }
         });
+        cityBox.addActionListener(e -> {
+            Object object = cityBox.getSelectedItem();
+            if(object instanceof City){
+                studentCity = (City) object;
+                cityIsSelected = true;
+            }
+        });
+
         addStudent.setFocusable(false); // Button of adding a student.
         addStudent.setBorder(BorderFactory.createEtchedBorder());
         addStudent.setBackground(Color.GREEN);
@@ -202,7 +217,7 @@ public class MainWindow extends JFrame implements ActionListener {
                 case "Student Statistics" : new studentStatistics(manager); break;
                 case "Save as a file" : saveFile.saveFile(manager); break;
                 case "Get a file" : new GetFile(manager,filePath,model); break;
-                case "Searching ways" : break;
+                case "Searching ways" : new SearchingWays(sorter); break;
                 default:
             }
         }
@@ -227,8 +242,7 @@ public class MainWindow extends JFrame implements ActionListener {
     private void buttonAddStudent(){
         if(textInputs[0].getText().isEmpty() || textInputs[1].getText().isEmpty() ||
                 textInputs[2].getText().isEmpty() || textInputs[3].getText().isEmpty() ||
-                textInputs[4].getText().isEmpty() || textInputs[5].getText().isEmpty() ||
-                textInputs[6].getText().isEmpty()){
+                textInputs[4].getText().isEmpty() || textInputs[5].getText().isEmpty()){
             JOptionPane.showMessageDialog(null,"The fields are empty.","Empty fields",
                     JOptionPane.ERROR_MESSAGE);
         }
@@ -237,7 +251,8 @@ public class MainWindow extends JFrame implements ActionListener {
                     "The name must be only letters and one name in the filed","Wrong input",
                     JOptionPane.ERROR_MESSAGE);
         }
-        else if(textInputs[1].getText().equals(manager.checkName(textInputs[1].getText()))){
+        else if(checkFullName(textInputs[0].getText(),textInputs[1].getText()).equals
+                        (textInputs[0].getText().toLowerCase()+" "+textInputs[1].getText().toLowerCase())){
             JOptionPane.showMessageDialog(null,"The student name is already in the list",
                     "Wrong input",JOptionPane.ERROR_MESSAGE);
         }
@@ -260,9 +275,9 @@ public class MainWindow extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(null,"The student grade must be between 0 and 20",
                     "Between 0 and 20",JOptionPane.ERROR_MESSAGE);
         }
-        else if(!checkAddress(textInputs[6].getText())){
-            JOptionPane.showMessageDialog(null,"The student address must be only letters",
-                    "Address",JOptionPane.ERROR_MESSAGE);
+        else if(!cityIsSelected){
+            JOptionPane.showMessageDialog(null,"The student city is not selected yet",
+                    "Select Address",JOptionPane.ERROR_MESSAGE);
         }
         else if(!genderIsSelected){
             JOptionPane.showMessageDialog(null,"The student gender is not selected yet",
@@ -276,18 +291,16 @@ public class MainWindow extends JFrame implements ActionListener {
             grades[0] = Double.parseDouble(textInputs[3].getText());
             grades[1] = Double.parseDouble(textInputs[4].getText());
             grades[2] = Double.parseDouble(textInputs[5].getText());
-            String address = textInputs[6].getText();
-            storeDataTable(firstName,secondName,age,grades,gender,address);
+            storeDataTable(firstName,secondName,age,grades);
         }
     }
 
-    private void storeDataTable(String firstName,String secondName,int age,double[] grades,Gender gender, String address){
+    private void storeDataTable(String firstName, String secondName, int age, double[] grades){
         firstName = firstName.substring(0,1).toUpperCase() + firstName.substring(1).toLowerCase();
         secondName = secondName.substring(0,1).toUpperCase() + secondName.substring(1).toLowerCase();
-        address = address.substring(0,1).toUpperCase() + address.substring(1).toLowerCase();
         String fullName = firstName+" "+secondName;
 
-        Student student = new Student(firstName,secondName,age,grades,gender,address,fullName);
+        Student student = new Student(firstName,secondName,age,grades,gender,studentCity,fullName);
         student.calculateGrades();
         int studentID = student.GenerateStudentID();
         double point = student.getStudentPoint();
@@ -302,7 +315,7 @@ public class MainWindow extends JFrame implements ActionListener {
         point = Double.parseDouble(decimalFormat.format(Double.parseDouble(String.valueOf(point))));
 
         model.addRow(new Object[] {firstName,secondName,age,gender,studentID,grades[0],grades[1],grades[2],point,
-                address,classNumber+1});
+                studentCity,classNumber+1});
         manager.saveStudent(student);
     }
 
@@ -313,6 +326,10 @@ public class MainWindow extends JFrame implements ActionListener {
             if(labels[x].getText().equals("Gender : ")){
                 boxGender.setSelectedIndex(0);
                 genderIsSelected = false;
+            }
+            else if(labels[x].getText().equals("City : ")){
+                cityBox.setSelectedIndex(0);
+                cityIsSelected = false;
             }
         }
     }
@@ -366,14 +383,14 @@ public class MainWindow extends JFrame implements ActionListener {
         }
     }
     private void searchForStudent(){
-        String name = searchName.getText().trim();
+        String name = searchName.getText().trim().toLowerCase();
         boolean check = false;
         for(int x = 0 ; x< manager.studentsSize(); x++){
             if(name.isEmpty()){
                 sorter.setRowFilter(null);
             }
-            else if (manager.getStudentFullName(x).trim().toLowerCase().contains(name.trim())){
-                sorter.setRowFilter(RowFilter.regexFilter("(?i)"+name,0));
+            else if (manager.getFirstStudentName(x).toLowerCase().equals(name) || manager.getSecondStudentName(x).toLowerCase().equals(name)){
+                sorter.setRowFilter(RowFilter.regexFilter("(?i)"+name,0,1));
                 check = true;
             }
         }
@@ -475,7 +492,7 @@ public class MainWindow extends JFrame implements ActionListener {
                         student.getFirstStudentName(), student.getSecondStudentName(), student.getStudentAge(),
                         student.getStudentGender(), student.getStudentID(), student.getStudentGrades(0),
                         student.getStudentGrades(1), student.getStudentGrades(2), point,
-                        student.getStudentAddress(), student.getStudentClassNumber()});
+                        student.getStudentCity(), student.getStudentClassNumber()});
             }
             table.setModel(topThreeModel);
             sortedSorter.setRowFilter(RowFilter.numberFilter(RowFilter.ComparisonType.AFTER,9.99,8));
@@ -486,14 +503,15 @@ public class MainWindow extends JFrame implements ActionListener {
     private Boolean checkName(String name){
         return name.matches("[a-zA-Z]+");
     }
+    private String checkFullName(String firstName, String secondName){
+        String fullName = firstName+" "+secondName;
+        return manager.checkName(fullName);
+    }
     private Boolean checkAge(String age){
         return age.matches("\\d+");
     }
     private Boolean checkValidAge(int age){
         return age >= 15 && age <= 20;
-    }
-    private Boolean checkAddress(String address){
-        return address.matches("[a-zA-Z]+");
     }
     private boolean checkGrade(String grade){
         return grade.matches("\\d+(\\.\\d+)?");

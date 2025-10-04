@@ -1,6 +1,7 @@
 import java.util.Random;
 
 enum Gender {male,female}
+enum City {Tangier,Tetouan,Al_Hoceima,Rabat,Casablanca,Fes,Chefchaouen,Marrakesh}
 
 public class Student implements SaveAble{
 
@@ -13,7 +14,7 @@ public class Student implements SaveAble{
     private int studentID;
     private Gender studentGender;
     private int studentClassNumber;
-    private String studentAddress;
+    private City studentCity;
 
     Student(){
         this.firstStudentName = "No name";
@@ -35,20 +36,20 @@ public class Student implements SaveAble{
         this.studentGender = other.studentGender;
         this.secondStudentName = other.secondStudentName;
         this.studentClassNumber = other.studentClassNumber;
-        this.studentAddress = other.studentAddress;
         this.fullName = other.fullName;
+        this.studentCity = other.studentCity;
     }
 
-    Student(String firstName, String secondName,int age, double[] Grades,Gender gender, String address, String fullName){
+    Student(String firstName, String secondName,int age, double[] Grades,Gender gender, City city, String fullName){
         this.firstStudentName = firstName;
         this.studentAge = age;
         this.studentGrades = Grades;
         this.secondStudentName = secondName;
         this.studentGender = gender;
-        this.studentAddress = address;
+        this.studentCity = city;
         this.fullName = fullName;
     }
-    Student(String firstName,String secondName,int age,Gender gender,int ID,double[] grades,double point,String address,int classNumber ){
+    Student(String firstName,String secondName,int age,Gender gender,int ID,double[] grades,double point,City city,int classNumber,String fullName){
         this.firstStudentName = firstName;
         this.secondStudentName = secondName;
         this.studentAge = age;
@@ -56,8 +57,9 @@ public class Student implements SaveAble{
         this.studentID = ID;
         this.studentGrades = grades;
         this.studentPoint = point;
-        this.studentAddress = address;
         this.studentClassNumber = classNumber;
+        this.fullName = fullName;
+        this.studentCity = city;
     }
 
     // Setters and Getters.
@@ -85,11 +87,11 @@ public class Student implements SaveAble{
     public double getStudentPoint(){
         return this.studentPoint;
     }
-    public String getStudentAddress(){
-        return this.studentAddress;
-    }
     public String getFullName(){
         return this.fullName;
+    }
+    City getStudentCity() {
+        return studentCity;
     }
     public void setStudentClassNumber(int classNumber){
         this.studentClassNumber = classNumber;
@@ -111,8 +113,8 @@ public class Student implements SaveAble{
     void setGender(Gender gender){
         this.studentGender = gender;
     }
-    public void setAddress(String address){
-        this.studentAddress = address;
+    void setCity(City city){
+        this.studentCity = city;
     }
 
     // Calculating The grades of the students.
@@ -128,7 +130,7 @@ public class Student implements SaveAble{
     @Override
     public String saveFile(){
         return firstStudentName+","+secondStudentName+","+studentAge+","+studentGender+","+studentID+","+
-               studentGrades[0]+","+studentGrades[1]+","+studentGrades[2]+","+studentPoint+","+studentAddress+","+
+               studentGrades[0]+","+studentGrades[1]+","+studentGrades[2]+","+studentPoint+","+studentCity+","+
                studentClassNumber+"\n";
     }
 

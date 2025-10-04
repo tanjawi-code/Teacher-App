@@ -17,27 +17,6 @@ public class StudentsManager {
     String getStudentFullName(int index){
         return students.get(index).getFullName();
     }
-    int getStudentAge(int index){
-        return students.get(index).getStudentAge();
-    }
-    double getStudentGrade(int index,int grade){
-        return students.get(index).getStudentGrades(grade);
-    }
-    double getStudentPoint(int index){
-        return students.get(index).getStudentPoint();
-    }
-    Gender getStudentGender(int index){
-        return students.get(index).getStudentGender();
-    }
-    int getStudentClassNumber(int index){
-        return students.get(index).getStudentClassNumber();
-    }
-    int getStudentID(int index){
-        return students.get(index).getStudentID();
-    }
-    String getStudentAddress(int index){
-        return students.get(index).getStudentAddress();
-    }
     String saveFile(int index){
         return students.get(index).saveFile();
     }
@@ -55,8 +34,8 @@ public class StudentsManager {
     void setStudentGender(int index,Gender gender){
         students.get(index).setGender(gender);
     }
-    void setStudentAddress(int index,String address){
-        students.get(index).setAddress(address);
+    void setStudentAddress(int index,City city){
+        students.get(index).setCity(city);
     }
     void setStudentGrades(int index,double[] grades){
         students.get(index).setGrades(grades);
@@ -229,7 +208,7 @@ public class StudentsManager {
     // Check the name if it's not repeated.
     String checkName(String name){
         for (Student student : students) {
-            if (name.equals(student.getFirstStudentName().trim().toLowerCase())) {
+            if (student.getFullName().toLowerCase().contains(name.trim())) {
                 return name;
             }
         }

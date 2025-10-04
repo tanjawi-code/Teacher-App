@@ -1,10 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 
-public class studentStatistics implements ActionListener {
+public class studentStatistics {
 
     JFrame frame = new JFrame();
     JPanel panel = new JPanel(new BorderLayout());
@@ -64,13 +62,6 @@ public class studentStatistics implements ActionListener {
         }
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == button){
-            frame.dispose();
-        }
-    }
-
     private void getStudentStatistics(int index, StudentsManager manager){
         frame.setSize(350,220);
         frame.setResizable(false);
@@ -114,7 +105,7 @@ public class studentStatistics implements ActionListener {
         button.setFocusable(false);
         button.setBorder(BorderFactory.createEtchedBorder());
         button.setBackground(Color.CYAN);
-        button.addActionListener(this);
+        button.addActionListener(e -> frame.dispose());
         gridPanel.add(button);
 
         for(int x = 0; x< labels.length; x++){

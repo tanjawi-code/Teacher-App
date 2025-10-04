@@ -1,17 +1,14 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 
-public class ClassStatistics implements ActionListener {
+public class ClassStatistics {
 
     JFrame frame = new JFrame("Statistics");
     JButton button = new JButton("Back");
     JPanel statisticsClassPanel = new JPanel(new BorderLayout());
 
     // This is for statistics of the class.
-
     ClassStatistics(StudentsManager manager, TeachersManager teachersManager){
         if(manager.isEmpty()){
             JOptionPane.showMessageDialog(null,"The class is empty","Empty class",
@@ -19,13 +16,6 @@ public class ClassStatistics implements ActionListener {
         }
         else{
             getClassStatistics(manager,teachersManager);
-        }
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == button){
-            frame.dispose();
         }
     }
 
@@ -81,7 +71,7 @@ public class ClassStatistics implements ActionListener {
         button.setFocusable(false);
         button.setBorder(BorderFactory.createEtchedBorder());
         button.setBackground(Color.CYAN);
-        button.addActionListener(this);
+        button.addActionListener(e -> frame.dispose());
         gridPanel.add(button);
 
         statisticsClassPanel.add(gridPanel,BorderLayout.NORTH);

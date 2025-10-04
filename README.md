@@ -40,4 +40,4 @@ happen when you delete a student and then add a student.
 ## **The developer**
 - **Name** : [private name].
 - **Github** : [https://github.com/tanjawi-code].
-- *Version* : 1.9.2
+- *Version* : 2.0.0

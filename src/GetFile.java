@@ -124,6 +124,7 @@ public class GetFile extends Component implements ActionListener {
                 double[] grades = new double[3];
                 String firstName = data[0];
                 String secondName = data[1];
+                String fullName = data[0]+" "+data[1];
                 int age = Integer.parseInt(data[2]);
                 Gender gender = Gender.valueOf(data[3]);
                 int ID = Integer.parseInt(data[4]);
@@ -131,12 +132,12 @@ public class GetFile extends Component implements ActionListener {
                 double grade2 = Double.parseDouble(data[6]);
                 double grade3 = Double.parseDouble(data[7]);
                 double point = Double.parseDouble(decimalFormat.format(Double.parseDouble(String.valueOf(data[8]))));
-                String address = data[9];
+                City address = City.valueOf(data[9]);
                 int classNumber = Integer.parseInt(data[10]);
                 grades[0] = grade1;
                 grades[1] = grade2;
                 grades[2] = grade3;
-                Student student = new Student(firstName,secondName,age,gender,ID,grades,point,address,classNumber);
+                Student student = new Student(firstName,secondName,age,gender,ID,grades,point,address,classNumber,fullName);
                 model.addRow(new Object[] {firstName,secondName,age,gender,ID,grades[0],grades[1],grades[2],point,
                 address,classNumber});
                 manager.saveStudent(student);

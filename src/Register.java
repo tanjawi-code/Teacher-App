@@ -12,6 +12,9 @@ public class Register implements ActionListener {
     private teacherGender chosenGender;
     private schools chosenSchool;
     private subjects chosenSubject;
+    boolean genderIsSelected = false;
+    boolean schoolIsSelected = false;
+    boolean subjectIsSelected = false;
 
     ImageIcon icon = new ImageIcon("school.png");
     ImageIcon imageIcon1 = new ImageIcon("see.png");
@@ -43,9 +46,6 @@ public class Register implements ActionListener {
     JButton showPasswordButton = new JButton("Show password",seeIconPassword);
     JButton HidePasswordButton = new JButton("Hide password",closeIconPassword);
 
-    boolean genderIsSelected = false;
-    boolean schoolIsSelected = false;
-    boolean subjectIsSelected = false;
     Register(StudentsManager studentsManager, TeachersManager manager){
         frame.setTitle("Login-Screen");
         frame.setSize(460,450);
@@ -156,7 +156,8 @@ public class Register implements ActionListener {
             case "Back" : frame.dispose(); break;
             case "Show password" : teacherPassword.setEchoChar((char) 0); break;
             case "Hide password" : teacherPassword.setEchoChar('•'); break;
-            default: System.out.println("Something went wrong.");
+            default: JOptionPane.showMessageDialog(null,"Something went wrong","Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 
