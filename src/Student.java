@@ -5,9 +5,9 @@ enum City {Tangier,Tetouan,Al_Hoceima,Rabat,Casablanca,Fes,Chefchaouen,Marrakesh
 
 public class Student implements SaveAble{
 
-    private String firstStudentName;
-    private String secondStudentName;
-    private String fullName;
+    private final String firstStudentName;
+    private final String secondStudentName;
+    private final String fullName;
     private int studentAge;
     private double[] studentGrades = new double[3];
     private double studentPoint;
@@ -18,6 +18,8 @@ public class Student implements SaveAble{
 
     Student(){
         this.firstStudentName = "No name";
+        this.secondStudentName = "No name";
+        this.fullName = "No name";
         this.studentAge = 0;
         this.studentGrades[0] = 0;
         this.studentGrades[1] = 0;
@@ -62,7 +64,7 @@ public class Student implements SaveAble{
         this.studentCity = city;
     }
 
-    // Setters and Getters.
+    // Getters.
     public String getFirstStudentName(){
         return firstStudentName;
     }
@@ -97,24 +99,17 @@ public class Student implements SaveAble{
         this.studentClassNumber = classNumber;
     }
 
-    // Setters for updating data.
-    public void setFirstName(String name){
-        this.firstStudentName = name;
-    }
-    public void setSecondName(String name){
-        this.secondStudentName = name;
-    }
+    // Setters for updating age and grades.
     public void setAge(int age){
         this.studentAge = age;
     }
     public void setGrades(double[] grades){
         this.studentGrades = grades;
-    }
-    void setGender(Gender gender){
-        this.studentGender = gender;
-    }
-    void setCity(City city){
-        this.studentCity = city;
+        double sum = 0;
+        for(Double grade : studentGrades){
+            sum += grade;
+        }
+        this.studentPoint = sum/studentGrades.length;
     }
 
     // Calculating The grades of the students.

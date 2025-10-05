@@ -3,23 +3,20 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
 
-public class SearchingWays implements searchAble {
+public class SearchingWays {
 
     JFrame frame = new JFrame("Searching ways");
     private final TableRowSorter<TableModel> sorter;
 
     String[] labelTitles = {"Age","Gender","City","Point"};
-    String[] ageTitles = {"15","16","17","18","19","20"};
     String[] pointTitles = {"18-20","15-17.99","10-14.99","5-9.99","0-4.99"};
 
     JLabel[] labels = new JLabel[labelTitles.length];
-    JComboBox<String> ageBox = new JComboBox<>(ageTitles);
+    JComboBox<Integer> ageBox = new JComboBox<>(new Integer[]{15,16,17,18,19,20});
     JComboBox<Gender> genderBox = new JComboBox<>(Gender.values());
     JComboBox<City> cityBox = new JComboBox<>(City.values());
     JComboBox<String> pointBox = new JComboBox<>(pointTitles);
     JButton button = new JButton("Back");
-
-    private String chosenAge;
     private String chosenPoint;
 
     SearchingWays(TableRowSorter<TableModel> sorter){
@@ -51,9 +48,16 @@ public class SearchingWays implements searchAble {
         button.addActionListener(e -> frame.dispose());
 
         ageBox.addActionListener(e -> {
-            Object object = ageBox.getSelectedItem();
-            chosenAge = (String) object;
-            searchByAge();
+            Integer age = (Integer) ageBox.getSelectedItem();
+            if(age != null){
+                sorter.setRowFilter(new RowFilter<>() {
+                    @Override
+                    public boolean include(Entry<? extends TableModel, ? extends Integer> entry) {
+                        int value = (int) entry.getValue(2);
+                        return value == age;
+                    }
+                });
+            }
         });
         genderBox.addActionListener(e -> {
             Gender gender = (Gender) genderBox.getSelectedItem();
@@ -85,76 +89,7 @@ public class SearchingWays implements searchAble {
         frame.setVisible(true);
     }
 
-    @Override
-    public void searchByAge() {
-        switch (chosenAge){
-            case "15" :
-                sorter.setRowFilter(new RowFilter<Object,  Object>() {
-                    @Override
-                    public boolean include(Entry<? ,  ? > entry) {
-                        int age = (int) entry.getValue(2);
-                        return age == 15;
-                    }
-                });
-                break;
-            case "16" :
-                sorter.setRowFilter(new RowFilter<Object,  Object>() {
-                    @Override
-                    public boolean include(Entry<? ,  ? > entry) {
-                        int age = (int) entry.getValue(2);
-                        return age == 16;
-                    }
-                });
-                break;
-            case "17" :
-                sorter.setRowFilter(new RowFilter<Object,  Object>() {
-                    @Override
-                    public boolean include(Entry<? ,  ? > entry) {
-                        int age = (int) entry.getValue(2);
-                        return age == 17;
-                    }
-                });
-                break;
-            case "18" :
-                sorter.setRowFilter(new RowFilter<Object,  Object>() {
-                    @Override
-                    public boolean include(Entry<? ,  ? > entry) {
-                        int age = (int) entry.getValue(2);
-                        return age == 18;
-                    }
-                });
-                break;
-            case "19" :
-                sorter.setRowFilter(new RowFilter<Object,  Object>() {
-                    @Override
-                    public boolean include(Entry<? ,  ? > entry) {
-                        int age = (int) entry.getValue(2);
-                        return age == 19;
-                    }
-                });
-                break;
-            case "20" :
-                sorter.setRowFilter(new RowFilter<Object,  Object>() {
-                    @Override
-                    public boolean include(Entry<? ,  ? > entry) {
-                        int age = (int) entry.getValue(2);
-                        return age == 20;
-                    }
-                });
-                break;
-        }
-    }
-
-    @Override
-    public void searchByGender() {
-    }
-
-    @Override
-    public void searchByAddress() {
-    }
-
-    @Override
-    public void searchByPoint() {
+    private void searchByPoint() {
         switch (chosenPoint){
             case "18-20" :
                 sorter.setRowFilter(new RowFilter<Object,  Object>() {

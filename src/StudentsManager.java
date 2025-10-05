@@ -8,6 +8,9 @@ public class StudentsManager {
     private final ArrayList<Student> students = new ArrayList<>();
 
     // Getters.
+    Student getStudent(int index){
+        return students.get(index);
+    }
     String getFirstStudentName(int index){
         return students.get(index).getFirstStudentName();
     }
@@ -17,28 +20,11 @@ public class StudentsManager {
     String getStudentFullName(int index){
         return students.get(index).getFullName();
     }
+    int getStudentID(int index){
+        return students.get(index).getStudentID();
+    }
     String saveFile(int index){
         return students.get(index).saveFile();
-    }
-
-    // Setters for updating.
-    void setStudentFirstName(int index,String name){
-        students.get(index).setFirstName(name);
-    }
-    void setStudentSecondName(int index,String name){
-        students.get(index).setSecondName(name);
-    }
-    void setStudentAge(int index,int age){
-        students.get(index).setAge(age);
-    }
-    void setStudentGender(int index,Gender gender){
-        students.get(index).setGender(gender);
-    }
-    void setStudentAddress(int index,City city){
-        students.get(index).setCity(city);
-    }
-    void setStudentGrades(int index,double[] grades){
-        students.get(index).setGrades(grades);
     }
 
     // Saving a student.

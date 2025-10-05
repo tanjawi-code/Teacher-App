@@ -63,7 +63,7 @@ public class studentStatistics {
     }
 
     private void getStudentStatistics(int index, StudentsManager manager){
-        frame.setSize(350,220);
+        frame.setSize(350,230);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);

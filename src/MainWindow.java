@@ -44,7 +44,13 @@ public class MainWindow extends JFrame implements ActionListener {
     JButton buttonConfirmUpdate = new JButton("Confirm update");
     JTextField searchName = new JTextField(50);
 
-    DefaultTableModel model = new DefaultTableModel(tableTitles,0);
+    DefaultTableModel model = new DefaultTableModel(tableTitles,0){
+        @Override
+        public boolean isCellEditable(int row, int column){
+            return column != 0 && column != 1 && column != 3 && column != 4 && column != 8 &&
+                    column != 9 && column != 10;
+        }
+    };
     JTable table = new JTable(model);
     JScrollPane pane = new JScrollPane(table);
     TableRowSorter<TableModel> sorter = new TableRowSorter<>(model);
@@ -53,8 +59,6 @@ public class MainWindow extends JFrame implements ActionListener {
     City studentCity;
     boolean genderIsSelected = false;
     boolean cityIsSelected = false;
-    int selectedRow = table.getSelectedRow();
-    int studentIndex;
     MainWindow(StudentsManager manager, TeachersManager teachersManager){
         this.setTitle("Students management");
         this.setResizable(false);
@@ -198,13 +202,13 @@ public class MainWindow extends JFrame implements ActionListener {
 
         if(Arrays.asList(leftUnderTitles).contains(value)){
             switch (value){
-                case "Statistics" : new ClassStatistics(manager,teachersManager); break;
-                case "Passed" : passedStudents(); break;
-                case "Failed" : failedStudents(); break;
-                case "Top 3" : topThreeStudents(); break;
-                case "Account" :  new Account(teachersManager); break;
-                case "Sittings" : break;
-                default:
+                case "Statistics" -> new ClassStatistics(manager,teachersManager);
+                case "Passed" -> passedStudents();
+                case "Failed" -> failedStudents();
+                case "Top 3" -> topThreeStudents();
+                case "Account" ->  new Account(teachersManager);
+                case "Sittings" -> System.out.println();
+                default -> System.out.println("\n");
             }
         }
         else if(Arrays.asList(rightUnderTitles).contains(value)){
@@ -212,13 +216,13 @@ public class MainWindow extends JFrame implements ActionListener {
             String filePath = saveFile.getFilePath();
 
             switch (value){
-                case "Delete" : deleteStudent(); break;
-                case "Update" : updateStudent(); break;
-                case "Student Statistics" : new studentStatistics(manager); break;
-                case "Save as a file" : saveFile.saveFile(manager); break;
-                case "Get a file" : new GetFile(manager,filePath,model); break;
-                case "Searching ways" : new SearchingWays(sorter); break;
-                default:
+                case "Delete" -> deleteStudent();
+                case "Update" -> updateStudent();
+                case "Student Statistics" -> new studentStatistics(manager);
+                case "Save as a file" -> saveFile.saveFile(manager);
+                case "Get a file" -> new GetFile(manager,filePath,model);
+                case "Searching ways" -> new SearchingWays(sorter);
+                default -> System.out.println();
             }
         }
         else if (value.equals("Add student")) {
@@ -234,12 +238,13 @@ public class MainWindow extends JFrame implements ActionListener {
             refreshTable();
         }
         else if(value.equals("Confirm update")){
-            confirmUpdate(selectedRow);
+            confirmUpdate();
         }
     }
 
     // This is for adding the student to the table.
     private void buttonAddStudent(){
+        String fullName = textInputs[0].getText().toLowerCase()+" "+textInputs[1].getText().toLowerCase();
         if(textInputs[0].getText().isEmpty() || textInputs[1].getText().isEmpty() ||
                 textInputs[2].getText().isEmpty() || textInputs[3].getText().isEmpty() ||
                 textInputs[4].getText().isEmpty() || textInputs[5].getText().isEmpty()){
@@ -251,8 +256,7 @@ public class MainWindow extends JFrame implements ActionListener {
                     "The name must be only letters and one name in the filed","Wrong input",
                     JOptionPane.ERROR_MESSAGE);
         }
-        else if(checkFullName(textInputs[0].getText(),textInputs[1].getText()).equals
-                        (textInputs[0].getText().toLowerCase()+" "+textInputs[1].getText().toLowerCase())){
+        else if(checkFullName(textInputs[0].getText(),textInputs[1].getText()).equals(fullName)){
             JOptionPane.showMessageDialog(null,"The student name is already in the list",
                     "Wrong input",JOptionPane.ERROR_MESSAGE);
         }
@@ -357,7 +361,7 @@ public class MainWindow extends JFrame implements ActionListener {
             boolean isFound = false;
             for(int x =0 ;x<manager.studentsSize(); x++){
                 if(manager.getStudentFullName(x).toLowerCase().contains(name.trim().toLowerCase())){
-                    sorter.setRowFilter(RowFilter.regexFilter("(?i)"+name,0));
+                    sorter.setRowFilter(RowFilter.regexFilter("(?i)"+name,0,1));
                     int choice = JOptionPane.showConfirmDialog(null,
                             "Do you want to remove the student "+manager.getStudentFullName(x),
                             "Removing a student",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
@@ -430,14 +434,18 @@ public class MainWindow extends JFrame implements ActionListener {
             if(isEmpty){
                 boolean isFound = false;
                 for(int x =0 ; x<manager.studentsSize(); x++){
-                    if(manager.getFirstStudentName(x).trim().toLowerCase().equals(name.trim())){
-                        sorter.setRowFilter(RowFilter.regexFilter("(?i)"+name,0));
+                    if(manager.getStudentFullName(x).toLowerCase().contains(name.trim().toLowerCase())){
+                        sorter.setRowFilter(RowFilter.regexFilter("(?i)"+name,0,1));
                         JOptionPane.showMessageDialog(null,
-                                "You can modify details through the table","Update student's details",
-                                JOptionPane.INFORMATION_MESSAGE);
-                        studentIndex = x;
+                                """
+                                                               You can modify details through the table.
+                                        When you finish updating details of the student click confirm, and then refresh
+                                        """,
+                                "Update student's details",JOptionPane.INFORMATION_MESSAGE);
                         buttonConfirmUpdate.setVisible(true);
                         isFound = true;
+                        table.setEnabled(true);
+                        break;
                     }
                 }
                 if(!isFound){
@@ -451,9 +459,37 @@ public class MainWindow extends JFrame implements ActionListener {
         table.setModel(model);
         sorter.setRowFilter(null);
         searchName.setText("");
-    }
-    private void confirmUpdate(int row){
+        table.setEnabled(false);
         buttonConfirmUpdate.setVisible(false);
+    }
+    private void confirmUpdate(){
+        int row = table.getSelectedRow();
+        int rowModel = table.convertRowIndexToModel(row);
+        if(row != -1){
+            int ID = Integer.parseInt(table.getValueAt(row,4).toString());
+            for(int x = 0 ;x<manager.studentsSize(); x++){
+                if(ID == manager.getStudentID(x)){
+                    Student student = manager.getStudent(rowModel);
+                    student.setAge(Integer.parseInt(table.getValueAt(row,2).toString()));
+                    double[] grades = new double[3];
+                    grades[0] = Double.parseDouble(table.getValueAt(row,5).toString());
+                    grades[1] = Double.parseDouble(table.getValueAt(row,6).toString());
+                    grades[2] = Double.parseDouble(table.getValueAt(row,7).toString());
+                    student.setGrades(grades);
+
+                    DecimalFormat decimalFormat = new DecimalFormat("#.##");
+                    double point = student.getStudentPoint();
+                    point = Double.parseDouble(decimalFormat.format(Double.parseDouble(String.valueOf(point))));
+
+                    model.setValueAt(student.getStudentAge(),rowModel,2);
+                    model.setValueAt(student.getStudentGrades(0),rowModel,5);
+                    model.setValueAt(student.getStudentGrades(0),rowModel,6);
+                    model.setValueAt(student.getStudentGrades(0),rowModel,7);
+                    model.setValueAt(point,rowModel,8);
+                    break;
+                }
+            }
+        }
     }
 
     // These three methods are for showing in the table: passed students, failed students, top 3 students.
