@@ -4,9 +4,10 @@ enum teacherGender{Male,Female}
 
 public class Teacher {
 
-    private String name;
+    private int id;
+    private final String name;
     private int age;
-    private String password;
+    private final String password;
     private subjects subject;
     private schools school;
     private teacherGender gender;
@@ -38,6 +39,7 @@ public class Teacher {
         this.gender = other.gender;
         this.subject = other.subject;
         this.school = other.school;
+        this.id = other.id;
     }
 
     // Getters

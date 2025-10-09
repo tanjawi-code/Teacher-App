@@ -10,20 +10,15 @@ public class studentStatistics {
 
     studentStatistics(StudentsManager manager){
         String name = "";
-        boolean isEmpty = false;
         boolean isCancel = true;
 
         // Checking the class if it is empty.
         if(manager.isEmpty()){
             JOptionPane.showMessageDialog(null,"The class is empty","Empty class",
                     JOptionPane.INFORMATION_MESSAGE);
+            isCancel = false;
         }
         else {
-            isEmpty = true;
-        }
-
-        // Checking if the user presses cancel in the name field.
-        if(isEmpty){
             while(true){
                 name = JOptionPane.showInputDialog("What is the name of the student?");
                 if(name == null){
@@ -63,16 +58,15 @@ public class studentStatistics {
     }
 
     private void getStudentStatistics(int index, StudentsManager manager){
-        frame.setSize(350,230);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setLayout(new BorderLayout());
 
-        JPanel gridPanel = new JPanel(new GridLayout(6,2,0,10));
+        JPanel gridPanel = new JPanel(new GridLayout(8,2,0,10));
         String[] titles = {
-                "The highest grade : ","The lowest grade : ","The average of the grades : ",
-                "Grades less than 10 : ","The rate of the student : "};
+                "The student name : ","The student point : ","The highest grade : ","The lowest grade : ",
+                "The average of the grades : ","Grades less than 10 : ","The rate of the student : "};
         JLabel[] labels = new JLabel[titles.length];
         JLabel[] studentLabel = new JLabel[titles.length];
 
@@ -84,6 +78,8 @@ public class studentStatistics {
             studentLabel[x].setFont(new Font("Arial",Font.PLAIN,15));
         }
 
+        String name = manager.getStudentFullName(index);
+        double point = manager.getStudentPoint(index);
         double getHighGrade = manager.getHighestGrade(index);
         double getLowGrade = manager.getLowestGrade(index);
         double getGradesAverage = manager.getGradesAverage(index);
@@ -95,12 +91,15 @@ public class studentStatistics {
         String minGrade = String.valueOf(decimalFormat.format(Double.parseDouble(String.valueOf(getLowGrade))));
         String averageGrades = String.valueOf(decimalFormat.format(Double.parseDouble(String.valueOf(getGradesAverage))));
         String belowTen = String.valueOf(getGradesLessTen);
+        String studentPoint = String.valueOf(decimalFormat.format(Double.parseDouble(String.valueOf(point))));
 
-        studentLabel[0].setText(maxGrade);
-        studentLabel[1].setText(minGrade);
-        studentLabel[2].setText(averageGrades);
-        studentLabel[3].setText(belowTen);
-        studentLabel[4].setText(rate);
+        studentLabel[0].setText(name);
+        studentLabel[1].setText(studentPoint);
+        studentLabel[2].setText(maxGrade);
+        studentLabel[3].setText(minGrade);
+        studentLabel[4].setText(averageGrades);
+        studentLabel[5].setText(belowTen);
+        studentLabel[6].setText(rate);
 
         button.setFocusable(false);
         button.setBorder(BorderFactory.createEtchedBorder());
@@ -117,6 +116,7 @@ public class studentStatistics {
         panel.add(gridPanel,BorderLayout.NORTH);
 
         frame.add(panel,BorderLayout.WEST);
+        frame.pack();
         frame.setVisible(true);
     }
 }

@@ -23,6 +23,9 @@ public class StudentsManager {
     int getStudentID(int index){
         return students.get(index).getStudentID();
     }
+    double getStudentPoint(int index){
+        return students.get(index).getStudentPoint();
+    }
     String saveFile(int index){
         return students.get(index).saveFile();
     }

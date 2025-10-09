@@ -2,6 +2,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Random;
 
 public class Login extends JFrame implements ActionListener {
 
@@ -138,19 +142,123 @@ public class Login extends JFrame implements ActionListener {
                     "The limit is 20",JOptionPane.ERROR_MESSAGE);
         }
         else{
-            JOptionPane.showMessageDialog(null,"Hello Mr."+name,
-                    "Welcome message",JOptionPane.INFORMATION_MESSAGE);
+            String password = new String(textPassword.getPassword());
+            Boolean exists = teachersManager.selectTeacherFromTable(name,password);
+            if(exists){
+                new MainWindow(manager,teachersManager);
+                JOptionPane.showMessageDialog(null,"Welcome again "+name,"Welcome",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+            else{
+                JOptionPane.showMessageDialog(null,"The name or the password is incorrect",
+                        "Error",JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
     // This is for forgetting the password.
     private void forgetPassword(){
-        JOptionPane.showMessageDialog(null,"It's coming soon","Forgetting the password",
-                JOptionPane.INFORMATION_MESSAGE);
+        String name;
+        boolean isCancel = false;
+        while (true){
+            name = JOptionPane.showInputDialog("What is your account name : ");
+            if(name == null){
+                isCancel = true;
+                break;
+            }
+            else if(checkInputName(name)){
+                break;
+            }
+            else {
+                JOptionPane.showMessageDialog(null,"The name must only letters",
+                        "Name",JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+        boolean nameExists = teachersManager.checkUserAccountName(name);
+        if(!isCancel){
+            if(nameExists){
+                checkUserCode();
+            }
+            else {
+                JOptionPane.showMessageDialog(null,"Couldn't find an account bu this name",
+                        "Name is not found",JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
     // This is for clearing fields.
     private void clearButtonFields(){
         textName.setText("");
         textPassword.setText("");
+    }
+
+    // This is for if the teacher forgets the password. it will create a code and send it to desktop.
+    private int getAccountCode(){
+        Random random = new Random();
+        int code = random.nextInt(100000,9999999);
+        String codeValue = String.valueOf(code);
+        String filePath = "C:\\Users\\asus\\Desktop\\Account code.text";
+        try(FileWriter fileWriter = new FileWriter(filePath)){
+            fileWriter.write(codeValue);
+        }
+        catch (FileNotFoundException e){
+            JOptionPane.showMessageDialog(null,"The location of the file is not found",
+                    "Location is not found",JOptionPane.ERROR_MESSAGE);
+        }
+        catch (IOException e){
+            JOptionPane.showMessageDialog(null,"Something is wrong","Something wrong",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+        return code;
+    }
+    // This is for making the code unavailable.
+    private void brokeTheCode(){
+        String filePath = "C:\\Users\\asus\\Desktop\\Account code.text";
+        try(FileWriter fileWriter = new FileWriter(filePath)){
+            fileWriter.write("");
+        }
+        catch (FileNotFoundException e){
+            JOptionPane.showMessageDialog(null,"The location of the file is not found",
+                    "Location is not found",JOptionPane.ERROR_MESSAGE);
+        }
+        catch (IOException e){
+            JOptionPane.showMessageDialog(null,"Something is wrong","Something wrong",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    // This is for writing the code.
+    private void checkUserCode() {
+        String code;
+        String realCode = String.valueOf(getAccountCode());
+        int count = 5;
+        boolean isEqual;
+        while (true){
+            code = JOptionPane.showInputDialog("Tries: "+count+" -- Enter the code: ");
+            if (code == null){
+                isEqual = false;
+                break;
+            }
+            else if(code.equals(realCode)){
+                isEqual = true;
+                brokeTheCode();
+                break;
+            }
+            else if(count == 1){
+                JOptionPane.showMessageDialog(null,"time's up","Time is finished",
+                        JOptionPane.ERROR_MESSAGE);
+                isEqual = false;
+                break;
+            }
+            else {
+                JOptionPane.showMessageDialog(null,"The code is incorrect","Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+            count--;
+        }
+
+
+        if(isEqual){
+            new MainWindow(manager,teachersManager);
+        }
     }
 
     private Boolean checkInputName(String name){

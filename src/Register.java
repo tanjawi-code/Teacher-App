@@ -12,9 +12,9 @@ public class Register implements ActionListener {
     private teacherGender chosenGender;
     private schools chosenSchool;
     private subjects chosenSubject;
-    boolean genderIsSelected = false;
-    boolean schoolIsSelected = false;
-    boolean subjectIsSelected = false;
+    private boolean genderIsSelected = false;
+    private boolean schoolIsSelected = false;
+    private boolean subjectIsSelected = false;
 
     ImageIcon icon = new ImageIcon("school.png");
     ImageIcon imageIcon1 = new ImageIcon("see.png");
@@ -217,6 +217,7 @@ public class Register implements ActionListener {
             Teacher teacher = new Teacher(name,age,password,chosenSubject,chosenSchool,chosenGender);
 
             manager.saveTeacher(teacher);
+            manager.insertTeachersToTable(teacher);
             new MainWindow(studentsManager,manager);
             JOptionPane.showMessageDialog(null,"The account is created.",
                     "Welcome",JOptionPane.INFORMATION_MESSAGE);

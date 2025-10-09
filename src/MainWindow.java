@@ -207,7 +207,7 @@ public class MainWindow extends JFrame implements ActionListener {
                 case "Failed" -> failedStudents();
                 case "Top 3" -> topThreeStudents();
                 case "Account" ->  new Account(teachersManager);
-                case "Sittings" -> System.out.println();
+                case "Sittings" -> JOptionPane.showMessageDialog(null,"It's coming soon","Sittings",JOptionPane.INFORMATION_MESSAGE);
                 default -> System.out.println("\n");
             }
         }
@@ -340,21 +340,28 @@ public class MainWindow extends JFrame implements ActionListener {
 
     // These four methods are for deleting, searching, updating, refreshing.
     private void deleteStudent(){
-        String name;
+        String name ="";
         boolean isCancel = false;
-        while(true){
-            name = JOptionPane.showInputDialog("What is the student's first name you want to remove?");
-            if(name == null){
-                isCancel = true;
-                break;
+        if(!manager.isEmpty()){
+            while(true){
+                name = JOptionPane.showInputDialog("What is the student's first name you want to remove?");
+                if(name == null){
+                    isCancel = true;
+                    break;
+                }
+                else if(name.matches("[a-zA-Z]+")){
+                    break;
+                }
+                else {
+                    JOptionPane.showMessageDialog(null,"the name must be only letters",
+                            "Wrong input",JOptionPane.ERROR_MESSAGE);
+                }
             }
-            else if(name.matches("[a-zA-Z]+")){
-                break;
-            }
-            else {
-                JOptionPane.showMessageDialog(null,"the name must be only letters",
-                        "Wrong input",JOptionPane.ERROR_MESSAGE);
-            }
+        }
+        else {
+            JOptionPane.showMessageDialog(null,"The class is empty.","Empty class",
+                    JOptionPane.INFORMATION_MESSAGE);
+            isCancel = true;
         }
 
         if(!isCancel){
@@ -438,7 +445,7 @@ public class MainWindow extends JFrame implements ActionListener {
                         sorter.setRowFilter(RowFilter.regexFilter("(?i)"+name,0,1));
                         JOptionPane.showMessageDialog(null,
                                 """
-                                                               You can modify details through the table.
+                                                                  You can modify details through the table.
                                         When you finish updating details of the student click confirm, and then refresh
                                         """,
                                 "Update student's details",JOptionPane.INFORMATION_MESSAGE);
@@ -457,6 +464,7 @@ public class MainWindow extends JFrame implements ActionListener {
     }
     private void refreshTable(){
         table.setModel(model);
+        table.setRowSorter(sorter);
         sorter.setRowFilter(null);
         searchName.setText("");
         table.setEnabled(false);
@@ -483,8 +491,8 @@ public class MainWindow extends JFrame implements ActionListener {
 
                     model.setValueAt(student.getStudentAge(),rowModel,2);
                     model.setValueAt(student.getStudentGrades(0),rowModel,5);
-                    model.setValueAt(student.getStudentGrades(0),rowModel,6);
-                    model.setValueAt(student.getStudentGrades(0),rowModel,7);
+                    model.setValueAt(student.getStudentGrades(1),rowModel,6);
+                    model.setValueAt(student.getStudentGrades(2),rowModel,7);
                     model.setValueAt(point,rowModel,8);
                     break;
                 }
@@ -531,6 +539,7 @@ public class MainWindow extends JFrame implements ActionListener {
                         student.getStudentCity(), student.getStudentClassNumber()});
             }
             table.setModel(topThreeModel);
+            table.setRowSorter(sortedSorter);
             sortedSorter.setRowFilter(RowFilter.numberFilter(RowFilter.ComparisonType.AFTER,9.99,8));
         }
     }
@@ -549,7 +558,7 @@ public class MainWindow extends JFrame implements ActionListener {
     private Boolean checkValidAge(int age){
         return age >= 15 && age <= 20;
     }
-    private boolean checkGrade(String grade){
+    private Boolean checkGrade(String grade){
         return grade.matches("\\d+(\\.\\d+)?");
     }
     private Boolean checkValidGrades(double grade){

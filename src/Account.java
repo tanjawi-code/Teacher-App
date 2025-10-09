@@ -11,12 +11,10 @@ public class Account implements ActionListener {
     JButton changePasswordButton = new JButton("Change password");
     JButton deleteAccountButton = new JButton("Delete account");
     JButton buttonBack = new JButton("Back");
-
     JPanel westPanel = new JPanel(new BorderLayout());
-
     String password;
+
     Account(TeachersManager manager){
-        frame.setSize(440,350);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
@@ -41,7 +39,6 @@ public class Account implements ActionListener {
         JLabel[] teacherLabel = new JLabel[titles.length];
         JPanel gridPanel = new JPanel(new GridLayout(12,2,0,5));
 
-
         for(int x = 0 ;x< labels.length; x++){
             labels[x] = new JLabel(titles[x]);
             labels[x].setFont(new Font("MV Boli",Font.PLAIN,20));
@@ -51,7 +48,7 @@ public class Account implements ActionListener {
 
         String name = manager.getTeacherName(0);
         int age = manager.getTeacherAge(0);
-        password = manager.password(0);
+        password = manager.getTeacherPassword(0);
         String gender = String.valueOf(manager.getTeacherGender(0));
         String school = String.valueOf(manager.getTeacherSchool(0));
         String subject = String.valueOf(manager.getTeacherSubject(0));
@@ -74,6 +71,7 @@ public class Account implements ActionListener {
 
         westPanel.add(gridPanel,BorderLayout.NORTH);
         frame.add(westPanel,BorderLayout.WEST);
+        frame.pack();
         frame.setVisible(true);
     }
 

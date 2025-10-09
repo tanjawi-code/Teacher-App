@@ -1,7 +1,8 @@
 import java.util.Random;
 
 enum Gender {male,female}
-enum City {Tangier,Tetouan,Al_Hoceima,Rabat,Casablanca,Fes,Chefchaouen,Marrakesh}
+enum City {Tangier,Tetouan,Al_Hoceima,Rabat,Casablanca,Fes,Chefchaouen,Marrakesh,Meknes,Berkane,Agadir,Taza,Nador,
+           Oujda,Kenitra,Ouarzazate,Taroudant,Khenifra}
 
 public class Student implements SaveAble{
 
