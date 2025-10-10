@@ -6,7 +6,7 @@ public class Teacher {
 
     private int id;
     private final String name;
-    private int age;
+    private final int age;
     private final String password;
     private subjects subject;
     private schools school;
@@ -27,9 +27,14 @@ public class Teacher {
         this.gender = gender;
     }
 
-    Teacher(String name, String password){
+    Teacher(String name, int age, String password, subjects subject, schools school, teacherGender gender,int id){
         this.name = name;
+        this.age = age;
         this.password = password;
+        this.subject = subject;
+        this.school = school;
+        this.gender = gender;
+        this.id = id;
     }
 
     Teacher(Teacher other){

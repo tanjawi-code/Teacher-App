@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -11,6 +12,8 @@ public class Login extends JFrame implements ActionListener {
 
     private final StudentsManager manager;
     private final TeachersManager teachersManager;
+    private final StudentsSQLite studentsSQLite;
+    private final TeachersSQLite teachersSQLite;
 
     // This is for the log of the screen.
     ImageIcon icon = new ImageIcon("school.png");
@@ -39,7 +42,7 @@ public class Login extends JFrame implements ActionListener {
     JPanel centerPanel = new JPanel(new BorderLayout());
     JPanel southPanel = new JPanel(new FlowLayout());
 
-    Login(StudentsManager manager,TeachersManager teachersManager){
+    Login(StudentsManager manager,TeachersManager teachersManager,StudentsSQLite students,TeachersSQLite teachers){
         this.setTitle("Login-Screen");
         this.setSize(420,420);
         this.setLocationRelativeTo(null);
@@ -49,6 +52,8 @@ public class Login extends JFrame implements ActionListener {
         this.setIconImage(icon.getImage());
         this.manager = manager;
         this.teachersManager = teachersManager;
+        this.studentsSQLite = students;
+        this.teachersSQLite = teachers;
 
         // This is for displaying a welcome message in the top.
         welcomeMessage.setForeground(Color.RED);
@@ -117,7 +122,7 @@ public class Login extends JFrame implements ActionListener {
 
         switch (text) {
             case "Login" -> loginButton();
-            case "Create new account" -> new Register(manager, teachersManager);
+            case "Create new account" -> new Register(manager, teachersManager, studentsSQLite, teachersSQLite);
             case "Did you forget the password?" -> forgetPassword();
             case "Clear" -> clearButtonFields();
             case "Show password" -> textPassword.setEchoChar((char) 0);
@@ -143,9 +148,12 @@ public class Login extends JFrame implements ActionListener {
         }
         else{
             String password = new String(textPassword.getPassword());
-            Boolean exists = teachersManager.selectTeacherFromTable(name,password);
+            Boolean exists = teachersSQLite.selectTeacherFromTable(name,password);
             if(exists){
-                new MainWindow(manager,teachersManager);
+                studentsSQLite.getStudents(teachersSQLite.getTeacherID(),manager);
+                Teacher teacher = teachersSQLite.getTeacherData();
+                teachersManager.saveTeacher(teacher);
+                new MainWindow(manager,teachersManager,studentsSQLite,teachersSQLite,true);
                 JOptionPane.showMessageDialog(null,"Welcome again "+name,"Welcome",
                         JOptionPane.INFORMATION_MESSAGE);
             }
@@ -174,13 +182,16 @@ public class Login extends JFrame implements ActionListener {
             }
         }
 
-        boolean nameExists = teachersManager.checkUserAccountName(name);
+        boolean nameExists = teachersSQLite.checkUserAccountName(name);
         if(!isCancel){
             if(nameExists){
+                JOptionPane.showMessageDialog(null,
+                        "The file is in desktop called account code.txt","The file location",
+                        JOptionPane.ERROR_MESSAGE);
                 checkUserCode();
             }
             else {
-                JOptionPane.showMessageDialog(null,"Couldn't find an account bu this name",
+                JOptionPane.showMessageDialog(null,"Couldn't find an account by this name",
                         "Name is not found",JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -213,16 +224,10 @@ public class Login extends JFrame implements ActionListener {
     // This is for making the code unavailable.
     private void brokeTheCode(){
         String filePath = "C:\\Users\\asus\\Desktop\\Account code.text";
-        try(FileWriter fileWriter = new FileWriter(filePath)){
-            fileWriter.write("");
-        }
-        catch (FileNotFoundException e){
-            JOptionPane.showMessageDialog(null,"The location of the file is not found",
-                    "Location is not found",JOptionPane.ERROR_MESSAGE);
-        }
-        catch (IOException e){
-            JOptionPane.showMessageDialog(null,"Something is wrong","Something wrong",
-                    JOptionPane.ERROR_MESSAGE);
+        File deleteFile = new File(filePath);
+        if(deleteFile.delete()){
+            JOptionPane.showMessageDialog(null,"The file is deleted","The is deleted",
+                    JOptionPane.INFORMATION_MESSAGE);
         }
     }
     // This is for writing the code.
@@ -232,9 +237,10 @@ public class Login extends JFrame implements ActionListener {
         int count = 5;
         boolean isEqual;
         while (true){
-            code = JOptionPane.showInputDialog("Tries: "+count+" -- Enter the code: ");
+            code = JOptionPane.showInputDialog("Tries: "+count+" || Enter the code: ");
             if (code == null){
                 isEqual = false;
+                brokeTheCode();
                 break;
             }
             else if(code.equals(realCode)){
@@ -246,6 +252,7 @@ public class Login extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(null,"time's up","Time is finished",
                         JOptionPane.ERROR_MESSAGE);
                 isEqual = false;
+                brokeTheCode();
                 break;
             }
             else {
@@ -254,10 +261,11 @@ public class Login extends JFrame implements ActionListener {
             }
             count--;
         }
-
-
         if(isEqual){
-            new MainWindow(manager,teachersManager);
+            studentsSQLite.getStudents(teachersSQLite.getTeacherID(),manager);
+            Teacher teacher = teachersSQLite.getTeacherData();
+            teachersManager.saveTeacher(teacher);
+            new MainWindow(manager,teachersManager,studentsSQLite,teachersSQLite,true);
         }
     }
 

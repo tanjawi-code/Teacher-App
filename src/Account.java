@@ -46,12 +46,12 @@ public class Account implements ActionListener {
             teacherLabel[x].setFont(new Font("Arial",Font.PLAIN,15));
         }
 
-        String name = manager.getTeacherName(0);
-        int age = manager.getTeacherAge(0);
-        password = manager.getTeacherPassword(0);
-        String gender = String.valueOf(manager.getTeacherGender(0));
-        String school = String.valueOf(manager.getTeacherSchool(0));
-        String subject = String.valueOf(manager.getTeacherSubject(0));
+        String name = manager.getTeacherName();
+        int age = manager.getTeacherAge();
+        password = manager.getTeacherPassword();
+        String gender = String.valueOf(manager.getTeacherGender());
+        String school = String.valueOf(manager.getTeacherSchool());
+        String subject = String.valueOf(manager.getTeacherSubject());
 
         teacherLabel[0].setText(name);
         teacherLabel[1].setText(String.valueOf(age));

@@ -19,7 +19,7 @@ public class ClassStatistics {
         }
     }
 
-    void getClassStatistics(StudentsManager manager, TeachersManager teachersManager){
+    private void getClassStatistics(StudentsManager manager, TeachersManager teachersManager){
         frame.setSize(420,350);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -51,7 +51,7 @@ public class ClassStatistics {
         String minPoint = String.valueOf(decimalFormat.format(Double.parseDouble(String.valueOf(min))));
         String averagePoint = String.valueOf(decimalFormat.format(Double.parseDouble(String.valueOf(average))));
 
-        labelsStatistics[0].setText(String.valueOf(teachersManager.getTeacherSubject(0)));
+        labelsStatistics[0].setText(String.valueOf(teachersManager.getTeacherSubject()));
         labelsStatistics[1].setText(String.valueOf(manager.studentsSize()));
         labelsStatistics[2].setText(String.valueOf(manager.getMalesNumber()));
         labelsStatistics[3].setText(String.valueOf(manager.getFemalesNumber()));

@@ -37,4 +37,4 @@ happen when you delete a student and then add a student.
 ## **The developer**
 - **Name** : [private name].
 - **Github** : [https://github.com/tanjawi-code].
-- *Version* : 2.2.1
+- *Version* : 2.4.2

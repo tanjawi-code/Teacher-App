@@ -13,6 +13,8 @@ public class MainWindow extends JFrame implements ActionListener {
 
     private final StudentsManager manager;
     private final TeachersManager teachersManager;
+    private final StudentsSQLite studentsSQLite;
+    private final TeachersSQLite teachersSQLite;
 
     // This is for the buttons in the lower part of the screen.
     String[] leftUnderTitles = {"Statistics","Passed","Failed","Top 3","Account","Sittings"};
@@ -55,11 +57,11 @@ public class MainWindow extends JFrame implements ActionListener {
     JScrollPane pane = new JScrollPane(table);
     TableRowSorter<TableModel> sorter = new TableRowSorter<>(model);
 
-    Gender gender;
-    City studentCity;
-    boolean genderIsSelected = false;
-    boolean cityIsSelected = false;
-    MainWindow(StudentsManager manager, TeachersManager teachersManager){
+    private Gender gender;
+    private City studentCity;
+    private boolean genderIsSelected = false;
+    private boolean cityIsSelected = false;
+    MainWindow(StudentsManager manager, TeachersManager teachersManager,StudentsSQLite students,TeachersSQLite teachers, Boolean userIsFound){
         this.setTitle("Students management");
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -67,6 +69,8 @@ public class MainWindow extends JFrame implements ActionListener {
         this.setLayout(new BorderLayout());
         this.manager = manager;
         this.teachersManager = teachersManager;
+        this.studentsSQLite = students;
+        this.teachersSQLite = teachers;
 
         // This is for the higher part of the screen in left side.
         JPanel textPanel = new JPanel(new GridLayout(9,2,0,5));
@@ -188,6 +192,10 @@ public class MainWindow extends JFrame implements ActionListener {
         }
         rightSouthPanel.add(rightButtonsPanel,BorderLayout.SOUTH);
         southPanel.add(rightSouthPanel,BorderLayout.EAST);
+
+        if(userIsFound){
+            getTeacherStudents();
+        }
 
         this.add(northPanel,BorderLayout.CENTER); // Holds the north and center and south in the screen's center.
         this.add(westPanel,BorderLayout.WEST); // Holds the north and center in the west.
@@ -314,12 +322,14 @@ public class MainWindow extends JFrame implements ActionListener {
             classNumber = manager.increaseClassNumber(classNumber);
         }
         student.setStudentClassNumber(classNumber+1);
+        student.setStudentTeacherID(teachersSQLite.getTeacherID());
 
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         point = Double.parseDouble(decimalFormat.format(Double.parseDouble(String.valueOf(point))));
 
         model.addRow(new Object[] {firstName,secondName,age,gender,studentID,grades[0],grades[1],grades[2],point,
                 studentCity,classNumber+1});
+        studentsSQLite.insertStudentsToTable(student);
         manager.saveStudent(student);
     }
 
@@ -338,7 +348,7 @@ public class MainWindow extends JFrame implements ActionListener {
         }
     }
 
-    // These four methods are for deleting, searching, updating, refreshing.
+    // These four methods are for deleting, searching, updating, refreshing, and confirming.
     private void deleteStudent(){
         String name ="";
         boolean isCancel = false;
@@ -500,7 +510,7 @@ public class MainWindow extends JFrame implements ActionListener {
         }
     }
 
-    // These three methods are for showing in the table: passed students, failed students, top 3 students.
+    // These three methods are for showing in the table: passed students, failed students, and top 3 students.
     private void passedStudents(){
         if(manager.isEmpty()){
             JOptionPane.showMessageDialog(null,"There are no students","Empty class",
@@ -541,6 +551,18 @@ public class MainWindow extends JFrame implements ActionListener {
             table.setModel(topThreeModel);
             table.setRowSorter(sortedSorter);
             sortedSorter.setRowFilter(RowFilter.numberFilter(RowFilter.ComparisonType.AFTER,9.99,8));
+        }
+    }
+
+    // This is for getting students details if the user(teacher) is found(has an account).
+    void getTeacherStudents(){
+        for(int x = 0 ; x<manager.studentsSize() ; x++){
+            Student student = manager.getStudent(x);
+            model.addRow(new Object[] {
+                    student.getFirstStudentName(), student.getSecondStudentName(), student.getStudentAge(),
+                    student.getStudentGender(), student.getStudentID(), student.getStudentGrades(0),
+                    student.getStudentGrades(1), student.getStudentGrades(2),
+                    student.getStudentPoint(), student.getStudentCity(), student.getStudentClassNumber()});
         }
     }
 

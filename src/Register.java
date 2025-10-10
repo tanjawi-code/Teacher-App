@@ -8,6 +8,8 @@ public class Register implements ActionListener {
     JFrame frame = new JFrame("Creating an account");
     private final StudentsManager studentsManager;
     private final TeachersManager manager; // Create teachers' accounts.
+    private final StudentsSQLite studentsSQLite;
+    private final TeachersSQLite teachersSQLite;
 
     private teacherGender chosenGender;
     private schools chosenSchool;
@@ -46,7 +48,7 @@ public class Register implements ActionListener {
     JButton showPasswordButton = new JButton("Show password",seeIconPassword);
     JButton HidePasswordButton = new JButton("Hide password",closeIconPassword);
 
-    Register(StudentsManager studentsManager, TeachersManager manager){
+    Register(StudentsManager studentsManager,TeachersManager manager,StudentsSQLite students,TeachersSQLite teachers){
         frame.setTitle("Login-Screen");
         frame.setSize(460,450);
         frame.setLocationRelativeTo(null);
@@ -56,6 +58,8 @@ public class Register implements ActionListener {
         frame.setIconImage(icon.getImage());
         this.studentsManager = studentsManager;
         this.manager = manager;
+        this.studentsSQLite = students;
+        this.teachersSQLite = teachers;
 
         // These are labels .
         String[] titles = {"Name : ","Age : ","Gender : ","School : ","Subject : ","Password : ","Confirm Password : "};
@@ -217,8 +221,8 @@ public class Register implements ActionListener {
             Teacher teacher = new Teacher(name,age,password,chosenSubject,chosenSchool,chosenGender);
 
             manager.saveTeacher(teacher);
-            manager.insertTeachersToTable(teacher);
-            new MainWindow(studentsManager,manager);
+            teachersSQLite.insertTeachersToTable(teacher);
+            new MainWindow(studentsManager,manager,studentsSQLite,teachersSQLite,false);
             JOptionPane.showMessageDialog(null,"The account is created.",
                     "Welcome",JOptionPane.INFORMATION_MESSAGE);
         }

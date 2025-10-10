@@ -16,6 +16,7 @@ public class Student implements SaveAble{
     private Gender studentGender;
     private int studentClassNumber;
     private City studentCity;
+    private int studentTeacherID;
 
     Student(){
         this.firstStudentName = "No name";
@@ -41,6 +42,7 @@ public class Student implements SaveAble{
         this.studentClassNumber = other.studentClassNumber;
         this.fullName = other.fullName;
         this.studentCity = other.studentCity;
+        this.studentTeacherID = other.studentTeacherID;
     }
 
     Student(String firstName, String secondName,int age, double[] Grades,Gender gender, City city, String fullName){
@@ -96,8 +98,14 @@ public class Student implements SaveAble{
     City getStudentCity() {
         return studentCity;
     }
+    int getStudentTeacherID(){
+        return this.studentTeacherID;
+    }
     public void setStudentClassNumber(int classNumber){
         this.studentClassNumber = classNumber;
+    }
+    public void setStudentTeacherID(int studentTeacherID){
+        this.studentTeacherID = studentTeacherID;
     }
 
     // Setters for updating age and grades.
