@@ -17,7 +17,7 @@ public class MainWindow extends JFrame implements ActionListener {
     private final TeachersSQLite teachersSQLite;
 
     // This is for the buttons in the lower part of the screen.
-    String[] leftUnderTitles = {"Statistics","Passed","Failed","Top 3","Account","Sittings"};
+    String[] leftUnderTitles = {"Statistics","Passed","Failed","Top 3","Account","Settings"};
     String[] rightUnderTitles = {"Delete","Update","Student Statistics","Save as a file","Get a file","Searching ways"};
     JButton[] leftUnderButtons = new JButton[leftUnderTitles.length];
     JButton[] rightUnderButtons = new JButton[rightUnderTitles.length];
@@ -215,7 +215,7 @@ public class MainWindow extends JFrame implements ActionListener {
                 case "Failed" -> failedStudents();
                 case "Top 3" -> topThreeStudents();
                 case "Account" ->  new Account(teachersManager);
-                case "Sittings" -> JOptionPane.showMessageDialog(null,"It's coming soon","Sittings",JOptionPane.INFORMATION_MESSAGE);
+                case "Settings" -> JOptionPane.showMessageDialog(null,"It's coming later","Settings",JOptionPane.INFORMATION_MESSAGE);
                 default -> System.out.println("\n");
             }
         }
@@ -253,9 +253,7 @@ public class MainWindow extends JFrame implements ActionListener {
     // This is for adding the student to the table.
     private void buttonAddStudent(){
         String fullName = textInputs[0].getText().toLowerCase()+" "+textInputs[1].getText().toLowerCase();
-        if(textInputs[0].getText().isEmpty() || textInputs[1].getText().isEmpty() ||
-                textInputs[2].getText().isEmpty() || textInputs[3].getText().isEmpty() ||
-                textInputs[4].getText().isEmpty() || textInputs[5].getText().isEmpty()){
+        if(checkFieldsAreEmpty()){
             JOptionPane.showMessageDialog(null,"The fields are empty.","Empty fields",
                     JOptionPane.ERROR_MESSAGE);
         }
@@ -354,12 +352,12 @@ public class MainWindow extends JFrame implements ActionListener {
         boolean isCancel = false;
         if(!manager.isEmpty()){
             while(true){
-                name = JOptionPane.showInputDialog("What is the student's first name you want to remove?");
+                name = JOptionPane.showInputDialog("What is the student's name you want to remove?");
                 if(name == null){
                     isCancel = true;
                     break;
                 }
-                else if(name.matches("[a-zA-Z]+")){
+                else if(name.matches("[a-zA-Z]+(\\s[a-zA-z]+)*")){
                     break;
                 }
                 else {
@@ -374,25 +372,12 @@ public class MainWindow extends JFrame implements ActionListener {
             isCancel = true;
         }
 
+        boolean isFound = false;
         if(!isCancel){
-            boolean isFound = false;
             for(int x =0 ;x<manager.studentsSize(); x++){
-                if(manager.getStudentFullName(x).toLowerCase().contains(name.trim().toLowerCase())){
-                    sorter.setRowFilter(RowFilter.regexFilter("(?i)"+name,0,1));
-                    int choice = JOptionPane.showConfirmDialog(null,
-                            "Do you want to remove the student "+manager.getStudentFullName(x),
-                            "Removing a student",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
-                    if(choice == 0){
-                        model.removeRow(x);
-                        manager.removeStudent(x);
-                        JOptionPane.showMessageDialog(null,
-                                "The student is removed successfully","Student is removed",
-                                JOptionPane.INFORMATION_MESSAGE);
-                    }
-                    else{
-                        JOptionPane.showMessageDialog(null,"The student is not removed",
-                                "Student is not removed",JOptionPane.INFORMATION_MESSAGE);
-                    }
+                if(manager.getStudentFullName(x).toLowerCase().trim().contains(name.trim().toLowerCase())){
+                    sorter.setRowFilter(RowFilter.regexFilter("^"+manager.getStudentID(x)+"$",4));
+                    confirmDelete(x);
                     isFound = true;
                     break;
                 }
@@ -400,6 +385,30 @@ public class MainWindow extends JFrame implements ActionListener {
             if(!isFound){
                 JOptionPane.showMessageDialog(null,"The student name is not found",
                         "Student is not found",JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }
+    private void confirmDelete(int index){
+        String name = manager.getStudentFullName(index);
+        int studentID = manager.getStudentID(index);
+        int id = studentsSQLite.deleteStudent(name, studentID);
+        if(id != -1){
+            int choice = JOptionPane.showConfirmDialog(null,
+                    "Are you sure you want to remove this student: "+name,"Removing a student",
+                    JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+            if(choice == 0){
+                model.removeRow(index);
+                manager.removeStudent(index);
+                boolean isDeleted = studentsSQLite.deleteStudentFromTable(id);
+                if(isDeleted){
+                    JOptionPane.showMessageDialog(null,
+                            "The student is removed successfully","Student is removed",
+                            JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+            else{
+                JOptionPane.showMessageDialog(null,"The student is not removed",
+                        "Student is not removed",JOptionPane.INFORMATION_MESSAGE);
             }
         }
     }
@@ -539,6 +548,7 @@ public class MainWindow extends JFrame implements ActionListener {
             DefaultTableModel topThreeModel = new DefaultTableModel(tableTitles,0);
             TableRowSorter<TableModel> sortedSorter = new TableRowSorter<>(topThreeModel);
             DecimalFormat decimalFormat = new DecimalFormat("#.##");
+            int count = 1;
             for (Student student : sortedList) {
                 double point = student.getStudentPoint();
                 point = Double.parseDouble(decimalFormat.format(Double.parseDouble(String.valueOf(point))));
@@ -547,6 +557,10 @@ public class MainWindow extends JFrame implements ActionListener {
                         student.getStudentGender(), student.getStudentID(), student.getStudentGrades(0),
                         student.getStudentGrades(1), student.getStudentGrades(2), point,
                         student.getStudentCity(), student.getStudentClassNumber()});
+                if(count == 3){
+                    break;
+                }
+                count++;
             }
             table.setModel(topThreeModel);
             table.setRowSorter(sortedSorter);
@@ -567,6 +581,12 @@ public class MainWindow extends JFrame implements ActionListener {
     }
 
     // These are methods are for checking the fields.
+    private Boolean checkFieldsAreEmpty(){
+        return textInputs[0].getText().isEmpty() || textInputs[1].getText().isEmpty() ||
+                textInputs[2].getText().isEmpty() || textInputs[3].getText().isEmpty() ||
+                textInputs[4].getText().isEmpty() || textInputs[5].getText().isEmpty();
+        // 0 = first name || 1 = second name || 2 = age || 3 = grade 1 || 4 = grade 2 || 5 = grade 3.
+    }
     private Boolean checkName(String name){
         return name.matches("[a-zA-Z]+");
     }

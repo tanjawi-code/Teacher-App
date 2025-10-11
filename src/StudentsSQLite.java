@@ -73,7 +73,7 @@ public class StudentsSQLite {
             statement.executeUpdate();
         }
         catch (Exception e){
-            e.printStackTrace();
+            System.out.println("Problem in inserting students to table");
         }
     }
 
@@ -107,7 +107,40 @@ public class StudentsSQLite {
         }
         catch (Exception e){
             System.out.println("problem 1 ");
-            e.printStackTrace();
+        }
+    }
+
+    // This is for searching for a student to get the student's id.
+    int deleteStudent(String fullName, int studentID){
+        String sql = "SELECT * FROM students WHERE full_name = ? AND student_id = ?";
+        try (Connection connection = getConnect(); PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setString(1, fullName);
+            statement.setInt(2, studentID);
+            ResultSet resultSet = statement.executeQuery();
+            if(resultSet.next()){
+                return resultSet.getInt("id");
+            }
+            else {
+                return -1;
+            }
+        }
+        catch (Exception e){
+            System.out.println("Problem in deleting student from table.");
+            return -1;
+        }
+    }
+
+    // This is for deleting the student after getting the id.
+    Boolean deleteStudentFromTable(int id){
+        String sql = "DELETE FROM students WHERE id = ?";
+        try (Connection connection = getConnect(); PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setInt(1,id);
+            int deleted = statement.executeUpdate();
+            return deleted > 0;
+        }
+        catch (Exception e){
+            System.out.println("Problem in confirming deleting");
+            return false;
         }
     }
 }

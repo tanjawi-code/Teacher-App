@@ -16,8 +16,8 @@ point, lowest point, class average, success rate, and the top three students in 
 ---
 ## To-Do list.
 - [  ] Make things more clear and simple.
-- [  ] Improve Showing statistics for class and for students.
 - [  ] Work more on SQLite.
+- [  ] Add updating students' details in SQLite.
 ---
 ## Problems need to be fixed.
 - Fix the problem in student statistics button. when you press cancel the program show that student is not found.
@@ -31,10 +31,10 @@ happen when you delete a student and then add a student.
 - Add database support (MySQl).
 - Improve the project by using **JavaFx** instead of swing.
 - Add multi-language support (Localization).
-- Add sittings to the program.
+- Add settings to the program.
 - Add multi-classes, and multi-levels.
 ---
 ## **The developer**
 - **Name** : [private name].
 - **Github** : [https://github.com/tanjawi-code].
-- *Version* : 2.4.2
+- *Version* : 2.5.2

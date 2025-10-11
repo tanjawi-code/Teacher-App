@@ -25,15 +25,15 @@ public class Login extends JFrame implements ActionListener {
     Image scaledImage2 = icon2.getImage().getScaledInstance(25,25,Image.SCALE_SMOOTH);
     ImageIcon closePassword = new ImageIcon(scaledImage2);
 
-    String[] buttonsTitles = {"Login","Create new account"};
+    private final String[] buttonsTitles = {"Login","Create new account"};
     JButton[] buttons = new JButton[buttonsTitles.length];
     JButton forgetPasswordButton = new JButton("Did you forget the password?");
     JButton buttonClear = new JButton("Clear");
     JButton showPasswordButton = new JButton("Show password",seePassword);
     JButton hidePasswordButton = new JButton("Hide password",closePassword);
 
-    JTextField textName = new JTextField(20);
-    JPasswordField textPassword = new JPasswordField(20);
+    private final JTextField textName = new JTextField(20);
+    private final JPasswordField textPassword = new JPasswordField(20);
     JLabel labelName = new JLabel("Name : ");
     JLabel labelPassword = new JLabel("Password : ");
     JLabel welcomeMessage = new JLabel("Welcome to the students management app");
@@ -127,6 +127,7 @@ public class Login extends JFrame implements ActionListener {
             case "Clear" -> clearButtonFields();
             case "Show password" -> textPassword.setEchoChar((char) 0);
             case "Hide password" -> textPassword.setEchoChar('•');
+            default -> System.out.println("Problem part 1");
         }
     }
 
@@ -159,7 +160,7 @@ public class Login extends JFrame implements ActionListener {
             }
             else{
                 JOptionPane.showMessageDialog(null,"The name or the password is incorrect",
-                        "Error",JOptionPane.ERROR_MESSAGE);
+                        "The account is not found",JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -187,7 +188,7 @@ public class Login extends JFrame implements ActionListener {
             if(nameExists){
                 JOptionPane.showMessageDialog(null,
                         "The file is in desktop called account code.txt","The file location",
-                        JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.INFORMATION_MESSAGE);
                 checkUserCode();
             }
             else {
@@ -205,7 +206,7 @@ public class Login extends JFrame implements ActionListener {
     // This is for if the teacher forgets the password. it will create a code and send it to desktop.
     private int getAccountCode(){
         Random random = new Random();
-        int code = random.nextInt(100000,9999999);
+        int code = random.nextInt(100000,999999);
         String codeValue = String.valueOf(code);
         String filePath = "C:\\Users\\asus\\Desktop\\Account code.text";
         try(FileWriter fileWriter = new FileWriter(filePath)){
@@ -226,7 +227,7 @@ public class Login extends JFrame implements ActionListener {
         String filePath = "C:\\Users\\asus\\Desktop\\Account code.text";
         File deleteFile = new File(filePath);
         if(deleteFile.delete()){
-            JOptionPane.showMessageDialog(null,"The file is deleted","The is deleted",
+            JOptionPane.showMessageDialog(null,"The file is deleted","File is deleted",
                     JOptionPane.INFORMATION_MESSAGE);
         }
     }
@@ -249,8 +250,8 @@ public class Login extends JFrame implements ActionListener {
                 break;
             }
             else if(count == 1){
-                JOptionPane.showMessageDialog(null,"time's up","Time is finished",
-                        JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null,"time's up","Time's up",
+                        JOptionPane.INFORMATION_MESSAGE);
                 isEqual = false;
                 brokeTheCode();
                 break;

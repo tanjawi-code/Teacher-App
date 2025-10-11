@@ -7,7 +7,7 @@ public class Register implements ActionListener {
 
     JFrame frame = new JFrame("Creating an account");
     private final StudentsManager studentsManager;
-    private final TeachersManager manager; // Create teachers' accounts.
+    private final TeachersManager manager;
     private final StudentsSQLite studentsSQLite;
     private final TeachersSQLite teachersSQLite;
 
@@ -155,13 +155,12 @@ public class Register implements ActionListener {
         String value = button.getText();
 
         switch (value) {
-            case "Create account" : createAccountButton(); break;
-            case "Clear" : clearButton(); break;
-            case "Back" : frame.dispose(); break;
-            case "Show password" : teacherPassword.setEchoChar((char) 0); break;
-            case "Hide password" : teacherPassword.setEchoChar('•'); break;
-            default: JOptionPane.showMessageDialog(null,"Something went wrong","Error",
-                    JOptionPane.ERROR_MESSAGE);
+            case "Create account" -> createAccountButton();
+            case "Clear" -> clearButton();
+            case "Back" -> frame.dispose();
+            case "Show password" -> teacherPassword.setEchoChar((char) 0);
+            case "Hide password" -> teacherPassword.setEchoChar('•');
+            default -> System.out.println("Problem part 2");
         }
     }
 
