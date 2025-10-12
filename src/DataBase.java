@@ -9,7 +9,7 @@ public class DataBase {
     public Connection getConnect(){
         Connection connection = null;
         try{
-            connection = DriverManager.getConnection("jdbc:sqlite:dataBase/school.db");
+            connection = DriverManager.getConnection("jdbc:sqlite:school.db");
             connection.createStatement().execute("PRAGMA foreign_keys = ON;");
         }
         catch (Exception e){
