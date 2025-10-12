@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 public class Account implements ActionListener {
 
     TeachersManager manager;
+    private final TeachersSQLite teachersSQLite;
 
     JFrame frame = new JFrame("My account");
     JButton changePasswordButton = new JButton("Change password");
@@ -14,12 +15,14 @@ public class Account implements ActionListener {
     JPanel westPanel = new JPanel(new BorderLayout());
     String password;
 
-    Account(TeachersManager manager){
+    private final String name;
+    Account(TeachersManager manager, TeachersSQLite teachers){
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setLayout(new BorderLayout());
         this.manager = manager;
+        this.teachersSQLite = teachers;
 
         changePasswordButton.setFocusable(false); // Changing password button.
         changePasswordButton.setBorder(BorderFactory.createEtchedBorder());
@@ -46,7 +49,7 @@ public class Account implements ActionListener {
             teacherLabel[x].setFont(new Font("Arial",Font.PLAIN,15));
         }
 
-        String name = manager.getTeacherName();
+        name = manager.getTeacherName();
         int age = manager.getTeacherAge();
         password = manager.getTeacherPassword();
         String gender = String.valueOf(manager.getTeacherGender());
@@ -78,7 +81,7 @@ public class Account implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == changePasswordButton){
-            changePassword(password);
+            changePassword();
         }
         else if(e.getSource() == deleteAccountButton){
             deleteAccount();
@@ -89,22 +92,61 @@ public class Account implements ActionListener {
     }
 
     // This is for changing password.
-    private void changePassword(String password){
+    private void changePassword(){
+        String oldPassword = JOptionPane.showInputDialog("Enter the old password: ");
+        boolean isCancel = oldPassword == null;
 
+        if(!isCancel){
+            boolean isEqual = teachersSQLite.selectTeacherFromTable(name,oldPassword);
+            if(isEqual){
+                String newPassword;
+                while (true){
+                    newPassword = JOptionPane.showInputDialog("Enter the new password: ");
+                    if(newPassword == null){
+                        break;
+                    }
+                    else if(password.length() <= 5){
+                        JOptionPane.showMessageDialog(null,
+                                "The password is weak, the password must be strong.","Password is weak",
+                                JOptionPane.WARNING_MESSAGE);
+                    }
+                    else {
+                        teachersSQLite.changePassword(newPassword, teachersSQLite.getTeacherID());
+                        JOptionPane.showMessageDialog(null,"You changed the password",
+                                "The password is changed",JOptionPane.INFORMATION_MESSAGE);
+                        break;
+                    }
+                }
+            }
+            else {
+                JOptionPane.showMessageDialog(null,"The password is wrong",
+                        "Password is wrong",JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
     }
     // This is for deleting the account.
     private void deleteAccount(){
         int choice;
-        choice = JOptionPane.showConfirmDialog(null,
-                """
+        String message = """
                         Deleting your account will remove everything you have in this account:
                         your profile, your students' details and you will start from the beginning.
-                        Are sure you want to delete and lose everything in this account?""",
-                "Deleting the account",JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
+                        Are sure you want to delete everything in this account?
+                        Please confirm if you want to delete your account""";
+
+        choice = JOptionPane.showConfirmDialog(null,message,"Deleting the account",
+                JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE);
 
         if(choice == 0){
-            JOptionPane.showMessageDialog(null,"It's coming soon","Coming soon",
-                    JOptionPane.INFORMATION_MESSAGE);
+            Boolean isDeleted = teachersSQLite.deleteAccount(teachersSQLite.getTeacherID());
+            if(isDeleted){
+                JOptionPane.showMessageDialog(null,"The account is deleted",
+                        "Account is deleted",JOptionPane.INFORMATION_MESSAGE);
+                System.exit(0);
+            }
+            else {
+                JOptionPane.showMessageDialog(null,"Problem in deleting account",
+                        "Error",JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 }

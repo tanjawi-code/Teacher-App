@@ -8,10 +8,13 @@ public class Main {
 
         StudentsManager manager = new StudentsManager(); // For students.
         TeachersManager teachersManager = new TeachersManager(); // For teachers.
-        StudentsSQLite studentsSQLite = new StudentsSQLite();// This is for SQLite.
+
+        DataBase dataBase = new DataBase(); // This class is for connecting with SQLite.
+        StudentsSQLite studentsSQLite = new StudentsSQLite(dataBase);// This is for SQLite.
         studentsSQLite.createStudentsTable();
-        TeachersSQLite teachersSQLite = new TeachersSQLite();// This is for SQLite.
+        TeachersSQLite teachersSQLite = new TeachersSQLite(dataBase);// This is for SQLite.
         teachersSQLite.createTeachersTable();
+        studentsSQLite.check();
 
         Login login = new Login(manager,teachersManager,studentsSQLite,teachersSQLite);
 

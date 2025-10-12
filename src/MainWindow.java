@@ -16,9 +16,15 @@ public class MainWindow extends JFrame implements ActionListener {
     private final StudentsSQLite studentsSQLite;
     private final TeachersSQLite teachersSQLite;
 
+    // These are the main panels that are in the frame.
+    JPanel northPanel = new JPanel(new BorderLayout());
+    JPanel westPanel = new JPanel(new BorderLayout());
+    JPanel southPanel = new JPanel(new BorderLayout());
+
     // This is for the buttons in the lower part of the screen.
     String[] leftUnderTitles = {"Statistics","Passed","Failed","Top 3","Account","Settings"};
     String[] rightUnderTitles = {"Delete","Update","Student Statistics","Save as a file","Get a file","Searching ways"};
+    String[] otherButtonsTitles = {"Add student","Clear","Search","Refresh","Confirm update"};
     JButton[] leftUnderButtons = new JButton[leftUnderTitles.length];
     JButton[] rightUnderButtons = new JButton[rightUnderTitles.length];
 
@@ -32,11 +38,6 @@ public class MainWindow extends JFrame implements ActionListener {
     JButton clearButton = new JButton("Clear");
     JComboBox<Gender> boxGender = new JComboBox<>(Gender.values());
     JComboBox<City> cityBox = new JComboBox<>(City.values());
-
-    // These are the main panels that are in the frame.
-    JPanel northPanel = new JPanel(new BorderLayout());
-    JPanel westPanel = new JPanel(new BorderLayout());
-    JPanel southPanel = new JPanel(new BorderLayout());
 
     // This is for the table.
     String[] tableTitles = {
@@ -214,9 +215,9 @@ public class MainWindow extends JFrame implements ActionListener {
                 case "Passed" -> passedStudents();
                 case "Failed" -> failedStudents();
                 case "Top 3" -> topThreeStudents();
-                case "Account" ->  new Account(teachersManager);
+                case "Account" ->  new Account(teachersManager,teachersSQLite);
                 case "Settings" -> JOptionPane.showMessageDialog(null,"It's coming later","Settings",JOptionPane.INFORMATION_MESSAGE);
-                default -> System.out.println("\n");
+                default -> System.out.println();
             }
         }
         else if(Arrays.asList(rightUnderTitles).contains(value)){
@@ -233,20 +234,15 @@ public class MainWindow extends JFrame implements ActionListener {
                 default -> System.out.println();
             }
         }
-        else if (value.equals("Add student")) {
-            buttonAddStudent();
-        }
-        else if(value.equals("Clear")){
-            buttonClearFields();
-        }
-        else if(value.equals("Search")){
-            searchForStudent();
-        }
-        else if(value.equals("Refresh")){
-            refreshTable();
-        }
-        else if(value.equals("Confirm update")){
-            confirmUpdate();
+        else if(Arrays.asList(otherButtonsTitles).contains(value)){
+            switch (value){
+                case "Add student" -> buttonAddStudent();
+                case "Clear" -> buttonClearFields();
+                case "Search" -> searchForStudent();
+                case "Refresh" -> refreshTable();
+                case "Confirm update" -> confirmUpdate();
+                default -> System.out.println();
+            }
         }
     }
 
@@ -445,7 +441,7 @@ public class MainWindow extends JFrame implements ActionListener {
                     isCancel = true;
                     break;
                 }
-                else if(name.matches("[a-zA-Z]+") ){
+                else if(name.matches("[a-zA-Z]+(\\s[a-zA-z]+)*") ){
                     isEmpty = true;
                     break;
                 }
@@ -496,7 +492,8 @@ public class MainWindow extends JFrame implements ActionListener {
             int ID = Integer.parseInt(table.getValueAt(row,4).toString());
             for(int x = 0 ;x<manager.studentsSize(); x++){
                 if(ID == manager.getStudentID(x)){
-                    Student student = manager.getStudent(rowModel);
+                    Student student = manager.getStudent(x);
+                    String fullName = manager.getStudentFullName(x);
                     student.setAge(Integer.parseInt(table.getValueAt(row,2).toString()));
                     double[] grades = new double[3];
                     grades[0] = Double.parseDouble(table.getValueAt(row,5).toString());
@@ -513,6 +510,7 @@ public class MainWindow extends JFrame implements ActionListener {
                     model.setValueAt(student.getStudentGrades(1),rowModel,6);
                     model.setValueAt(student.getStudentGrades(2),rowModel,7);
                     model.setValueAt(point,rowModel,8);
+                    studentsSQLite.updateStudentGrades(fullName,ID,grades,student.getStudentAge(),point);
                     break;
                 }
             }

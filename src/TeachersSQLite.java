@@ -4,20 +4,10 @@ import java.sql.*;
 public class TeachersSQLite {
 
     private int teacherID;
+    private final DataBase dataBase;
 
-    TeachersSQLite(){}
-
-    // This is for connecting with database.
-    public Connection getConnect(){
-        Connection connection = null;
-        try{
-            connection = DriverManager.getConnection("jdbc:sqlite:dataBase/school.db");
-        }
-        catch (Exception e){
-            JOptionPane.showMessageDialog(null,"Couldn't connect","Error",
-                    JOptionPane.ERROR_MESSAGE);
-        }
-        return connection;
+    TeachersSQLite(DataBase dataBase){
+        this.dataBase = dataBase;
     }
 
     // This is for creating a table for teachers.
@@ -31,7 +21,7 @@ public class TeachersSQLite {
                 "subject TEXT,"+
                 "school TEXT"+
                 ")";
-        try(Connection connection = getConnect(); Statement statement = connection.createStatement()){
+        try(Connection connection = dataBase.getConnect(); Statement statement = connection.createStatement()){
             statement.execute(table);
         }
         catch (Exception e){
@@ -43,7 +33,7 @@ public class TeachersSQLite {
     void insertTeachersToTable(Teacher teacher){
         String sql = "INSERT INTO teachers(name, password, age, gender, subject, school) VALUES(?, ?, ?, ?, ?, ?)";
 
-        try(Connection connection = getConnect(); PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+        try(Connection connection = dataBase.getConnect(); PreparedStatement preparedStatement = connection.prepareStatement(sql)){
             preparedStatement.setString(1, teacher.getName());
             preparedStatement.setString(2, teacher.getPassword());
             preparedStatement.setString(3, String.valueOf(teacher.getAge()));
@@ -60,7 +50,7 @@ public class TeachersSQLite {
     // This is taking the details from the table.
     Boolean selectTeacherFromTable(String name, String password){
         String sql = "SELECT * FROM teachers WHERE name = ? AND password = ?";
-        try(Connection connection = getConnect(); PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+        try(Connection connection = dataBase.getConnect(); PreparedStatement preparedStatement = connection.prepareStatement(sql)){
             preparedStatement.setString(1,name);
             preparedStatement.setString(2,password);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -77,7 +67,7 @@ public class TeachersSQLite {
     // This is checking username in the account if the user forgets the password.
     Boolean checkUserAccountName(String name){
         String sql = "SELECT * FROM teachers WHERE name = ?";
-        try(Connection connection = getConnect(); PreparedStatement preparedStatement = connection.prepareStatement(sql)){
+        try(Connection connection = dataBase.getConnect(); PreparedStatement preparedStatement = connection.prepareStatement(sql)){
             preparedStatement.setString(1,name);
             ResultSet resultSet = preparedStatement.executeQuery();
             teacherID = resultSet.getInt("id");
@@ -93,7 +83,7 @@ public class TeachersSQLite {
     // This is for getting teacher data.
     Teacher getTeacherData(){
         String sql = "SELECT * FROM teachers WHERE id = ?";
-        try (Connection connection = getConnect(); PreparedStatement statement = connection.prepareStatement(sql)){
+        try (Connection connection = dataBase.getConnect(); PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setInt(1,teacherID);
             ResultSet resultSet = statement.executeQuery();
 
@@ -120,5 +110,32 @@ public class TeachersSQLite {
     // This is for getting the teacher id.
     int getTeacherID(){
         return this.teacherID;
+    }
+
+    // This is for changing user's password.
+    void changePassword(String password, int id){
+        String sql = "UPDATE teachers SET password = ? WHERE id = ?";
+        try (Connection connection = dataBase.getConnect(); PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setString(1, password);
+            statement.setInt(2, id);
+            statement.executeUpdate();
+        }
+        catch (Exception e){
+            System.out.println("Problem in changing password.");
+        }
+    }
+
+    // This is for deleting the user's account.
+    Boolean deleteAccount(int id){
+        String sql = "DELETE FROM teachers WHERE id = ?";
+        try (Connection connection = dataBase.getConnect(); PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setInt(1,id);
+            int deleted = statement.executeUpdate();
+            return deleted > 0;
+        }
+        catch (Exception e){
+            System.out.println("Problem in deleting user's account");
+            return false;
+        }
     }
 }

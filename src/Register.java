@@ -49,7 +49,6 @@ public class Register implements ActionListener {
     JButton HidePasswordButton = new JButton("Hide password",closeIconPassword);
 
     Register(StudentsManager studentsManager,TeachersManager manager,StudentsSQLite students,TeachersSQLite teachers){
-        frame.setTitle("Login-Screen");
         frame.setSize(460,450);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

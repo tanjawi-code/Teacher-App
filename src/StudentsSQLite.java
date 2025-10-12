@@ -4,20 +4,10 @@ import java.text.DecimalFormat;
 
 public class StudentsSQLite {
 
-    StudentsSQLite(){}
+    private final DataBase dataBase;
 
-    // This is for connecting with database.
-    public Connection getConnect(){
-        Connection connection = null;
-        try{
-            connection = DriverManager.getConnection("jdbc:sqlite:dataBase/school.db");
-            connection.createStatement().execute("PRAGMA foreign_keys = ON;");
-        }
-        catch (Exception e){
-            JOptionPane.showMessageDialog(null,"Couldn't connect","Error",
-                    JOptionPane.ERROR_MESSAGE);
-        }
-        return connection;
+    StudentsSQLite(DataBase dataBase){
+        this.dataBase = dataBase;
     }
 
     // This is for creating a table for students in SQLite.
@@ -37,14 +27,14 @@ public class StudentsSQLite {
                 "student_id INTEGER,"+
                 "class_number INTEGER,"+
                 "teacher_id INTEGER,"+
-                "FOREIGN KEY (teacher_id) REFERENCES teachers(id)"+
+                "FOREIGN KEY (teacher_id) REFERENCES teachers(id) ON DELETE CASCADE"+
                 ");";
 
-        try(Connection connection = getConnect(); Statement statement = connection.createStatement()){
+        try(Connection connection = dataBase.getConnect(); Statement statement = connection.createStatement()){
             statement.execute(sql);
         }
         catch (Exception e){
-            System.out.println("Something went wrong in creating table of students.");
+            System.out.println("Problem in creating table");
         }
     }
 
@@ -53,7 +43,7 @@ public class StudentsSQLite {
         String sql = "INSERT INTO students(first_name, second_name, full_name, gender, age, grade_1, grade_2, "+
                      "grade_3, point, city, student_id, class_number, teacher_id)"+
                      "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection connection = getConnect(); PreparedStatement statement = connection.prepareStatement(sql)){
+        try (Connection connection = dataBase.getConnect(); PreparedStatement statement = connection.prepareStatement(sql)){
             DecimalFormat decimalFormat = new DecimalFormat("#.##");
             double point = Double.parseDouble(decimalFormat.format(Double.parseDouble(String.valueOf(student.getStudentPoint()))));
 
@@ -81,7 +71,7 @@ public class StudentsSQLite {
     void getStudents(int id, StudentsManager manager){
         String sql = "SELECT * FROM students WHERE teacher_id = ?";
 
-        try(Connection connection = getConnect(); PreparedStatement statement = connection.prepareStatement(sql)){
+        try(Connection connection = dataBase.getConnect(); PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setInt(1,id);
             ResultSet resultSet = statement.executeQuery();
             Student student;
@@ -113,7 +103,7 @@ public class StudentsSQLite {
     // This is for searching for a student to get the student's id.
     int deleteStudent(String fullName, int studentID){
         String sql = "SELECT * FROM students WHERE full_name = ? AND student_id = ?";
-        try (Connection connection = getConnect(); PreparedStatement statement = connection.prepareStatement(sql)){
+        try (Connection connection = dataBase.getConnect(); PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setString(1, fullName);
             statement.setInt(2, studentID);
             ResultSet resultSet = statement.executeQuery();
@@ -133,7 +123,7 @@ public class StudentsSQLite {
     // This is for deleting the student after getting the id.
     Boolean deleteStudentFromTable(int id){
         String sql = "DELETE FROM students WHERE id = ?";
-        try (Connection connection = getConnect(); PreparedStatement statement = connection.prepareStatement(sql)){
+        try (Connection connection = dataBase.getConnect(); PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setInt(1,id);
             int deleted = statement.executeUpdate();
             return deleted > 0;
@@ -141,6 +131,43 @@ public class StudentsSQLite {
         catch (Exception e){
             System.out.println("Problem in confirming deleting");
             return false;
+        }
+    }
+
+    // This is for updating student's grades.
+    void updateStudentGrades(String fullName, int studentID, double[] grades, int age, double point){
+        String sql = "UPDATE students SET grade_1 = ?, grade_2 = ?, grade_3 = ?, age = ?, point = ? "+
+                "WHERE full_name = ? AND student_id = ?";
+        try (Connection connection = dataBase.getConnect(); PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setDouble(1, grades[0]);
+            statement.setDouble(2, grades[1]);
+            statement.setDouble(3, grades[2]);
+            statement.setInt(4, age);
+            statement.setDouble(5,point);
+            statement.setString(6, fullName);
+            statement.setInt(7, studentID);
+            statement.executeUpdate();
+        }
+        catch (Exception e){
+            System.out.println("Problem in updating student's grades in table.");
+        }
+    }
+
+    void check(){
+        String sql = " PRAGMA foreign_key_list(students);";
+
+        try (Connection connection = dataBase.getConnect(); PreparedStatement statement = connection.prepareStatement(sql)){
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()){
+                System.out.println("Table : "+resultSet.getString("table")+"\n"+
+                        "Column : "+resultSet.getString("from")+"\n"+
+                        "Related : "+resultSet.getString("to")+"\n"+
+                        "To delete : "+resultSet.getString("on_delete"));
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Problem");
         }
     }
 }
