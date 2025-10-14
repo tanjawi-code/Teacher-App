@@ -45,10 +45,16 @@ public class StudentsManager {
         return students.isEmpty();
     }
 
-    // Show the top three student points from top to bottoms.
+    // Show the top three student points from top.
     ArrayList<Student> showTopThreePoints(){
         final ArrayList<Student> sortedStudent = new ArrayList<>(students);
         sortedStudent.sort(Comparator.comparingDouble(Student::getStudentPoint).reversed());
+        return sortedStudent;
+    }
+    // Show the lower three student points from bottom.
+    ArrayList<Student> showLowThreePoints(){
+        final ArrayList<Student> sortedStudent = new ArrayList<>(students);
+        sortedStudent.sort(Comparator.comparingDouble(Student::getStudentPoint));
         return sortedStudent;
     }
 

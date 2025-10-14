@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Objects;
 
 public class Register implements ActionListener {
 
@@ -18,11 +19,11 @@ public class Register implements ActionListener {
     private boolean schoolIsSelected = false;
     private boolean subjectIsSelected = false;
 
-    ImageIcon icon = new ImageIcon("school.png");
-    ImageIcon imageIcon1 = new ImageIcon("see.png");
+    ImageIcon icon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/images/school.png")));
+    ImageIcon imageIcon1 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/images/see.png")));
     Image scaledImage1 = imageIcon1.getImage().getScaledInstance(25,25,Image.SCALE_SMOOTH);
     ImageIcon seeIconPassword = new ImageIcon(scaledImage1);
-    ImageIcon imageIcon2 = new ImageIcon("invisible.png");
+    ImageIcon imageIcon2 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/images/invisible.png")));
     Image scaledImage2 = imageIcon2.getImage().getScaledInstance(25,25,Image.SCALE_SMOOTH);
     ImageIcon closeIconPassword = new ImageIcon(scaledImage2);
 

@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Random;
 
 public class Login extends JFrame implements ActionListener {
@@ -16,12 +17,12 @@ public class Login extends JFrame implements ActionListener {
     private final TeachersSQLite teachersSQLite;
 
     // This is for the log of the screen.
-    ImageIcon icon = new ImageIcon("school.png");
+    ImageIcon icon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/images/school.png")));
     // This is for the icons of showing, hiding password.
-    ImageIcon icon1 = new ImageIcon("see.png");
+    ImageIcon icon1 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/images/see.png")));
     Image scaledImage1 = icon1.getImage().getScaledInstance(25,25,Image.SCALE_SMOOTH);
     ImageIcon seePassword = new ImageIcon(scaledImage1);
-    ImageIcon icon2 = new ImageIcon("invisible.png");
+    ImageIcon icon2 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/images/invisible.png")));
     Image scaledImage2 = icon2.getImage().getScaledInstance(25,25,Image.SCALE_SMOOTH);
     ImageIcon closePassword = new ImageIcon(scaledImage2);
 

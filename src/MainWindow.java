@@ -5,9 +5,10 @@ import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class MainWindow extends JFrame implements ActionListener {
 
@@ -16,16 +17,33 @@ public class MainWindow extends JFrame implements ActionListener {
     private final StudentsSQLite studentsSQLite;
     private final TeachersSQLite teachersSQLite;
 
+    // This is for settings image.
+    ImageIcon schoolIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/images/school.png")));
+    ImageIcon icon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/images/cogwheel.png")));
+    Image scaledImage = icon.getImage().getScaledInstance(30,30,Image.SCALE_SMOOTH);
+    ImageIcon settingsIcon = new ImageIcon(scaledImage);
+    ImageIcon icon2 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/images/user.png")));
+    Image scaledImage2 = icon2.getImage().getScaledInstance(30,30,Image.SCALE_SMOOTH);
+    ImageIcon userIcon = new ImageIcon(scaledImage2);
+    JButton settingsButton = new JButton();
+    JButton userButton = new JButton();
+
+    // This is for the menuBar.
+    JMenuBar menuBar = new JMenuBar();
+    JMenu fileMenu = new JMenu("File");
+    JMenuItem openItem = new JMenuItem("Open file");
+    JMenuItem saveItem = new JMenuItem("save as file");
+    JMenuItem exitItem = new JMenuItem("Exit");
+
     // These are the main panels that are in the frame.
     JPanel northPanel = new JPanel(new BorderLayout());
+    JPanel centerPanel = new JPanel(new BorderLayout());
     JPanel westPanel = new JPanel(new BorderLayout());
     JPanel southPanel = new JPanel(new BorderLayout());
 
     // This is for the buttons in the lower part of the screen.
-    String[] leftUnderTitles = {"Statistics","Passed","Failed","Top 3","Account","Settings"};
-    String[] rightUnderTitles = {"Delete","Update","Student Statistics","Save as a file","Get a file","Searching ways"};
+    String[] rightUnderTitles = {"Delete","Update","Student Statistics","Statistics","Searching ways"};
     String[] otherButtonsTitles = {"Add student","Clear","Search","Refresh","Confirm update"};
-    JButton[] leftUnderButtons = new JButton[leftUnderTitles.length];
     JButton[] rightUnderButtons = new JButton[rightUnderTitles.length];
 
     // This is for inputs in the higher part of the screen in left side.
@@ -68,10 +86,63 @@ public class MainWindow extends JFrame implements ActionListener {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setLayout(new BorderLayout());
+        this.setIconImage(schoolIcon.getImage());
         this.manager = manager;
         this.teachersManager = teachersManager;
         this.studentsSQLite = students;
         this.teachersSQLite = teachers;
+
+        JPanel northLeftPanel = new JPanel(new FlowLayout(FlowLayout.LEADING,20,0));
+        northLeftPanel.setBackground(new Color(4, 53, 83));
+        northLeftPanel.setOpaque(true);
+        JPanel messagePanel = new JPanel(new FlowLayout());
+        messagePanel.setBackground(new Color(4, 53, 83));
+        messagePanel.setOpaque(true);
+
+        // This is for the label message.
+        JLabel messageLabel = new JLabel("Students Management");
+        messageLabel.setForeground(Color.WHITE);
+        messageLabel.setFont(new Font("Arial",Font.BOLD,40));
+        messagePanel.add(messageLabel);
+
+        // This is for the menu in the north.
+        settingsButton.setFocusable(false); // Starting of settings button.
+        settingsButton.setBorder(BorderFactory.createEtchedBorder());
+        settingsButton.setBackground(Color.WHITE);
+        settingsButton.setIcon(settingsIcon);
+        settingsButton.addActionListener(this);
+        userButton.setFocusable(false); // Starting of user button.
+        userButton.setBorder(BorderFactory.createEtchedBorder());
+        userButton.setBackground(Color.WHITE);
+        userButton.setIcon(userIcon);
+        userButton.addActionListener(this);
+
+        // This is for the menu bar.
+        SaveFile saveFile = new SaveFile();
+        String filePath = saveFile.getFilePath();
+        menuBar.setPreferredSize(new Dimension(35,35));
+        fileMenu.setForeground(Color.BLACK);
+        openItem.setMnemonic(KeyEvent.VK_O);
+        saveItem.setMnemonic(KeyEvent.VK_S);
+        exitItem.setMnemonic(KeyEvent.VK_E);
+        openItem.addActionListener(e -> new GetFile(manager,filePath,model));
+        saveItem.addActionListener(e -> saveFile.saveFile(manager));
+        exitItem.addActionListener(e -> System.exit(0));
+
+        fileMenu.setMnemonic(KeyEvent.VK_F); // Alt + A/a.
+        fileMenu.add(openItem);
+        fileMenu.add(saveItem);
+        fileMenu.add(exitItem);
+        menuBar.add(fileMenu);
+
+        northLeftPanel.add(settingsButton);
+        northLeftPanel.add(userButton);
+        northLeftPanel.add(menuBar);
+        northPanel.setBackground(new Color(4, 53, 83));
+        northPanel.setPreferredSize(new Dimension(0,100));
+        northPanel.setOpaque(true);
+        northPanel.add(messagePanel,BorderLayout.NORTH);
+        northPanel.add(northLeftPanel,BorderLayout.WEST);
 
         // This is for the higher part of the screen in left side.
         JPanel textPanel = new JPanel(new GridLayout(9,2,0,5));
@@ -110,6 +181,7 @@ public class MainWindow extends JFrame implements ActionListener {
             }
         });
 
+        JPanel westNorthPanel = new JPanel(new BorderLayout());
         addStudent.setFocusable(false); // Button of adding a student.
         addStudent.setBorder(BorderFactory.createEtchedBorder());
         addStudent.setBackground(Color.GREEN);
@@ -120,21 +192,8 @@ public class MainWindow extends JFrame implements ActionListener {
         clearButton.addActionListener(this);
         textPanel.add(addStudent);
         textPanel.add(clearButton);
-        westPanel.add(textPanel,BorderLayout.NORTH);
-
-        // This is for the lower part of the screen in left side.
-        JPanel leftButtonsPanel = new JPanel(new GridLayout(3,2,30,30));
-        for(int x = 0; x<leftUnderButtons.length; x++){
-            leftUnderButtons[x] = new JButton(leftUnderTitles[x]);
-            leftUnderButtons[x].setBackground(Color.LIGHT_GRAY);
-            leftUnderButtons[x].setFocusable(false);
-            leftUnderButtons[x].setBorder(BorderFactory.createEtchedBorder());
-            leftUnderButtons[x].addActionListener(this);
-            leftUnderButtons[x].setPreferredSize(new Dimension(160,80));
-            leftUnderButtons[x].setFont(new Font("MV Boli",Font.BOLD,25));
-            leftButtonsPanel.add(leftUnderButtons[x]);
-        }
-        southPanel.add(leftButtonsPanel,BorderLayout.WEST);
+        westNorthPanel.add(textPanel,BorderLayout.NORTH);
+        westPanel.add(westNorthPanel,BorderLayout.CENTER);
 
         // This is for the higher part of the screen in right side.
         JPanel tableChoices = new JPanel(new FlowLayout(FlowLayout.TRAILING));
@@ -166,41 +225,40 @@ public class MainWindow extends JFrame implements ActionListener {
 
         // This is for the table.
         table.setRowSorter(sorter);
-        northPanel.add(pane,BorderLayout.CENTER);
-        northPanel.add(tableChoices,BorderLayout.NORTH);
+        centerPanel.add(pane,BorderLayout.CENTER);
+        centerPanel.add(tableChoices,BorderLayout.NORTH);
         table.setEnabled(false);
 
         // This is for the lower part in right side.
-        JPanel rightButtonsPanel = new JPanel(new GridLayout(2,3,0,40));
-        JPanel rightSouthPanel = new JPanel(new BorderLayout());
+        JPanel southFlowPanel = new JPanel(new FlowLayout());
         for(int x = 0; x<rightUnderButtons.length; x++){
             rightUnderButtons[x] = new JButton(rightUnderTitles[x]);
             String title = rightUnderButtons[x].getText();
             rightUnderButtons[x].setFocusable(false);
             rightUnderButtons[x].setBorder(BorderFactory.createEtchedBorder());
             rightUnderButtons[x].addActionListener(this);
-            rightUnderButtons[x].setPreferredSize(new Dimension(300,100));
+            rightUnderButtons[x].setPreferredSize(new Dimension(200,100));
             rightUnderButtons[x].setFont(new Font("MV Boli",Font.BOLD,20));
             if(Arrays.asList(rightUnderTitles).contains(title)){
                 switch (title) {
                     case "Delete" -> rightUnderButtons[x].setBackground(Color.RED);
-                    case "Update" -> rightUnderButtons[x].setBackground(new Color(0, 118, 192));
-                    case "Student Statistics" -> rightUnderButtons[x].setBackground(new Color(244, 121, 43));
-                    default -> rightUnderButtons[x].setBackground(Color.LIGHT_GRAY);
+                    case "Update" -> rightUnderButtons[x].setBackground(new Color(68, 110, 136));
+                    default -> rightUnderButtons[x].setBackground(new Color(0, 118, 192));
                 }
             }
-            rightButtonsPanel.add(rightUnderButtons[x]);
+            southFlowPanel.add(rightUnderButtons[x]);
+
         }
-        rightSouthPanel.add(rightButtonsPanel,BorderLayout.SOUTH);
-        southPanel.add(rightSouthPanel,BorderLayout.EAST);
+        southPanel.add(southFlowPanel,BorderLayout.CENTER);
 
         if(userIsFound){
             getTeacherStudents();
         }
 
-        this.add(northPanel,BorderLayout.CENTER); // Holds the north and center and south in the screen's center.
-        this.add(westPanel,BorderLayout.WEST); // Holds the north and center in the west.
-        this.add(southPanel,BorderLayout.SOUTH); // Holds the south in the west and east.
+        this.add(northPanel,BorderLayout.NORTH); // Holds The menu bar, welcome message, and two buttons.
+        this.add(centerPanel,BorderLayout.CENTER); // Holds the menu table and table.
+        this.add(westPanel,BorderLayout.WEST); // Holds the fields.
+        this.add(southPanel,BorderLayout.SOUTH); // Holds 5 buttons.
         this.setVisible(true);
     }
 
@@ -209,28 +267,13 @@ public class MainWindow extends JFrame implements ActionListener {
         JButton button = (JButton) e.getSource();
         String value = button.getText();
 
-        if(Arrays.asList(leftUnderTitles).contains(value)){
-            switch (value){
-                case "Statistics" -> new ClassStatistics(manager,teachersManager);
-                case "Passed" -> passedStudents();
-                case "Failed" -> failedStudents();
-                case "Top 3" -> topThreeStudents();
-                case "Account" ->  new Account(teachersManager,teachersSQLite);
-                case "Settings" -> JOptionPane.showMessageDialog(null,"It's coming later","Settings",JOptionPane.INFORMATION_MESSAGE);
-                default -> System.out.println();
-            }
-        }
-        else if(Arrays.asList(rightUnderTitles).contains(value)){
-            SaveFile saveFile = new SaveFile();
-            String filePath = saveFile.getFilePath();
-
+        if(Arrays.asList(rightUnderTitles).contains(value)){
             switch (value){
                 case "Delete" -> deleteStudent();
                 case "Update" -> updateStudent();
                 case "Student Statistics" -> new studentStatistics(manager);
-                case "Save as a file" -> saveFile.saveFile(manager);
-                case "Get a file" -> new GetFile(manager,filePath,model);
-                case "Searching ways" -> new SearchingWays(sorter);
+                case "Statistics" -> new ClassStatistics(manager,teachersManager);
+                case "Searching ways" -> new SearchingWays(sorter,manager,table,tableTitles);
                 default -> System.out.println();
             }
         }
@@ -243,6 +286,13 @@ public class MainWindow extends JFrame implements ActionListener {
                 case "Confirm update" -> confirmUpdate();
                 default -> System.out.println();
             }
+        }
+        else if(e.getSource() == userButton){
+            new Account(teachersManager,teachersSQLite);
+        }
+        else if (e.getSource() == settingsButton){
+            JOptionPane.showMessageDialog(null,"It's coming later","Settings",
+                    JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -514,55 +564,6 @@ public class MainWindow extends JFrame implements ActionListener {
                     break;
                 }
             }
-        }
-    }
-
-    // These three methods are for showing in the table: passed students, failed students, and top 3 students.
-    private void passedStudents(){
-        if(manager.isEmpty()){
-            JOptionPane.showMessageDialog(null,"There are no students","Empty class",
-                    JOptionPane.ERROR_MESSAGE);
-        }
-        else {
-            sorter.setRowFilter(RowFilter.numberFilter(RowFilter.ComparisonType.AFTER,9.99,8));
-        }
-    }
-    private  void failedStudents(){
-        if(manager.isEmpty()){
-            JOptionPane.showMessageDialog(null,"There are no students","Empty class",
-                    JOptionPane.ERROR_MESSAGE);
-        }
-        else{
-            sorter.setRowFilter(RowFilter.numberFilter(RowFilter.ComparisonType.BEFORE,10,8));
-        }
-    }
-    private void topThreeStudents(){
-        if(manager.isEmpty()){
-            JOptionPane.showMessageDialog(null,"The class is empty","Empty class",
-                    JOptionPane.ERROR_MESSAGE);
-        }
-        else{
-            ArrayList<Student> sortedList = manager.showTopThreePoints();
-            DefaultTableModel topThreeModel = new DefaultTableModel(tableTitles,0);
-            TableRowSorter<TableModel> sortedSorter = new TableRowSorter<>(topThreeModel);
-            DecimalFormat decimalFormat = new DecimalFormat("#.##");
-            int count = 1;
-            for (Student student : sortedList) {
-                double point = student.getStudentPoint();
-                point = Double.parseDouble(decimalFormat.format(Double.parseDouble(String.valueOf(point))));
-                topThreeModel.addRow(new Object[]{
-                        student.getFirstStudentName(), student.getSecondStudentName(), student.getStudentAge(),
-                        student.getStudentGender(), student.getStudentID(), student.getStudentGrades(0),
-                        student.getStudentGrades(1), student.getStudentGrades(2), point,
-                        student.getStudentCity(), student.getStudentClassNumber()});
-                if(count == 3){
-                    break;
-                }
-                count++;
-            }
-            table.setModel(topThreeModel);
-            table.setRowSorter(sortedSorter);
-            sortedSorter.setRowFilter(RowFilter.numberFilter(RowFilter.ComparisonType.AFTER,9.99,8));
         }
     }
 
