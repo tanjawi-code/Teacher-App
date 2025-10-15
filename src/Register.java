@@ -11,6 +11,7 @@ public class Register implements ActionListener {
     private final TeachersManager manager;
     private final StudentsSQLite studentsSQLite;
     private final TeachersSQLite teachersSQLite;
+    private final SavedFilesSQLite savedFilesSQLite;
 
     private teacherGender chosenGender;
     private schools chosenSchool;
@@ -49,7 +50,7 @@ public class Register implements ActionListener {
     JButton showPasswordButton = new JButton("Show password",seeIconPassword);
     JButton HidePasswordButton = new JButton("Hide password",closeIconPassword);
 
-    Register(StudentsManager studentsManager,TeachersManager manager,StudentsSQLite students,TeachersSQLite teachers){
+    Register(StudentsManager studentsManager,TeachersManager manager,StudentsSQLite students,TeachersSQLite teachers,SavedFilesSQLite files){
         frame.setSize(460,450);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -60,6 +61,7 @@ public class Register implements ActionListener {
         this.manager = manager;
         this.studentsSQLite = students;
         this.teachersSQLite = teachers;
+        this.savedFilesSQLite = files;
 
         // These are labels .
         String[] titles = {"Name : ","Age : ","Gender : ","School : ","Subject : ","Password : ","Confirm Password : "};
@@ -219,9 +221,9 @@ public class Register implements ActionListener {
             int age = Integer.parseInt(teacherAge.getText());
             Teacher teacher = new Teacher(name,age,password,chosenSubject,chosenSchool,chosenGender);
 
-            manager.saveTeacher(teacher);
             teachersSQLite.insertTeachersToTable(teacher);
-            new MainWindow(studentsManager,manager,studentsSQLite,teachersSQLite,false);
+            manager.saveTeacher(teacher);
+            new MainWindow(studentsManager,manager,studentsSQLite,teachersSQLite,false,savedFilesSQLite);
             JOptionPane.showMessageDialog(null,"The account is created.",
                     "Welcome",JOptionPane.INFORMATION_MESSAGE);
         }

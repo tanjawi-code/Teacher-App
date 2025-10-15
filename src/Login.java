@@ -15,6 +15,7 @@ public class Login extends JFrame implements ActionListener {
     private final TeachersManager teachersManager;
     private final StudentsSQLite studentsSQLite;
     private final TeachersSQLite teachersSQLite;
+    private final SavedFilesSQLite savedFilesSQLite;
 
     // This is for the log of the screen.
     ImageIcon icon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/images/school.png")));
@@ -43,7 +44,7 @@ public class Login extends JFrame implements ActionListener {
     JPanel centerPanel = new JPanel(new BorderLayout());
     JPanel southPanel = new JPanel(new FlowLayout());
 
-    Login(StudentsManager manager,TeachersManager teachersManager,StudentsSQLite students,TeachersSQLite teachers){
+    Login(StudentsManager manager,TeachersManager teachersManager,StudentsSQLite students,TeachersSQLite teachers, SavedFilesSQLite files){
         this.setTitle("Login-Screen");
         this.setSize(420,420);
         this.setLocationRelativeTo(null);
@@ -55,6 +56,7 @@ public class Login extends JFrame implements ActionListener {
         this.teachersManager = teachersManager;
         this.studentsSQLite = students;
         this.teachersSQLite = teachers;
+        this.savedFilesSQLite = files;
 
         // This is for displaying a welcome message in the top.
         welcomeMessage.setForeground(Color.RED);
@@ -123,7 +125,7 @@ public class Login extends JFrame implements ActionListener {
 
         switch (text) {
             case "Login" -> loginButton();
-            case "Create new account" -> new Register(manager, teachersManager, studentsSQLite, teachersSQLite);
+            case "Create new account" -> new Register(manager, teachersManager, studentsSQLite, teachersSQLite,savedFilesSQLite);
             case "Did you forget the password?" -> forgetPassword();
             case "Clear" -> clearButtonFields();
             case "Show password" -> textPassword.setEchoChar((char) 0);
@@ -155,7 +157,7 @@ public class Login extends JFrame implements ActionListener {
                 studentsSQLite.getStudents(teachersSQLite.getTeacherID(),manager);
                 Teacher teacher = teachersSQLite.getTeacherData();
                 teachersManager.saveTeacher(teacher);
-                new MainWindow(manager,teachersManager,studentsSQLite,teachersSQLite,true);
+                new MainWindow(manager,teachersManager,studentsSQLite,teachersSQLite,true,savedFilesSQLite);
                 JOptionPane.showMessageDialog(null,"Welcome again "+name,"Welcome",
                         JOptionPane.INFORMATION_MESSAGE);
             }
@@ -267,7 +269,7 @@ public class Login extends JFrame implements ActionListener {
             studentsSQLite.getStudents(teachersSQLite.getTeacherID(),manager);
             Teacher teacher = teachersSQLite.getTeacherData();
             teachersManager.saveTeacher(teacher);
-            new MainWindow(manager,teachersManager,studentsSQLite,teachersSQLite,true);
+            new MainWindow(manager,teachersManager,studentsSQLite,teachersSQLite,true,savedFilesSQLite);
         }
     }
 

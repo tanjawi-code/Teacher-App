@@ -4,7 +4,7 @@ import java.text.DecimalFormat;
 
 public class studentStatistics {
 
-    JFrame frame = new JFrame();
+    JFrame frame = new JFrame("Student Statistics");
     JPanel panel = new JPanel(new BorderLayout());
     JButton button = new JButton("Back");
 

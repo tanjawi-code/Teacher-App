@@ -41,6 +41,12 @@ public class TeachersSQLite {
             preparedStatement.setString(5, teacher.getSubject().toString());
             preparedStatement.setString(6, teacher.getSchool().toString());
             preparedStatement.executeUpdate();
+            ResultSet rs = preparedStatement.getGeneratedKeys();
+            teacherID = -1;
+            if (rs.next()) {
+                teacherID = rs.getInt(1);
+            }
+
         }
         catch (Exception e){
             System.out.println("Something went wrong in inserting data.");

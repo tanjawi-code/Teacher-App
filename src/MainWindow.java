@@ -17,6 +17,12 @@ public class MainWindow extends JFrame implements ActionListener {
     private final StudentsSQLite studentsSQLite;
     private final TeachersSQLite teachersSQLite;
 
+    // These are the main panels that are in the frame.
+    JPanel northPanel = new JPanel(new BorderLayout());
+    JPanel centerPanel = new JPanel(new BorderLayout());
+    JPanel westPanel = new JPanel(new BorderLayout());
+    JPanel southPanel = new JPanel(new BorderLayout());
+
     // This is for settings image.
     ImageIcon schoolIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/images/school.png")));
     ImageIcon icon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/images/cogwheel.png")));
@@ -34,15 +40,12 @@ public class MainWindow extends JFrame implements ActionListener {
     JMenuItem openItem = new JMenuItem("Open file");
     JMenuItem saveItem = new JMenuItem("save as file");
     JMenuItem exitItem = new JMenuItem("Exit");
-
-    // These are the main panels that are in the frame.
-    JPanel northPanel = new JPanel(new BorderLayout());
-    JPanel centerPanel = new JPanel(new BorderLayout());
-    JPanel westPanel = new JPanel(new BorderLayout());
-    JPanel southPanel = new JPanel(new BorderLayout());
+    JMenu statisticsMenu = new JMenu("Statistics");
+    JMenuItem classStatisticsItem = new JMenuItem("Class Statistics");
+    JMenuItem studentStatisticsItem = new JMenuItem("Student Statistics");
 
     // This is for the buttons in the lower part of the screen.
-    String[] rightUnderTitles = {"Delete","Update","Student Statistics","Statistics","Searching ways"};
+    String[] rightUnderTitles = {"Delete","Update","Searching ways"};
     String[] otherButtonsTitles = {"Add student","Clear","Search","Refresh","Confirm update"};
     JButton[] rightUnderButtons = new JButton[rightUnderTitles.length];
 
@@ -80,7 +83,7 @@ public class MainWindow extends JFrame implements ActionListener {
     private City studentCity;
     private boolean genderIsSelected = false;
     private boolean cityIsSelected = false;
-    MainWindow(StudentsManager manager, TeachersManager teachersManager,StudentsSQLite students,TeachersSQLite teachers, Boolean userIsFound){
+    MainWindow(StudentsManager  manager,TeachersManager teachersManager,StudentsSQLite students,TeachersSQLite teachers,Boolean userIsFound,SavedFilesSQLite savedFilesSQLite){
         this.setTitle("Students management");
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -119,22 +122,34 @@ public class MainWindow extends JFrame implements ActionListener {
 
         // This is for the menu bar.
         SaveFile saveFile = new SaveFile();
-        String filePath = saveFile.getFilePath();
-        menuBar.setPreferredSize(new Dimension(35,35));
+        menuBar.setPreferredSize(new Dimension(95,30));
+        menuBar.setBackground(Color.LIGHT_GRAY);
+
         fileMenu.setForeground(Color.BLACK);
         openItem.setMnemonic(KeyEvent.VK_O);
         saveItem.setMnemonic(KeyEvent.VK_S);
         exitItem.setMnemonic(KeyEvent.VK_E);
-        openItem.addActionListener(e -> new GetFile(manager,filePath,model));
-        saveItem.addActionListener(e -> saveFile.saveFile(manager));
+        openItem.addActionListener(e -> new GetFile(manager,model,studentsSQLite,teachersSQLite,savedFilesSQLite));
+        saveItem.addActionListener(e -> saveFile.saveFile(manager,savedFilesSQLite,teachersSQLite.getTeacherID()));
         exitItem.addActionListener(e -> System.exit(0));
 
-        fileMenu.setMnemonic(KeyEvent.VK_F); // Alt + A/a.
+        fileMenu.setMnemonic(KeyEvent.VK_F); // Alt + F/f.
         fileMenu.add(openItem);
         fileMenu.add(saveItem);
         fileMenu.add(exitItem);
-        menuBar.add(fileMenu);
 
+        statisticsMenu.setForeground(Color.BLACK);
+        classStatisticsItem.setMnemonic(KeyEvent.VK_C);
+        studentStatisticsItem.setMnemonic(KeyEvent.VK_S);
+        classStatisticsItem.addActionListener(e -> new ClassStatistics(manager,teachersManager));
+        studentStatisticsItem.addActionListener(e -> new studentStatistics(manager));
+
+        statisticsMenu.setMnemonic(KeyEvent.VK_S); // Alt + S/s.
+        statisticsMenu.add(classStatisticsItem);
+        statisticsMenu.add(studentStatisticsItem);
+
+        menuBar.add(fileMenu);
+        menuBar.add(statisticsMenu);
         northLeftPanel.add(settingsButton);
         northLeftPanel.add(userButton);
         northLeftPanel.add(menuBar);
@@ -230,7 +245,7 @@ public class MainWindow extends JFrame implements ActionListener {
         table.setEnabled(false);
 
         // This is for the lower part in right side.
-        JPanel southFlowPanel = new JPanel(new FlowLayout());
+        JPanel southFlowPanel = new JPanel(new FlowLayout(FlowLayout.CENTER,10,0));
         for(int x = 0; x<rightUnderButtons.length; x++){
             rightUnderButtons[x] = new JButton(rightUnderTitles[x]);
             String title = rightUnderButtons[x].getText();
@@ -271,8 +286,6 @@ public class MainWindow extends JFrame implements ActionListener {
             switch (value){
                 case "Delete" -> deleteStudent();
                 case "Update" -> updateStudent();
-                case "Student Statistics" -> new studentStatistics(manager);
-                case "Statistics" -> new ClassStatistics(manager,teachersManager);
                 case "Searching ways" -> new SearchingWays(sorter,manager,table,tableTitles);
                 default -> System.out.println();
             }

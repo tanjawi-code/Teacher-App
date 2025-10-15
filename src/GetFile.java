@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -9,7 +10,9 @@ import java.text.DecimalFormat;
 public class GetFile extends Component implements ActionListener {
 
     private final StudentsManager manager;
-    private final String fileName;
+    private final StudentsSQLite studentsSQLite;
+    private final TeachersSQLite teachersSQLite;
+    private final SavedFilesSQLite savedFilesSQLite;
     private final DefaultTableModel model;
 
     JFrame frame = new JFrame("Get a file from file explorer");
@@ -18,14 +21,16 @@ public class GetFile extends Component implements ActionListener {
     JButton buttonBack = new JButton("Back");
     JPanel northPanel = new JPanel(new BorderLayout());
 
-    GetFile(StudentsManager manager, String filePath, DefaultTableModel model){
+    GetFile(StudentsManager manager, DefaultTableModel model, StudentsSQLite students, TeachersSQLite teachers,SavedFilesSQLite files){
         frame.setSize(500,500);
         frame.setResizable(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
         frame.setLocationRelativeTo(null);
         this.manager = manager;
-        this.fileName = filePath;
+        this.studentsSQLite = students;
+        this.teachersSQLite = teachers;
+        this.savedFilesSQLite = files;
         this.model = model;
 
         JPanel buttonsPanel = new JPanel(new FlowLayout());
@@ -60,16 +65,25 @@ public class GetFile extends Component implements ActionListener {
     // This is for selecting file button.
     private void selectFileButton(){
         JFileChooser fileChooser = new JFileChooser();
-        int choice = fileChooser.showOpenDialog(this);
-        File file = fileChooser.getSelectedFile();
-        String filePath = file.getPath();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Text files","txt");
+        fileChooser.setFileFilter(filter);
+        int choice = fileChooser.showOpenDialog(null);
+
+        File file = new File(fileChooser.getSelectedFile().getAbsolutePath());
+        String filePath = savedFilesSQLite.getUserFilePath(teachersSQLite.getTeacherID());
+        String chosenFilePath = file.getPath();
+
         String[] confirm = {"Yes, Get the file","No, make new data (clear file)"};
 
         if(choice == JFileChooser.CANCEL_OPTION){
             selectButton.setEnabled(true);
         }
         else if (choice == JFileChooser.APPROVE_OPTION){
-            if(fileName.equals(filePath)){
+            if(filePath == null){
+                JOptionPane.showMessageDialog(null,"You didn't save a file yet",
+                        "File name is wrong",JOptionPane.ERROR_MESSAGE);
+            }
+            else if(filePath.equals(chosenFilePath)){
                 if(!(file.length() == 0)){
                     int choose = JOptionPane.showOptionDialog(null,
                             "Do you want to use the previous data of this file or making new one",
@@ -88,13 +102,14 @@ public class GetFile extends Component implements ActionListener {
                     }
                 }
                 else{
-                    JOptionPane.showMessageDialog(null,"the file is empty","Empty file",
-                            JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null,"the file is empty",
+                            "Empty file",JOptionPane.INFORMATION_MESSAGE);
                 }
             }
             else {
-                JOptionPane.showMessageDialog(null,"The file name must be studentsFile.csv",
-                        "File name is wrong",JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null,
+                        "The file must be the file you created to save your data","File name is wrong",
+                        JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -138,8 +153,10 @@ public class GetFile extends Component implements ActionListener {
                 grades[1] = grade2;
                 grades[2] = grade3;
                 Student student = new Student(firstName,secondName,age,gender,ID,grades,point,address,classNumber,fullName);
+                student.setStudentTeacherID(teachersSQLite.getTeacherID());
                 model.addRow(new Object[] {firstName,secondName,age,gender,ID,grades[0],grades[1],grades[2],point,
                 address,classNumber});
+                studentsSQLite.insertStudentsToTable(student);
                 manager.saveStudent(student);
             }
             textArea.setText(text.toString());
