@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="370.0" prefWidth="453.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TabPane prefHeight="494.0" prefWidth="347.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Getting started">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label alignment="CENTER" layoutX="-1.0" layoutY="-1.0" prefHeight="30.0" prefWidth="453.0" text="Welcome to Students Management System guide" textFill="#0a4fbe">
+                           <font>
+                              <Font name="Leelawadee UI Semilight" size="20.0" />
+                           </font>
+                        </Label>
+                        <VBox layoutX="-1.0" layoutY="56.0" prefHeight="301.0" prefWidth="452.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="39.33333333333337">
+                           <children>
+                              <Label text="Use the settings menu to change the language or the background color.">
+                                 <font>
+                                    <Font name="Cambria" size="15.0" />
+                                 </font>
+                              </Label>
+                              <Label text="In filtering page, you can only apply one filter at a time, not many filters at the same time." wrapText="true">
+                                 <font>
+                                    <Font name="Cambria" size="15.0" />
+                                 </font>
+                              </Label>
+                              <Label prefHeight="51.0" prefWidth="453.0" text="To change your account password, go to your account on the top right, and you'll find change password button at the botton." wrapText="true">
+                                 <font>
+                                    <Font name="Cambria" size="15.0" />
+                                 </font>
+                              </Label>
+                              <Label text="If you want to remove a student from the table, click on the student on the table, and then click delete, but be carefully not to delete a wrong student." wrapText="true">
+                                 <font>
+                                    <Font name="Cambria" size="15.0" />
+                                 </font>
+                              </Label>
+                              <Label text="In this application, you're only allow to change grades of the students. We'll add in the future changing cities." wrapText="true">
+                                 <font>
+                                    <Font name="Cambria" size="15.0" />
+                                 </font>
+                              </Label>
+                              <Label alignment="TOP_LEFT" prefHeight="63.0" prefWidth="453.0" text="In files menu, you have save as file and save class statistics file. In save as file, you'll save all your students data, but in save class statistics file, you'll save all the details of your class." wrapText="true">
+                                 <font>
+                                    <Font name="Cambria" size="15.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </VBox>
+                     </children></AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Shortcuts">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <GridPane gridLinesVisible="true" layoutX="101.0" layoutY="6.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Ctrl+O" textFill="#f40404" GridPane.rowIndex="1">
+                                 <font>
+                                    <Font name="Cambria Bold" size="20.0" />
+                                 </font>
+                              </Label>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Ctrl+Alt+S" textFill="#f40404" GridPane.rowIndex="2">
+                                 <font>
+                                    <Font name="Cambria Bold" size="20.0" />
+                                 </font>
+                              </Label>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Ctrl+T" textFill="#f40404" GridPane.rowIndex="3">
+                                 <font>
+                                    <Font name="Cambria Bold" size="20.0" />
+                                 </font>
+                              </Label>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Ctrl+L" textFill="#f40404" GridPane.rowIndex="4">
+                                 <font>
+                                    <Font name="Cambria Bold" size="20.0" />
+                                 </font>
+                              </Label>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Ctrl+H" textFill="#f40404" GridPane.rowIndex="5">
+                                 <font>
+                                    <Font name="Cambria Bold" size="20.0" />
+                                 </font>
+                              </Label>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Ctrl+U" textFill="#f40404" GridPane.rowIndex="6">
+                                 <font>
+                                    <Font name="Cambria Bold" size="20.0" />
+                                 </font>
+                              </Label>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Ctrl+V" textFill="#f40404" GridPane.rowIndex="7">
+                                 <font>
+                                    <Font name="Cambria Bold" size="20.0" />
+                                 </font>
+                              </Label>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Ctrl+S" textFill="#f40404">
+                                 <font>
+                                    <Font name="Cambria Bold" size="20.0" />
+                                 </font>
+                              </Label>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Save students file" GridPane.columnIndex="1">
+                                 <font>
+                                    <Font name="Cambria Bold" size="20.0" />
+                                 </font>
+                              </Label>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Open a file" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <font>
+                                    <Font name="Cambria Bold" size="20.0" />
+                                 </font>
+                              </Label>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Save class statistics file" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                 <font>
+                                    <Font name="Cambria Bold" size="20.0" />
+                                 </font>
+                              </Label>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Change theme" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                 <font>
+                                    <Font name="Cambria Bold" size="20.0" />
+                                 </font>
+                              </Label>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Change language" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                 <font>
+                                    <Font name="Cambria Bold" size="20.0" />
+                                 </font>
+                              </Label>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Help" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                                 <font>
+                                    <Font name="Cambria Bold" size="20.0" />
+                                 </font>
+                              </Label>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Check updates" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                                 <font>
+                                    <Font name="Cambria Bold" size="20.0" />
+                                 </font>
+                              </Label>
+                              <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Application version" GridPane.columnIndex="1" GridPane.rowIndex="7">
+                                 <font>
+                                    <Font name="Cambria Bold" size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </GridPane>
+                     </children></AnchorPane>
+            </content>
+          </Tab>
+            <Tab text="Your ideas or problems you have">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TextArea prefHeight="153.0" prefWidth="453.0" promptText="Your ideas:" wrapText="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <Separator layoutY="154.0" prefHeight="20.0" prefWidth="264.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+                        <TextArea layoutY="175.66666666666669" prefHeight="140.0" prefWidth="453.0" promptText="Problems you face in our application:" wrapText="true" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+                        <Button layoutY="316.33333333333337" mnemonicParsing="false" text="Submit (You can write in any place)" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+                           <font>
+                              <Font name="Cambria Bold" size="12.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+            <Tab text="Content">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="230.0" prefWidth="347.0" />
+              </content>
+            </Tab>
+            <Tab text="FAQ">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</VBox>

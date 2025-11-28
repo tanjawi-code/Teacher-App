@@ -1,40 +1,68 @@
-# Teacher app project
+<h1>Students Management System</h1>
 
-- introduction.
+- ### introduction.
 
-A simple java project to manage and store students' details.
+<img src="imagesForREADME/fullscreen.png" alt="a full screen of the app">
 
-## project description :
+## About the project :
 
 This project allows you to :
+- This is a program about managing students, users, saving-open students data, and saving statistics class file.
+- It's a system built with **JavaFx**, **Scene builder**, **Maven, SQLite**, etc.
+- This is a new version (3.0.0), and it's a full refactor of the older Swing version (2.7.2).
 
-- This is the lastest version 2.7.2 for now.
-- You can now add students, modifying grades and age, deleting, saving students in a file, and getting a file.
-- You can search for students by these choices: age, point, gender, city, status(passed or failed), and top/low.
-- You are able to see class and student statistics in the top.
-- You can manage your account by changing your password or deleting your account.
-- You might find a problem while using the program that I didn't notice.
-- I will stop in this version until I learn **JavaFx**, and then I will change the project from swing to javafx, and add many others things.
 ---
-## Problems need to be fixed.
-- Fix the problem in class number, example : when add students like five, and then you want to delete a student, but
-  **not the last student because the problem will not happen**. You delete a student, and then you add another 
-student. the last student who has 5 as the class number will be the same number of the added student after him.
-The last student (5 as class number), the added student (the one after him, 5 as class number). This problem will only
-happen when you delete a student and then add a student.
-- Fix the problem when clicking on showing the top/low in searching ways, and then clicking on updating.
+
+## Technologies used:
+* Java 25.
+* JavaFx.
+* Scene builder.
+* Database (SQLITE).
+* Jackson library (JSON serialization and deserialization).
+* Maven.
+* MVC Architecture.
+* CSS.
+
 ---
-## Future improvements.
+
+## Main features.
+<img src="imagesForREADME/addingStudent.png" alt="an image of adding students">
+
+* Add/ Edit/ remove students/ filters.
+* Auto refresh table.
+* Modern UI with **Scene builder**.
+* Student and class statistics/ save and open files (only files you create inside the app).
+* Database storage.
+* About menu, where you can see how to use the app.
+* Deleting account, and changing password.
+
+<img src="imagesForREADME/changePassword.png" alt="an image of changing passwords">
+
+---
+
+## Future improvements:
+- Password recovery via Google email.
+- Passwords hashing.
 - Add database support (MySQl).
-- Improve the project by using **JavaFx** instead of swing.
-- Add multi-language support (Localization).
-- Add settings to the program.
-- Add multi-classes, and multi-levels.
-- Add email.
-- Add multi choices of searching like gender + point + city and many others different ways.
-- Let the user enters directly to the program without entering password and name every time a user closes and open it. 
+- Add multi-languages support (Localization).
+- Add multi-classes.
+- Let the user enters directly to the program without entering password and name every time, if the user has an account.
+- Track files and compare it with the data of the app.
+- Showing a timer of 5 minutes, when the user wants to enter a code form Google of forgetting password.
+- Displaying a recommendation message of saving a file with json extension, and hide it if the user clicks do not show it again.
+
 ---
+
+## Problems need to be fixed:
+- Fix the problem in class number, example : when adding students like five, and then you want to delete a student, 
+but not the last student because the problem will not happen. You delete a student, and then you add another student.
+the last student who has 5 as the class number will be the same number of the added student after him. 
+The last student (5 as class number), the added student (the one after him, 5 as class number). 
+This problem will only happen when you delete a student except the last student, and then add a student.
+
+---
+
 ## **The developer**
-- **Name** : [private name].
+- **Status** : Alone.
 - **Github** : [https://github.com/tanjawi-code].
-- *Version* : 2.7.2
+- *Version* : 3.0.0

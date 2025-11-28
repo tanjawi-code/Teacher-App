@@ -1,0 +1,14 @@
+.leftButtons:hover {
+-fx-background-color: "skyblue";
+-fx-cursor: hand;
+}
+
+.bottomButtons:hover {
+-fx-background-color: #48e007;
+-fx-cursor: hand;
+}
+
+.centerButtons:hover {
+-fx-background-color: #dec807;
+-fx-cursor: hand;
+}

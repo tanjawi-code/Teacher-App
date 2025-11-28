@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="529.0" prefWidth="486.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.teacherApp.controllers.Register">
+   <children>
+      <GridPane fx:id="gridPane" layoutY="17.0" prefHeight="500.0" prefWidth="486.0" vgap="5.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="17.0" prefWidth="85.0" text="Name: ">
+               <font>
+                  <Font name="Arial Bold Italic" size="15.0" />
+               </font>
+            </Label>
+            <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Age: " GridPane.rowIndex="1">
+               <font>
+                  <Font name="Arial Bold Italic" size="15.0" />
+               </font>
+            </Label>
+            <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Gender: " GridPane.rowIndex="2">
+               <font>
+                  <Font name="Arial Bold Italic" size="15.0" />
+               </font>
+            </Label>
+            <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Mobile number: " GridPane.rowIndex="3">
+               <font>
+                  <Font name="Arial Bold Italic" size="15.0" />
+               </font>
+            </Label>
+            <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="City: " GridPane.rowIndex="4">
+               <font>
+                  <Font name="Arial Bold Italic" size="15.0" />
+               </font>
+            </Label>
+            <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="School level: " GridPane.rowIndex="5">
+               <font>
+                  <Font name="Arial Bold Italic" size="15.0" />
+               </font>
+            </Label>
+            <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Subject: (Based on school level)" GridPane.rowIndex="6">
+               <font>
+                  <Font name="Arial Bold Italic" size="15.0" />
+               </font>
+            </Label>
+            <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Email: " GridPane.rowIndex="7">
+               <font>
+                  <Font name="Arial Bold Italic" size="15.0" />
+               </font>
+            </Label>
+            <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Password: " GridPane.rowIndex="8">
+               <font>
+                  <Font name="Arial Bold Italic" size="15.0" />
+               </font>
+            </Label>
+            <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Confirm password: " GridPane.rowIndex="9">
+               <font>
+                  <Font name="Arial Bold Italic" size="15.0" />
+               </font>
+            </Label>
+            <Button fx:id="showPasswordButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#showPassword" text="Show password" GridPane.rowIndex="10">
+               <font>
+                  <Font name="Arial Bold" size="15.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="21.0" fitWidth="74.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/see.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="hidePasswordButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#hidePassword" text="Hide password" GridPane.columnIndex="1" GridPane.rowIndex="10">
+               <font>
+                  <Font name="Arial Bold" size="15.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="23.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/invisible.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="backButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#back" text="Back" GridPane.rowIndex="11">
+               <font>
+                  <Font name="Arial Bold" size="15.0" />
+               </font>
+            </Button>
+            <Button fx:id="clearButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clear" text="Clear fields" GridPane.columnIndex="1" GridPane.rowIndex="11">
+               <font>
+                  <Font name="Arial Bold" size="15.0" />
+               </font>
+            </Button>
+            <TextField fx:id="nameField" GridPane.columnIndex="1" />
+            <TextField fx:id="ageField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="mobilePhoneField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+            <PasswordField fx:id="confirmPasswordField" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+            <ChoiceBox fx:id="genderChoice" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <ChoiceBox fx:id="cityChoice" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <ChoiceBox fx:id="subjectChoice" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <ChoiceBox fx:id="schoolLevelChoice" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <Button fx:id="createAccountButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#createAccount" prefHeight="15.0" prefWidth="243.0" text="Create account" GridPane.columnIndex="1" GridPane.rowIndex="12">
+               <font>
+                  <Font name="Arial Bold Italic" size="15.0" />
+               </font>
+            </Button>
+         </children>
+      </GridPane>
+   </children>
+</AnchorPane>

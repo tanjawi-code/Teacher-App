@@ -1,0 +1,19 @@
+#clearButton {
+-fx-background-color: "gray";
+}
+
+#backButton {
+-fx-background-color: "lightgray";
+}
+
+#showPasswordButton {
+-fx-background-color: "red";
+}
+
+#hidePasswordButton {
+-fx-background-color: "lightgreen";
+}
+
+#createAccountButton {
+-fx-background-color: "skyblue";
+}
