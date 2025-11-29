@@ -2,8 +2,8 @@ package com.example.teacherApp.models;
 
 public class Settings {
 
-    private final String programBackground;
-    private final String dashboardBackground;
+    private String programBackground;
+    private String dashboardBackground;
     private final String language;
     private final boolean jsonRecommendation;
     private final int usrId;
@@ -16,6 +16,7 @@ public class Settings {
         this.usrId = usrId;
     }
 
+    // Getters.
     public String getProgramBackground() {
         return programBackground;
     }
@@ -30,5 +31,13 @@ public class Settings {
     }
     public int getUsrId() {
         return usrId;
+    }
+
+    // Setters
+    public void setProgramBackground(String programBackground) {
+        this.programBackground = programBackground;
+    }
+    public void setDashboardBackground(String dashboardBackground) {
+        this.dashboardBackground = dashboardBackground;
     }
 }

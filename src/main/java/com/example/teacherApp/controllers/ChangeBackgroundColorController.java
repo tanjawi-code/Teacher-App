@@ -1,7 +1,7 @@
 package com.example.teacherApp.controllers;
 
-import com.example.teacherApp.dao.SettingsSQLite;
 import com.example.teacherApp.models.Settings;
+import com.example.teacherApp.services.SettingsManager;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -26,7 +26,7 @@ public class ChangeBackgroundColorController implements Initializable {
         dashboardBackgroundColor.setItems(FXCollections.observableArrayList(dashboardColors));
     }
 
-    public void setDialogPane(SettingsSQLite settingsSQLite, int userId, DialogPane dialogPane,
+    public void setDialogPane(SettingsManager settingsManager, int userId, DialogPane dialogPane,
                               BorderPane borderPane, AnchorPane leftAnchorPane, Settings settings) {
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setDialogPane(dialogPane);
@@ -42,7 +42,9 @@ public class ChangeBackgroundColorController implements Initializable {
                         showAndWait();
             }
             else if (programBackgroundColor.getValue() != null) {
-                settingsSQLite.changeBackgroundsColor(programColor, programColor, userId);
+                settingsManager.changeUserBackgroundColor(programColor, programColor, userId);
+                settings.setProgramBackground(programColor);
+                settings.setDashboardBackground(programColor);
 
                 borderPane.setBackground(new Background(new BackgroundFill(Color.valueOf(programColor),
                         CornerRadii.EMPTY, Insets.EMPTY)));
@@ -50,7 +52,9 @@ public class ChangeBackgroundColorController implements Initializable {
                         CornerRadii.EMPTY, Insets.EMPTY)));
             }
             else if (dashboardBackgroundColor.getValue() != null) {
-                settingsSQLite.changeBackgroundsColor(settings.getProgramBackground(), dashboard, userId);
+                settingsManager.changeUserBackgroundColor(settings.getProgramBackground(), dashboard, userId);
+                settings.setDashboardBackground(dashboard);
+
                 leftAnchorPane.setBackground(new Background(new BackgroundFill(Color.valueOf(dashboard),
                         CornerRadii.EMPTY, Insets.EMPTY)));
             }

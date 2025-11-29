@@ -65,4 +65,4 @@ This problem will only happen when you delete a student except the last student,
 ## **The developer**
 - **Status** : Alone.
 - **Github** : [https://github.com/tanjawi-code].
-- *Version* : 3.0.0
+- *Version* : 3.0.1

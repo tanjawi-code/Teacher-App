@@ -4,10 +4,10 @@ import com.example.teacherApp.Enums.City;
 import com.example.teacherApp.Enums.Gender;
 import com.example.teacherApp.Enums.SchoolsLevel;
 import com.example.teacherApp.Enums.Subjects;
-import com.example.teacherApp.dao.SettingsSQLite;
 import com.example.teacherApp.models.Settings;
 import com.example.teacherApp.models.Teacher;
 import com.example.teacherApp.services.FilesManager;
+import com.example.teacherApp.services.SettingsManager;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -36,7 +36,7 @@ public class Register implements Initializable {
     private FilesManager filesManager;
     private StudentsManager studentsManager;
     private TeachersManager teachersManager;
-    private SettingsSQLite settingsSQLite;
+    private SettingsManager settingsManager;
 
     @FXML private ChoiceBox<Gender> genderChoice;
     @FXML private ChoiceBox<City> cityChoice;
@@ -216,7 +216,7 @@ public class Register implements Initializable {
         home.setFilesManager(filesManager);
         home.setStudentsManager(studentsManager);
         home.setTeachersManager(teachersManager);
-        home.setSettingsSQLite(settingsSQLite);
+        home.setSettingsManager(settingsManager);
         home.setTeacher(teacher);
 
         Scene scene = new Scene(parent);
@@ -240,7 +240,7 @@ public class Register implements Initializable {
         login.setFilesManager(filesManager);
         login.setStudentsManager(studentsManager);
         login.setTeachersManager(teachersManager);
-        login.setSettingsSQLite(settingsSQLite);
+        login.setSettingsManager(settingsManager);
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(parent);
@@ -270,7 +270,7 @@ public class Register implements Initializable {
         String dashboard = "WHITE";
         String language = "en";
         Settings settings = new Settings(programColor,dashboard,language,false,userId);
-        settingsSQLite.insertUserSettings(settings);
+        settingsManager.userDefaultSettings(settings);
         return settings;
     }
 
@@ -284,7 +284,7 @@ public class Register implements Initializable {
     public void setTeachersManager(TeachersManager teachersManager) {
         this.teachersManager = teachersManager;
     }
-    public void setSettingsSQLite(SettingsSQLite settingsSQLite) {
-        this.settingsSQLite = settingsSQLite;
+    public void setSettingsManager(SettingsManager settingsManager) {
+        this.settingsManager = settingsManager;
     }
 }

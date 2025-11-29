@@ -1,7 +1,7 @@
 package com.example.teacherApp.controllers;
 
-import com.example.teacherApp.dao.SettingsSQLite;
 import com.example.teacherApp.services.FilesManager;
+import com.example.teacherApp.services.SettingsManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,7 +25,7 @@ public class ForgetPasswordController {
     private StudentsManager studentsManager;
     private TeachersManager teachersManager;
     private FilesManager filesManager;
-    private SettingsSQLite settingsSQLite;
+    private SettingsManager settingsManager;
 
     @FXML private TextField userEmailField;
 
@@ -64,7 +64,7 @@ public class ForgetPasswordController {
         login.setFilesManager(filesManager);
         login.setStudentsManager(studentsManager);
         login.setTeachersManager(teachersManager);
-        login.setSettingsSQLite(settingsSQLite);
+        login.setSettingsManager(settingsManager);
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(parent);
@@ -88,7 +88,7 @@ public class ForgetPasswordController {
     public void setFilesManager(FilesManager filesManager) {
         this.filesManager = filesManager;
     }
-    public void setSettingsSQLite(SettingsSQLite settingsSQLite) {
-        this.settingsSQLite = settingsSQLite;
+    public void setSettingsManager(SettingsManager settingsManager) {
+        this.settingsManager = settingsManager;
     }
 }

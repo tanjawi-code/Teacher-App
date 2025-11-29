@@ -3,6 +3,7 @@ package com.example.teacherApp;
 import com.example.teacherApp.controllers.Login;
 import com.example.teacherApp.dao.*;
 import com.example.teacherApp.services.FilesManager;
+import com.example.teacherApp.services.SettingsManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -36,6 +37,7 @@ public class Main extends Application {
         StudentsManager manager = new StudentsManager(studentsSQLite); // For students.
         TeachersManager teachersManager = new TeachersManager(teachersSQLite); // For teachers.
         FilesManager filesManager = new FilesManager(savedFilesSQLite); // For files.
+        SettingsManager settingsManager = new SettingsManager(settingsSQLite); // For settings.
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/scenes/LoginScene.fxml"));
         Parent parent = fxmlLoader.load();
@@ -44,7 +46,7 @@ public class Main extends Application {
         login.setFilesManager(filesManager);
         login.setStudentsManager(manager);
         login.setTeachersManager(teachersManager);
-        login.setSettingsSQLite(settingsSQLite);
+        login.setSettingsManager(settingsManager);
 
         Scene scene = new Scene(parent);
         String css = Objects.requireNonNull(this.getClass().getResource("/styles/LoginStyle.css")).toExternalForm();

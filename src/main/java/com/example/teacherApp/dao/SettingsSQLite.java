@@ -88,4 +88,19 @@ public class SettingsSQLite {
             System.out.println("Problem in updating user's settings.");
         }
     }
+
+    // This is for hiding json recommendation, if the user clicks do not show again.
+    public void hideJsonRecommendation(boolean jsonRecommendation, int userId) {
+        String sql = "UPDATE settings SET json_recommendation = ? WHERE user_id = ?";
+
+        try (Connection connection = dataBase.getConnect(); PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setBoolean(1, jsonRecommendation);
+            statement.setInt(2, userId);
+            statement.executeUpdate();
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Cannot hide the json recommendation.");
+        }
+    }
 }

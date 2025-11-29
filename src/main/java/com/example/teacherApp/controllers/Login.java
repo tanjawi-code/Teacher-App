@@ -1,8 +1,8 @@
 package com.example.teacherApp.controllers;
 
-import com.example.teacherApp.dao.SettingsSQLite;
 import com.example.teacherApp.models.Settings;
 import com.example.teacherApp.services.FilesManager;
+import com.example.teacherApp.services.SettingsManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -35,7 +35,7 @@ public class Login implements Initializable {
     private StudentsManager studentsManager;
     private TeachersManager teachersManager;
     private FilesManager filesManager;
-    private SettingsSQLite settingsSQLite;
+    private SettingsManager settingsManager;
 
     @FXML private Button loginButton, forgetPasswordButton, newAccountButton;
     @FXML private Label welcomeLabel;
@@ -67,7 +67,7 @@ public class Login implements Initializable {
             alert.showAndWait();
         }
         else {
-            mainPage(event,teachersManager.getTeacher(),settingsSQLite.getUserSettings(teachersManager.getUserID()));
+            mainPage(event,teachersManager.getTeacher(),settingsManager.getUserSettings(teachersManager.getUserID()));
         }
     }
 
@@ -81,7 +81,7 @@ public class Login implements Initializable {
         forgetPasswordController.setStudentsManager(studentsManager);
         forgetPasswordController.setTeachersManager(teachersManager);
         forgetPasswordController.setFilesManager(filesManager);
-        forgetPasswordController.setSettingsSQLite(settingsSQLite);
+        forgetPasswordController.setSettingsManager(settingsManager);
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(parent);
@@ -105,7 +105,7 @@ public class Login implements Initializable {
         register.setFilesManager(filesManager);
         register.setStudentsManager(studentsManager);
         register.setTeachersManager(teachersManager);
-        register.setSettingsSQLite(settingsSQLite);
+        register.setSettingsManager(settingsManager);
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(parent);
@@ -129,7 +129,7 @@ public class Login implements Initializable {
         home.setFilesManager(filesManager);
         home.setStudentsManager(studentsManager);
         home.setTeachersManager(teachersManager);
-        home.setSettingsSQLite(settingsSQLite);
+        home.setSettingsManager(settingsManager);
         home.setUserIsFound(true);
         home.setTeacher(teacher);
         home.setSettings(settings);
@@ -155,7 +155,7 @@ public class Login implements Initializable {
     public void setTeachersManager(TeachersManager teachersManager) {
         this.teachersManager = teachersManager;
     }
-    public void setSettingsSQLite(SettingsSQLite settingsSQLite) {
-        this.settingsSQLite = settingsSQLite;
+    public void setSettingsManager(SettingsManager settingsManager) {
+        this.settingsManager = settingsManager;
     }
 }

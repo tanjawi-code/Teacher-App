@@ -1,9 +1,9 @@
 package com.example.teacherApp.controllers;
 
-import com.example.teacherApp.dao.SettingsSQLite;
 import com.example.teacherApp.models.Settings;
 import com.example.teacherApp.models.Student;
 import com.example.teacherApp.services.FilesManager;
+import com.example.teacherApp.services.SettingsManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -34,7 +34,7 @@ public class Home implements Initializable {
     private StudentsManager studentsManager;
     private TeachersManager teachersManager;
     private FilesManager filesManager;
-    private SettingsSQLite settingsSQLite;
+    private SettingsManager settingsManager;
     private Teacher teacher;
     private Settings settings;
 
@@ -287,7 +287,7 @@ public class Home implements Initializable {
         DialogPane dialogPane = loader.load();
 
         ChangeBackgroundColorController backgroundColorController = loader.getController();
-        backgroundColorController.setDialogPane(settingsSQLite, teachersManager.getUserID(), dialogPane,
+        backgroundColorController.setDialogPane(settingsManager, teachersManager.getUserID(), dialogPane,
                                                 borderPane, leftAnchorPane, settings);
     }
 
@@ -399,7 +399,7 @@ public class Home implements Initializable {
     public void version() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Version");
-        alert.setHeaderText("Version: 3.0.0");
+        alert.setHeaderText("Version: 3.0.1");
         alert.setContentText("A large update in the whole program,\nand we added a lot of features");
         alert.showAndWait();
     }
@@ -446,9 +446,6 @@ public class Home implements Initializable {
     public void setTeachersManager(TeachersManager teachersManager) {
         this.teachersManager = teachersManager;
     }
-    public void setSettingsSQLite(SettingsSQLite settingsSQLite) {
-        this.settingsSQLite = settingsSQLite;
-    }
     public void setUserIsFound(boolean userIsFound) {
         if (userIsFound) {
             studentsManager.getAllStudents(teachersManager.getUserID(), studentsManager, students);
@@ -459,9 +456,15 @@ public class Home implements Initializable {
     }
     public void setSettings(Settings settings) {
         this.settings = settings;
+        this.settings.setProgramBackground(settings.getProgramBackground());
+        this.settings.setDashboardBackground(settings.getDashboardBackground());
+
         Color programColor = Color.valueOf(settings.getProgramBackground());
         Color dashboard = Color.valueOf(settings.getDashboardBackground());
         borderPane.setBackground(new Background(new BackgroundFill(programColor,CornerRadii.EMPTY, Insets.EMPTY)));
         leftAnchorPane.setBackground(new Background(new BackgroundFill(dashboard, CornerRadii.EMPTY, Insets.EMPTY)));
+    }
+    public void setSettingsManager(SettingsManager settingsManager) {
+        this.settingsManager = settingsManager;
     }
 }
