@@ -49,7 +49,6 @@ This project allows you to :
 - Let the user enters directly to the program without entering password and name every time, if the user has an account.
 - Track files and compare it with the data of the app.
 - Showing a timer of 5 minutes, when the user wants to enter a code form Google of forgetting password.
-- Displaying a recommendation message of saving a file with json extension, and hide it if the user clicks do not show it again.
 
 ---
 
@@ -65,4 +64,4 @@ This problem will only happen when you delete a student except the last student,
 ## **The developer**
 - **Status** : Alone.
 - **Github** : [https://github.com/tanjawi-code].
-- *Version* : 3.0.1
+- *Version* : 3.1.2

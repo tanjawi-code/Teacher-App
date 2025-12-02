@@ -45,7 +45,7 @@
                                     <KeyCodeCombination alt="UP" code="L" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                                  </accelerator>
                               </MenuItem>
-                              <MenuItem mnemonicParsing="false" onAction="#deleteAllStudents" text="Unspecified Action">
+                              <MenuItem mnemonicParsing="false" onAction="#deleteAllStudents" text="Delete all students (Danger)">
                                  <accelerator>
                                     <KeyCodeCombination alt="UP" code="D" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                                  </accelerator>

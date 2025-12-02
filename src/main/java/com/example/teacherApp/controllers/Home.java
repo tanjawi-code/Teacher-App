@@ -287,8 +287,10 @@ public class Home implements Initializable {
         DialogPane dialogPane = loader.load();
 
         ChangeBackgroundColorController backgroundColorController = loader.getController();
-        backgroundColorController.setDialogPane(settingsManager, teachersManager.getUserID(), dialogPane,
-                                                borderPane, leftAnchorPane, settings);
+        backgroundColorController.setSettings(settings);
+        backgroundColorController.setSettingsManager(settingsManager);
+        backgroundColorController.setContainers(borderPane, leftAnchorPane);
+        backgroundColorController.setDialogPane(teachersManager.getUserID(), dialogPane);
     }
 
     @FXML // This is for deleting all the students.
@@ -335,21 +337,33 @@ public class Home implements Initializable {
     }
 
     @FXML // This is for saving a file.
-    private void saveFile() throws IOException{
+    private void saveFile() throws IOException {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save file");
+        List<Student> list = new ArrayList<>(students);
 
-        File file = fileChooser.showSaveDialog(new Stage());
+        if (!students.isEmpty()) {
+            if (!settings.isJsonRecommendation()) {
+                CheckBox checkBox = new CheckBox("Do not show again");
+                Optional<ButtonType> result = settingsManager.getRecommendation(checkBox);
 
-        if (file != null) {
-            if (!students.isEmpty()) {
-                SaveFile saveFile = new SaveFile(filesManager, students);
-                saveFile.saveStudentsFile(file, teachersManager.getUserID());
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    if (checkBox.isSelected()) {
+                        settings.setJsonRecommendation(true);
+                        settingsManager.stopJsonRecommendation(true, teachersManager.getUserID());
+                    }
+                    File file = fileChooser.showSaveDialog(new Stage());
+                    filesManager.saveStudentsDataInFile(list, file, teachersManager.getUserID());
+                }
             }
             else {
-                new Alert(Alert.AlertType.INFORMATION,"Cannot save, because there are not students",
-                          ButtonType.OK).showAndWait();
+                File file = fileChooser.showSaveDialog(new Stage());
+                filesManager.saveStudentsDataInFile(list, file, teachersManager.getUserID());
             }
+        }
+        else {
+            new Alert(Alert.AlertType.INFORMATION,"Cannot save, because there are no students yet",
+                    ButtonType.OK).showAndWait();
         }
     }
 
@@ -363,8 +377,7 @@ public class Home implements Initializable {
             String filePath = file.getPath();
             if (filePath.equals(filesManager.userFilePath(teachersManager.getUserID(), filePath))) {
                 if (file.length() != 0) {
-                    GetFile getFile = new GetFile(students, studentsManager);
-                    getFile.getStudentsFile(file, teachersManager.getUserID());
+                    filesManager.getStudents(file, teachersManager.getUserID(), students, studentsManager);
                 }
                 else {
                     new Alert(Alert.AlertType.INFORMATION,"Cannot use an empty file",ButtonType.OK).showAndWait();
@@ -386,11 +399,10 @@ public class Home implements Initializable {
         if (file != null) {
             if (students.isEmpty()) {
                 new Alert(Alert.AlertType.INFORMATION,"Cannot save file, because there are no students",
-                          ButtonType.OK).showAndWait();
+                        ButtonType.OK).showAndWait();
             }
             else {
-                SaveClassStatisticsFile statisticsFile = new SaveClassStatisticsFile(studentsManager,students,filesManager,teacher);
-                statisticsFile.saveClassStatistics(teachersManager.getUserID(),file);
+                filesManager.saveStatisticsFile(file, teachersManager.getUserID(), studentsManager, students, teacher);
             }
         }
     }
@@ -399,7 +411,7 @@ public class Home implements Initializable {
     public void version() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Version");
-        alert.setHeaderText("Version: 3.0.1");
+        alert.setHeaderText("Version: 3.1.2");
         alert.setContentText("A large update in the whole program,\nand we added a lot of features");
         alert.showAndWait();
     }
@@ -458,6 +470,7 @@ public class Home implements Initializable {
         this.settings = settings;
         this.settings.setProgramBackground(settings.getProgramBackground());
         this.settings.setDashboardBackground(settings.getDashboardBackground());
+        this.settings.setJsonRecommendation(settings.isJsonRecommendation());
 
         Color programColor = Color.valueOf(settings.getProgramBackground());
         Color dashboard = Color.valueOf(settings.getDashboardBackground());

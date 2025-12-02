@@ -1,47 +1,65 @@
-package com.example.teacherApp.controllers;
+package com.example.teacherApp.repository;
 
 import com.example.teacherApp.Enums.City;
 import com.example.teacherApp.Enums.Gender;
-import com.example.teacherApp.models.Student;
+import com.example.teacherApp.interfaces.StudentRepository;
 import com.example.teacherApp.models.StudentJSON;
-import com.example.teacherApp.services.StudentsManager;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.example.teacherApp.models.Student;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.ObservableList;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 
-public class GetFile  {
+public class StudentRepositoryFile implements StudentRepository {
 
-    private final ObservableList<Student> students;
-    private final StudentsManager studentsManager;
+    public StudentRepositoryFile(){}
 
-    public GetFile(ObservableList<Student> students, StudentsManager studentsManager) {
-        this.students = students;
-        this.studentsManager = studentsManager;
-    }
-
-    public void getStudentsFile(File file, int teacherID) throws IOException {
+    @Override
+    public List<Student> getAllStudents(File file, int userid) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         ArrayList<StudentJSON> list = objectMapper.readValue(file, new TypeReference<>(){});
-
-        // Moving data to observable list of the table (Class Student).
+        List<Student> students = new ArrayList<>();
 
         for (StudentJSON studentJSON : list) {
-            students.add(getStudentToTable(studentJSON, teacherID));
+            students.add(getStudent(studentJSON, userid));
         }
 
-        // Adding students to SQLite.
-        for (Student student : students) {
-            studentsManager.saveStudent(student);
-        }
+        return students;
     }
 
-    private Student getStudentToTable(StudentJSON studentJSON, int teacherID) {
+    @Override
+    public void saveAllStudents(List<Student> students, File file) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        ArrayList<StudentJSON> list = new ArrayList<>();
+
+        for (Student student : students) {
+            list.add(getStudentJSON(student, student.getFull_name(), student.getAge()));
+        }
+
+        ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter();
+        writer.writeValue(file, list);
+    }
+
+    // This is for storing students in a json file using StudentJSON.
+    private StudentJSON getStudentJSON(Student student, String name, int age) {
+        double grade1 = student.getGrade_1();
+        double grade2 = student.getGrade_2();
+        double grade3 = student.getGrade_3();
+        double point = student.getPoint();
+        int id = student.getID();
+        int classNumber = student.getClass_number();
+        Gender gender = student.getGender();
+        City city = student.getCity();
+        return new StudentJSON(name, age, grade1, grade2, grade3, point, id, classNumber, gender, city);
+    }
+
+    // This is for getting students, and displaying them in table.
+    private Student getStudent(StudentJSON studentJSON, int teacherID) {
         SimpleStringProperty fullName = new SimpleStringProperty(studentJSON.getFull_Name());
         SimpleStringProperty firstname = new SimpleStringProperty(getStudentFirstName(studentJSON.getFull_Name()));
         SimpleStringProperty lastname = new SimpleStringProperty(getStudentLastName(studentJSON.getFull_Name()));
@@ -55,7 +73,7 @@ public class GetFile  {
         Gender gender = studentJSON.getGender();
         City city = studentJSON.getCity();
         return new Student(firstname, lastname, fullName, age, grade1, grade2, grade3, point, studentID,
-                            classNumber,gender, city, teacherID);
+                classNumber,gender, city, teacherID);
     }
 
     // Getting the first word of the student (first name).

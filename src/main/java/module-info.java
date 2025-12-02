@@ -12,6 +12,7 @@ module TeacherApp {
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.annotation;
     requires java.sql;
+    requires javafx.base;
 
     opens com.example.teacherApp.controllers to javafx.fxml;
     opens com.example.teacherApp.models to javafx.base, com.fasterxml.jackson.databind;
@@ -23,4 +24,5 @@ module TeacherApp {
     exports com.example.teacherApp.models;
     exports com.example.teacherApp.Enums;
     exports com.example.teacherApp;
+    opens com.example.teacherApp.repository to javafx.fxml;
 }

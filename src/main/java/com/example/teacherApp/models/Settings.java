@@ -5,7 +5,7 @@ public class Settings {
     private String programBackground;
     private String dashboardBackground;
     private final String language;
-    private final boolean jsonRecommendation;
+    private boolean jsonRecommendation;
     private final int usrId;
 
     public Settings(String programBackground, String dashboardBackground, String language, boolean jsonRecommendation, int usrId) {
@@ -39,5 +39,8 @@ public class Settings {
     }
     public void setDashboardBackground(String dashboardBackground) {
         this.dashboardBackground = dashboardBackground;
+    }
+    public void setJsonRecommendation(boolean jsonRecommendation) {
+        this.jsonRecommendation = jsonRecommendation;
     }
 }
