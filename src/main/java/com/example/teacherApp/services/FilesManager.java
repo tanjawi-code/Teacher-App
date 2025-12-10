@@ -24,7 +24,7 @@ public class FilesManager {
         return savedFilesSQLite.getUserFilePath(userId, filePth);
     }
 
-    // This is for saving students data in a json file.
+    // This is for saving students data in a JSON file.
     public void saveStudentsDataInFile(List<Student> students, File file, int userId) throws IOException {
         if (file != null) {
             studentRepositoryFile.saveAllStudents(students, file);
@@ -41,9 +41,9 @@ public class FilesManager {
         }
     }
 
-    // This si for saving the class statistics in a json file.
-    public void saveStatisticsFile(File file, int userid, StudentsManager manager, ObservableList<Student> students, Teacher teacher) throws IOException {
-        SaveClassStatisticsFile statisticsFile = new SaveClassStatisticsFile(manager, students, teacher);
+    // This si for saving the class statistics in a JSON file.
+    public void saveStatisticsFile(File file, int userid, StudentsManager manager, Teacher teacher) throws IOException {
+        SaveClassStatisticsFile statisticsFile = new SaveClassStatisticsFile(manager, teacher);
         statisticsFile.saveClassStatistics(file);
         savedFilesSQLite.insertFileToTable(file.getPath(), file.getName(), getFileExtension(file), userid);
     }

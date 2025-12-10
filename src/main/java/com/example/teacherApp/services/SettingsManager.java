@@ -36,7 +36,7 @@ public class SettingsManager {
         settingsSQLite.changeBackgroundsColor(programColor, dashboardColor, userId);
     }
 
-    // This is for hiding json recommendation.
+    // This is for hiding JSON recommendation.
     public void stopJsonRecommendation(boolean jsonRecommendation, int userid) {
         settingsSQLite.hideJsonRecommendation(jsonRecommendation, userid);
     }

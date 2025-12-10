@@ -16,6 +16,11 @@ import com.example.teacherApp.services.TeachersManager;
 import java.util.Objects;
 
 public class Main extends Application {
+
+    static void main (String[] args) {
+        launch(args);
+    }
+
     @Override
     public void start(Stage stage) throws Exception {
         DataBase dataBase = new DataBase(); // This class is for connecting with SQLite.

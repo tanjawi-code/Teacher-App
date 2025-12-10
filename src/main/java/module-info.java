@@ -25,4 +25,5 @@ module TeacherApp {
     exports com.example.teacherApp.Enums;
     exports com.example.teacherApp;
     opens com.example.teacherApp.repository to javafx.fxml;
+    opens com.example.teacherApp.services.filters to javafx.fxml;
 }

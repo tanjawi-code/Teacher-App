@@ -151,7 +151,7 @@ public class Home implements Initializable {
         String name = getStudentNameFromUser();
 
         if (name != null && !name.isEmpty()) {
-            Student target = getStudentIsInTable(name);
+            Student target = studentsManager.getStudentIsInTable(name);
             if (target != null) {
                 String page = "EditStudentScene";
                 FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/"+page+".fxml")));
@@ -211,14 +211,14 @@ public class Home implements Initializable {
         String name = getStudentNameFromUser();
 
         if (name != null && !name.isEmpty()) {
-            Student target = getStudentIsInTable(name);
+            Student target = studentsManager.getStudentIsInTable(name);
             if (target != null) {
                 String page = "StudentStatisticsScene";
                 FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("/scenes/"+page+".fxml")));
                 Parent parent = loader.load();
                 StudentStatisticsController studentStatisticsController = loader.getController();
 
-                studentStatisticsController.setStudent(target);
+                studentStatisticsController.setStudent(studentsManager.getStudentStatistics(target), target);
 
                 borderPane.setCenter(parent);
             }
@@ -402,7 +402,7 @@ public class Home implements Initializable {
                         ButtonType.OK).showAndWait();
             }
             else {
-                filesManager.saveStatisticsFile(file, teachersManager.getUserID(), studentsManager, students, teacher);
+                filesManager.saveStatisticsFile(file, teachersManager.getUserID(), studentsManager, teacher);
             }
         }
     }
@@ -411,7 +411,7 @@ public class Home implements Initializable {
     public void version() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Version");
-        alert.setHeaderText("Version: 3.1.2");
+        alert.setHeaderText("Version: 3.2.2");
         alert.setContentText("A large update in the whole program,\nand we added a lot of features");
         alert.showAndWait();
     }
@@ -437,16 +437,6 @@ public class Home implements Initializable {
         textInputDialog.setContentText("The student name:");
         Optional<String> result = textInputDialog.showAndWait();
         return result.orElse(null);
-    }
-    // This is for getting a student name, and check if a student in the table, and used with edit, student statistics.
-    private Student getStudentIsInTable(String name) {
-        for (Student student : students) {
-            String fullName = student.getFull_name().toLowerCase();
-            if (fullName.equals(name.toLowerCase())) {
-                return student;
-            }
-        }
-        return null;
     }
 
     public void setFilesManager(FilesManager filesManager) {

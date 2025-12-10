@@ -5,8 +5,6 @@ import com.example.teacherApp.Enums.Gender;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Random;
 
 public class Student {
@@ -157,71 +155,5 @@ public class Student {
         this.ID = new SimpleIntegerProperty();
         Random random  = new Random();
         this.ID.set(random.nextInt(100,1000));
-    }
-
-    // This is for the student statistics.
-
-    // This is for getting student average grades.
-    public double getAverageGrades() {
-        return point.get() / 3;
-    }
-
-    // This is for getting the highest grade.
-    public double getHighestGrade() {
-        ArrayList<Double> grades = new ArrayList<>();
-        grades.add(grade_1.get());
-        grades.add(grade_2.get());
-        grades.add(grade_3.get());
-        return Collections.max(grades);
-    }
-
-    // This is for getting the lowest grade.
-    public double getLowestGrade() {
-        ArrayList<Double> grades = new ArrayList<>();
-        grades.add(grade_1.get());
-        grades.add(grade_2.get());
-        grades.add(grade_3.get());
-        return Collections.min(grades);
-    }
-
-    // This is for giving a rate for teh student.
-    public String studentRate() {
-        if (point.get() >= 18) {
-            return "Excellent";
-        }
-        else if (point.get() >= 14) {
-            return "Very good";
-        }
-        else if (point.get() >= 10) {
-            return "Good";
-        }
-        else {
-            return "Work Harder next time";
-        }
-    }
-
-    // This is for knowing how many grades less than 10.
-    public int getGradesLessThanTen() {
-        int count = 0;
-        if (grade_1.get() <= 9.99) {
-            count++;
-        }
-        if (grade_2.get() <= 9.99) {
-            count++;
-        }
-        if (grade_3.get() <= 9.99) {
-            count++;
-        }
-        return count;
-    }
-
-    // This is for giving passed or failed.
-    public String getStatus() {
-        if (point.get() >= 10) {
-            return "Passed";
-        }
-        else {
-            return "Failed";
-        }
     }
 }

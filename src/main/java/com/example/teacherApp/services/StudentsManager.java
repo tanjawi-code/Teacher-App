@@ -1,14 +1,12 @@
 package com.example.teacherApp.services;
 
-import com.example.teacherApp.Enums.City;
-import com.example.teacherApp.Enums.Gender;
 import com.example.teacherApp.dao.StudentsSQLite;
 import com.example.teacherApp.models.Student;
+import com.example.teacherApp.services.Statistics.StudentStatisticsService;
+import com.example.teacherApp.services.Statistics.StudentsStatisticsClassService;
 import javafx.collections.ObservableList;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class StudentsManager {
 
@@ -62,11 +60,6 @@ public class StudentsManager {
         return students.size();
     }
 
-    // This is for getting the gender of the student.
-    public City getCity(int index) {
-        return students.get(index).getCity();
-    }
-
     // This is for increasing the class number.
     public int increaseClassNumber(int count) {
         for(int x = 0; x<students.size(); x++) {
@@ -75,92 +68,30 @@ public class StudentsManager {
         return  count;
     }
 
-    // This is for the class statistics.
+    // This is for getting the service statistics of the students class.
+    public StudentsStatisticsClassService getStudentsStatisticsService() {
+        return new StudentsStatisticsClassService(students);
+    }
 
-    // Number of passed students.
-    public int getNumberOfPassedStudents(){
-        int passed = 0;
+    // This is for getting a student statistics.
+    public StudentStatisticsService getStudentStatistics(Student student) {
+        return new StudentStatisticsService(student);
+    }
+
+    // Get a student if it's in the list using the student's name.
+    public Student getStudentIsInTable(String name) {
         for (Student student : students) {
-            if (student.getPoint() >= 10) {
-                passed++;
+            String fullName = student.getFull_name().toLowerCase();
+            if (fullName.equals(name.toLowerCase())) {
+                return student;
             }
         }
-        return passed;
+        return null;
     }
-    // Number of failed students.
-    public int getNumberOfFailedStudents(){
-        int failed = 0;
-        for(Student student : students){
-            if(student.getPoint() <= 9.99){
-                failed++;
-            }
-        }
-        return failed;
-    }
-    // Number of males.
-    public int getMalesNumber(){
-        int males = 0;
-        for(Student student : students){
-            if(student.getGender() == Gender.MALE){
-                males++;
-            }
-        }
-        return males;
-    }
-    // Number of females.
-    public int getFemalesNumber(){
-        int females = 0;
-        for(Student student : students){
-            if(student.getGender() == Gender.FEMALE){
-                females++;
-            }
-        }
-        return females;
-    }
-    // The general average of the class.
-    public double getClassAverage(){
-        double average = 0;
-        for(Student student : students){
-            average += student.getPoint();
-        }
-        average = average / students.size();
 
-        return average;
-    }
-    // The general average of students' age.
-    public double getAverageAge() {
-        int age = 0;
-        for (Student student : students) {
-            age += student.getAge();
-        }
-        return (double) age / students.size();
-    }
-    // The succuss rate.
-    public String getSuccussRate(){
-        double percentage = (getNumberOfPassedStudents() * 100.0) / students.size();
-
-        DecimalFormat decimalFormat = new DecimalFormat("#");
-        decimalFormat.format(percentage);
-        String value = String.valueOf(decimalFormat.format(Double.parseDouble(String.valueOf(percentage))));
-        value = value+"%";
-
-        return value;
-    }
-    // The highest point.
-    public double getHighestPoint(){
-        ArrayList<Double> points = new ArrayList<>();
-        for(Student student : students){
-            points.add(student.getPoint());
-        }
-        return Collections.max(points);
-    }
-    // The lowest point.
-    public double getLowestPoint(){
-        ArrayList<Double> points = new ArrayList<>();
-        for(Student student : students){
-            points.add(student.getPoint());
-        }
-        return Collections.min(points);
+    // Get the list of student.
+    public ArrayList<Student> getStudents() {
+        return students;
     }
 
     // These are conditions for adding a student or editing grades.

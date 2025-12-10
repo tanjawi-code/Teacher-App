@@ -1,6 +1,7 @@
 package com.example.teacherApp.controllers;
 
 import com.example.teacherApp.Enums.City;
+import com.example.teacherApp.services.Statistics.StudentsStatisticsClassService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -28,19 +29,21 @@ public class ClassStatisticsController implements Initializable {
     }
 
     public void setStudentsManager(Teacher teacher, StudentsManager manager, ObservableList<Student> students) {
-            subjectLabel.setText(String.valueOf(teacher.getSubject()));
-            totalStudentsLabel.setText(String.valueOf(manager.studentsSize()));
-            malesLabel.setText(String.valueOf(manager.getMalesNumber()));
-            femalesLabel.setText(String.valueOf(manager.getFemalesNumber()));
-            passedLabel.setText(String.valueOf(manager.getNumberOfPassedStudents()));
-            failedLabel.setText(String.valueOf(manager.getNumberOfFailedStudents()));
-            averagePointsLabel.setText(String.valueOf(manager.getClassAverage()));
-            averageAgeLabel.setText(String.valueOf(manager.getAverageAge()));
-            highestPointLabel.setText(String.valueOf(manager.getHighestPoint()));
-            lowestPointLabel.setText(String.valueOf(manager.getLowestPoint()));
-            succussRateLabel.setText(manager.getSuccussRate());
+        StudentsStatisticsClassService statisticsService = manager.getStudentsStatisticsService();
 
-            studentsInCities(students);
+        subjectLabel.setText(String.valueOf(teacher.getSubject()));
+        totalStudentsLabel.setText(String.valueOf(manager.studentsSize()));
+        malesLabel.setText(String.valueOf(statisticsService.getMalesNumber()));
+        femalesLabel.setText(String.valueOf(statisticsService.getFemalesNumber()));
+        passedLabel.setText(String.valueOf(statisticsService.getNumberOfPassedStudents()));
+        failedLabel.setText(String.valueOf(statisticsService.getNumberOfFailedStudents()));
+        averagePointsLabel.setText(String.valueOf(statisticsService.getClassAverage()));
+        averageAgeLabel.setText(String.valueOf(statisticsService.getAverageAge()));
+        highestPointLabel.setText(String.valueOf(statisticsService.getHighestPoint()));
+        lowestPointLabel.setText(String.valueOf(statisticsService.getLowestPoint()));
+        succussRateLabel.setText(statisticsService.getSuccussRate());
+
+        studentsInCities(students);
     }
 
     // This is for knowing how many students in each city.
