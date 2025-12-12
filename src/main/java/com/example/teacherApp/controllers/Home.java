@@ -4,6 +4,7 @@ import com.example.teacherApp.models.Settings;
 import com.example.teacherApp.models.Student;
 import com.example.teacherApp.services.FilesManager;
 import com.example.teacherApp.services.SettingsManager;
+import com.example.teacherApp.services.filters.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -411,7 +412,7 @@ public class Home implements Initializable {
     public void version() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Version");
-        alert.setHeaderText("Version: 3.2.2");
+        alert.setHeaderText("Version: 3.3.2");
         alert.setContentText("A large update in the whole program,\nand we added a lot of features");
         alert.showAndWait();
     }

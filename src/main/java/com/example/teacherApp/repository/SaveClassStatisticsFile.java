@@ -1,6 +1,7 @@
 package com.example.teacherApp.repository;
 
 import com.example.teacherApp.Enums.City;
+import com.example.teacherApp.interfaces.SaveFileAble;
 import com.example.teacherApp.models.ClassStatistics;
 import com.example.teacherApp.models.Student;
 import com.example.teacherApp.models.Teacher;
@@ -8,14 +9,13 @@ import com.example.teacherApp.services.Statistics.StudentsStatisticsClassService
 import com.example.teacherApp.services.StudentsManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import javafx.collections.ObservableList;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class SaveClassStatisticsFile {
+public class SaveClassStatisticsFile implements SaveFileAble {
 
     private final Teacher teacher;
     private final StudentsManager studentsManager;
@@ -25,7 +25,8 @@ public class SaveClassStatisticsFile {
         this.teacher = teacher;
     }
 
-    public void saveClassStatistics(File file) throws IOException {
+    @Override
+    public void saveFile(File file) throws IOException{
         // Step 1: get students in every city.
         ArrayList<City> cities = new ArrayList<>(List.of(City.values()));
         HashMap<String, Integer> studentCity = new HashMap<>();

@@ -34,13 +34,6 @@ public class FilterAndSortingController implements Initializable {
         ageChoiceBox.getItems().addAll(15,16,17,18,19,20);
         statusChoiceBox.getItems().addAll("Passed","Failed");
         pointChoiceBox.getItems().addAll("0-4.99","5-9.99","10-14.99","15-17.99","18-20");
-
-        // Five classes of filtering students data: gender, age, city, status, and point.
-        new GenderFilter(genderChoiceBox).filter(filteredList);
-        new CityFilter(cityChoiceBox).filter(filteredList);
-        new AgeFilter(ageChoiceBox).filter(filteredList);
-        new StatusFilter(statusChoiceBox).filter(filteredList);
-        new PointFilter(pointChoiceBox).filter(filteredList);
     }
 
     @FXML // Going back to the dashboard.
@@ -63,6 +56,12 @@ public class FilterAndSortingController implements Initializable {
 
     public void setFilteredList(FilteredList<Student> filteredList) {
         this.filteredList = filteredList;
+
+        new GenderFilter(genderChoiceBox).filter(filteredList);
+        new CityFilter(cityChoiceBox).filter(filteredList);
+        new AgeFilter(ageChoiceBox).filter(filteredList);
+        new StatusFilter(statusChoiceBox).filter(filteredList);
+        new PointFilter(pointChoiceBox).filter(filteredList);
     }
     public void setLeftAnchorPane(AnchorPane leftAnchorPane) {
         this.leftAnchorPane = leftAnchorPane;
