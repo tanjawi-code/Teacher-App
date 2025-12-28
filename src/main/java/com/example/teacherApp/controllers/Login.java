@@ -1,8 +1,7 @@
 package com.example.teacherApp.controllers;
 
 import com.example.teacherApp.models.Settings;
-import com.example.teacherApp.services.FilesManager;
-import com.example.teacherApp.services.SettingsManager;
+import com.example.teacherApp.services.managers.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,8 +22,6 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import com.example.teacherApp.models.Teacher;
-import com.example.teacherApp.services.StudentsManager;
-import com.example.teacherApp.services.TeachersManager;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
@@ -117,6 +114,7 @@ public class Login implements Initializable {
         stage.centerOnScreen();
         stage.getIcons().add(image);
         stage.setTitle("Creating a new account");
+        stage.setResizable(false);
         stage.show();
     }
 
@@ -143,6 +141,7 @@ public class Login implements Initializable {
         stage.getIcons().add(image);
         stage.centerOnScreen();
         stage.setTitle("Home");
+        stage.setResizable(true);
         stage.show();
     }
 

@@ -7,7 +7,7 @@ import com.example.teacherApp.Enums.City;
 import com.example.teacherApp.Enums.Gender;
 import javafx.collections.ObservableList;
 import com.example.teacherApp.models.Student;
-import com.example.teacherApp.services.StudentsManager;
+import com.example.teacherApp.services.managers.StudentsManager;
 import java.sql.*;
 import java.text.DecimalFormat;
 

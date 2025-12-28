@@ -2,17 +2,13 @@ package com.example.teacherApp;
 
 import com.example.teacherApp.controllers.Login;
 import com.example.teacherApp.dao.*;
-import com.example.teacherApp.services.FilesManager;
-import com.example.teacherApp.services.SettingsManager;
+import com.example.teacherApp.services.managers.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import com.example.teacherApp.services.StudentsManager;
-import com.example.teacherApp.services.TeachersManager;
 import java.util.Objects;
 
 public class Main extends Application {
@@ -61,6 +57,7 @@ public class Main extends Application {
         stage.getIcons().add(image);
         stage.setScene(scene);
         stage.setTitle("Students Management");
+        stage.setResizable(false);
         stage.show();
     }
 }

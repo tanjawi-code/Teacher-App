@@ -10,7 +10,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import com.example.teacherApp.models.Student;
 import com.example.teacherApp.models.Teacher;
-import com.example.teacherApp.services.StudentsManager;
+import com.example.teacherApp.services.managers.StudentsManager;
 import java.net.URL;
 import java.util.ResourceBundle;
 

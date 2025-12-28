@@ -1,13 +1,9 @@
 package com.example.teacherApp.controllers;
 
-import com.example.teacherApp.Enums.City;
-import com.example.teacherApp.Enums.Gender;
-import com.example.teacherApp.Enums.SchoolsLevel;
-import com.example.teacherApp.Enums.Subjects;
+import com.example.teacherApp.Enums.*;
 import com.example.teacherApp.models.Settings;
 import com.example.teacherApp.models.Teacher;
-import com.example.teacherApp.services.FilesManager;
-import com.example.teacherApp.services.SettingsManager;
+import com.example.teacherApp.services.managers.*;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -24,8 +20,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import com.example.teacherApp.services.StudentsManager;
-import com.example.teacherApp.services.TeachersManager;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
@@ -149,6 +143,12 @@ public class Register implements Initializable {
             alert.setContentText("Enter the same password in the confirming password field.");
             alert.showAndWait();
         }
+        else if (!teachersManager.checkValidEmail(emailField.getText())) {
+            alert.setTitle("Email");
+            alert.setHeaderText("The email is not valid.");
+            alert.setContentText("The email must end with @gmail.com.");
+            alert.showAndWait();
+        }
         else {
             String name = nameField.getText();
             int age = Integer.parseInt(ageField.getText());
@@ -228,6 +228,7 @@ public class Register implements Initializable {
         stage.setTitle("Home");
         stage.centerOnScreen();
         stage.getIcons().add(image);
+        stage.setResizable(true);
         stage.show();
     }
 
@@ -252,6 +253,7 @@ public class Register implements Initializable {
         stage.centerOnScreen();
         stage.getIcons().add(image);
         stage.setTitle("Students Management");
+        stage.setResizable(false);
         stage.show();
     }
 

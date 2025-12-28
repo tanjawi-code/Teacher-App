@@ -18,7 +18,7 @@ module TeacherApp {
     opens com.example.teacherApp.models to javafx.base, com.fasterxml.jackson.databind;
     opens com.example.teacherApp.Enums to javafx.fxml;
     opens com.example.teacherApp.interfaces to javafx.fxml;
-    opens com.example.teacherApp.services to javafx.fxml;
+    opens com.example.teacherApp.services.managers to javafx.fxml;
     opens com.example.teacherApp.dao to javafx.base;
 
     exports com.example.teacherApp.models;

@@ -2,7 +2,7 @@ package com.example.teacherApp.controllers;
 
 import com.example.teacherApp.Enums.City;
 import com.example.teacherApp.Enums.Gender;
-import com.example.teacherApp.services.TeachersManager;
+import com.example.teacherApp.services.managers.TeachersManager;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -12,7 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import com.example.teacherApp.models.Student;
-import com.example.teacherApp.services.StudentsManager;
+import com.example.teacherApp.services.managers.StudentsManager;
 import java.net.URL;
 import java.util.ResourceBundle;
 

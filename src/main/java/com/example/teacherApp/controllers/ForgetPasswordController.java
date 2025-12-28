@@ -1,7 +1,7 @@
 package com.example.teacherApp.controllers;
 
-import com.example.teacherApp.services.FilesManager;
-import com.example.teacherApp.services.SettingsManager;
+import com.example.teacherApp.services.managers.FilesManager;
+import com.example.teacherApp.services.managers.SettingsManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,8 +14,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import com.example.teacherApp.models.Teacher;
-import com.example.teacherApp.services.StudentsManager;
-import com.example.teacherApp.services.TeachersManager;
+import com.example.teacherApp.services.managers.StudentsManager;
+import com.example.teacherApp.services.managers.TeachersManager;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Properties;

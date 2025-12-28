@@ -1,9 +1,6 @@
 package com.example.teacherApp.dao;
 
-import com.example.teacherApp.Enums.City;
-import com.example.teacherApp.Enums.Gender;
-import com.example.teacherApp.Enums.SchoolsLevel;
-import com.example.teacherApp.Enums.Subjects;
+import com.example.teacherApp.Enums.*;
 import com.example.teacherApp.models.Teacher;
 import java.sql.*;
 

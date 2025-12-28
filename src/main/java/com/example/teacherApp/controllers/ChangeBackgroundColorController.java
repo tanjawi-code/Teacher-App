@@ -1,7 +1,7 @@
 package com.example.teacherApp.controllers;
 
 import com.example.teacherApp.models.Settings;
-import com.example.teacherApp.services.SettingsManager;
+import com.example.teacherApp.services.managers.SettingsManager;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

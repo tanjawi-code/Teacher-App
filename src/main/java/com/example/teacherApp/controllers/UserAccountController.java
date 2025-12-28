@@ -1,6 +1,6 @@
 package com.example.teacherApp.controllers;
 
-import com.example.teacherApp.services.TeachersManager;
+import com.example.teacherApp.services.managers.TeachersManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;

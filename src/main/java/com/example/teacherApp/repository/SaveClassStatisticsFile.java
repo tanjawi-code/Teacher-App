@@ -6,7 +6,7 @@ import com.example.teacherApp.models.ClassStatistics;
 import com.example.teacherApp.models.Student;
 import com.example.teacherApp.models.Teacher;
 import com.example.teacherApp.services.Statistics.StudentsStatisticsClassService;
-import com.example.teacherApp.services.StudentsManager;
+import com.example.teacherApp.services.managers.StudentsManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import java.io.File;

@@ -1,4 +1,4 @@
-package com.example.teacherApp.services;
+package com.example.teacherApp.services.managers;
 
 import com.example.teacherApp.dao.TeachersSQLite;
 import com.example.teacherApp.models.Teacher;
@@ -68,6 +68,6 @@ public class TeachersManager {
     }
 
     public boolean checkValidEmail(String email) {
-        return email.matches("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$");
+        return email.matches("^[A-Za-z0-9+_.-]+@gmail\\.com$");
     }
 }

@@ -1,4 +1,4 @@
-package com.example.teacherApp.services;
+package com.example.teacherApp.services.managers;
 
 import com.example.teacherApp.dao.SettingsSQLite;
 import com.example.teacherApp.models.Settings;
